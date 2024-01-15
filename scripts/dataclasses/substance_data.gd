@@ -1,7 +1,7 @@
+class_name  SubstanceData
+
 extends Resource
 
-const SubstanceEffect = preload("res://scripts/dataclasses/substance_effect_data.gd")
-const SubstanceReaction = preload("res://scripts/dataclasses/substance_reaction_data.gd")
 
 @export_group("Base Data")
 @export var name := SubstanceName.new()
@@ -11,6 +11,9 @@ const SubstanceReaction = preload("res://scripts/dataclasses/substance_reaction_
 @export var melting_temperature: int = 270
 @export var ignition_temperature: int = 500
 @export var vaporisation_temperature: int = 400
+
+@export_group("Graphics")
+@export var icon: Image
 
 
 # Tree structure:
@@ -40,3 +43,15 @@ const SubstanceReaction = preload("res://scripts/dataclasses/substance_reaction_
 # 		}
 # 	]
 # }
+
+func _init(p_name: SubstanceName = SubstanceName.new(), p_effects: Array[SubstanceEffect] = [], p_possible_reactions: Array[SubstanceReaction] = [], p_melting_temperature: int = 270, p_ignition_temperature: int = 500, p_vaporisation_temperature: int = 400):
+    name = p_name
+    effects = p_effects
+    possible_reactions = p_possible_reactions
+    melting_temperature = p_melting_temperature
+    ignition_temperature = p_ignition_temperature
+    vaporisation_temperature = p_vaporisation_temperature
+    icon = Image.new()
+
+func _eq(other: SubstanceData)->bool:
+    return name._eq(other.name)

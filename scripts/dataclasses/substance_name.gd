@@ -6,3 +6,6 @@ extends Resource
 
 func _init(p_name: String = ""):
     name = p_name
+
+func _eq(other: SubstanceName)->bool:
+    return name == other.name
