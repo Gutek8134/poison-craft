@@ -1,25 +1,41 @@
-extends AnimatedSprite2D
+extends Node2D
 
 const room_temperature: int = 295
 
 @export_group("limits")
 @export var max_temperature: int = 570
-@export var min_temperature: int = 220
+@export var min_temperature: int = 280
 @export_group("attributes")
 ## Kelvins per second
-@export var heating_power: float = 2
+@export var heating_power: int = 2
+@export_group("gameplay")
+@export var temperature_change_interval: int = 3
 
-# Realted to causing reactions
+
+## In Kelvins, don't set manually outside of testing, use set_target_temperature instead
+var current_temperature: int:
+	set = _set_current_temperature
+## In Kelvins
+var target_temperature: int:
+	set = set_target_temperature
+
+
+@onready var temperature_change_timer := $Timer as Timer
+# Related to causing reactions
 
 ## key: string (substance name) = int (amount in grams)
 var content: Dictionary
-
-## In Kelvins
-var current_temperature: float:
-	set = set_current_temperature
-
-@onready var is_heating := false
+	
 @onready var is_mixing := false
+
+var is_heating: bool:
+	get:
+		return target_temperature - current_temperature < 0
+
+var is_cooling: bool:
+	get:
+		return target_temperature - current_temperature < 0
+	
 
 # TODO
 @onready var ongoing_reactions: Array[SubstanceReaction] = []
@@ -28,24 +44,27 @@ var current_temperature: float:
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	current_temperature = room_temperature
+	target_temperature = current_temperature
 
-func _process(delta):
-	if is_heating:
-		current_temperature += heating_power * delta
 
 func self_destruct()->void:
 	print("Oh shit! Self destruct!")
 	queue_free()
 
-func set_current_temperature(new_temperature: float):
+## In Kelvins
+func _set_current_temperature(new_temperature: int)->void:
 	current_temperature = new_temperature
 	if current_temperature > max_temperature or current_temperature < min_temperature:
 		self_destruct()
 
-func start_heating():
-	is_heating = true
+func set_target_temperature(new_temperature: int)->void:
+	if target_temperature == current_temperature:
+		target_temperature = clamp(new_temperature, min_temperature, max_temperature)
+		_start_approaching_target_temperature(temperature_change_interval)
+	else:
+		target_temperature = clamp(new_temperature, min_temperature, max_temperature)
 
-func mix():
+func start_mixing()->void:
 	is_mixing = true
 
 ## Amount in grams
@@ -59,3 +78,18 @@ func add_substance(substance: Substance, amount: int):
 func add_ingredient(ingredient: Ingredient, amount: int):
 	for substance_name in ingredient.composition:
 		content[substance_name] += amount * ingredient.composition[substance_name]
+
+## Interval in seconds
+func _start_approaching_target_temperature(interval: int = 3)->void:
+	# Changes current temperature in static interval
+	temperature_change_timer.wait_time = interval
+	temperature_change_timer.start()
+	while abs(target_temperature - current_temperature) > heating_power:
+		if current_temperature > target_temperature:
+			current_temperature -= heating_power*interval
+		else:
+			current_temperature += heating_power*interval
+		await temperature_change_timer.timeout
+		
+	current_temperature = target_temperature
+	temperature_change_timer.stop()
