@@ -40,6 +40,10 @@ var is_cooling: bool:
 # TODO
 @onready var ongoing_reactions: Array[SubstanceReaction] = []
 
+# Graphics related
+
+@onready var temperature_display := $cauldron_sprite/temperature_display as RichTextLabel
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -54,6 +58,7 @@ func self_destruct()->void:
 ## In Kelvins
 func _set_current_temperature(new_temperature: int)->void:
 	current_temperature = new_temperature
+	_update_temperature_display()
 	if current_temperature > max_temperature or current_temperature < min_temperature:
 		self_destruct()
 
@@ -63,9 +68,16 @@ func set_target_temperature(new_temperature: int)->void:
 		_start_approaching_target_temperature(temperature_change_interval)
 	else:
 		target_temperature = clamp(new_temperature, min_temperature, max_temperature)
+	_update_temperature_display()
 
 func start_mixing()->void:
 	is_mixing = true
+
+func increase_target_temperature(value: int = 10)->void:
+	target_temperature += value
+
+func decrease_target_temperature(value: int = 10)->void:
+	target_temperature -= value
 
 ## Amount in grams
 func add_substance(substance: Substance, amount: int):
@@ -84,12 +96,28 @@ func _start_approaching_target_temperature(interval: int = 3)->void:
 	# Changes current temperature in static interval
 	temperature_change_timer.wait_time = interval
 	temperature_change_timer.start()
-	while abs(target_temperature - current_temperature) > heating_power:
+	while true:
+		await temperature_change_timer.timeout
+		print(current_temperature, "->", target_temperature)
+		if abs(target_temperature - current_temperature) <= heating_power:
+			break
 		if current_temperature > target_temperature:
 			current_temperature -= heating_power*interval
 		else:
 			current_temperature += heating_power*interval
-		await temperature_change_timer.timeout
 		
 	current_temperature = target_temperature
 	temperature_change_timer.stop()
+
+func _update_temperature_display()->void:
+	temperature_display.text = "[center][font_size=50]%dK[/font_size][/center]" % current_temperature \
+if target_temperature == current_temperature \
+else "[center][font_size=40]%dK[/font_size]
+[font_size=30](%dK)[/font_size][/center]" % [target_temperature, current_temperature]
+
+
+func _on_decrease_temperature_button_pressed():
+	decrease_target_temperature()
+
+func _on_increase_temperature_button_pressed():
+	increase_target_temperature()
