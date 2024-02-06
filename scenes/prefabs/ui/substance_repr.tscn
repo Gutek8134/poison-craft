@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3 uid="uid://daodn204vfhht"]
+
+[ext_resource type="Texture2D" uid="uid://3ugdclamlyxd" path="res://icon.svg" id="1_rsgho"]
+
+[node name="HFlowContainer" type="HFlowContainer"]
+layout_direction = 2
+offset_right = 304.0
+offset_bottom = 95.0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(95.355, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("1_rsgho")
+expand_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]JELENIAL"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="TextureRect2" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(95.355, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("1_rsgho")
+expand_mode = 5
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+layout_mode = 2
+alignment = 1
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="VBoxContainer2"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]35g"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0

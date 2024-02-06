@@ -19,12 +19,12 @@ var current_temperature: int:
 var target_temperature: int:
 	set = set_target_temperature
 
-
+const DEFAULT_TEMPERATURE_CHANGE = 10
 @onready var temperature_change_timer := $Timer as Timer
 # Related to causing reactions
 
 ## key: string (substance name) = int (amount in grams)
-var content: Dictionary
+@onready var content: Dictionary = {}
 	
 @onready var is_mixing := false
 
@@ -43,7 +43,7 @@ var is_cooling: bool:
 # Graphics related
 
 @onready var temperature_display := $cauldron_sprite/temperature_display as RichTextLabel
-
+@onready var content_display := $substance_scroll/substance_grid as GridContainer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -73,10 +73,10 @@ func set_target_temperature(new_temperature: int)->void:
 func start_mixing()->void:
 	is_mixing = true
 
-func increase_target_temperature(value: int = 10)->void:
+func increase_target_temperature(value: int = DEFAULT_TEMPERATURE_CHANGE)->void:
 	target_temperature += value
 
-func decrease_target_temperature(value: int = 10)->void:
+func decrease_target_temperature(value: int = DEFAULT_TEMPERATURE_CHANGE)->void:
 	target_temperature -= value
 
 ## Amount in grams
@@ -85,11 +85,19 @@ func add_substance(substance: Substance, amount: int):
 		content[substance.data.name.name] = amount
 	else:
 		content[substance.data.name.name] += amount
+	update_substance_display()
 
 ## Amount in grams
 func add_ingredient(ingredient: Ingredient, amount: int):
 	for substance_name in ingredient.composition:
-		content[substance_name] += amount * ingredient.composition[substance_name]
+		if substance_name not in content:
+			content[substance_name] = amount * ingredient.composition[substance_name]
+		else:
+			content[substance_name] += amount * ingredient.composition[substance_name]
+	update_substance_display()
+
+func update_substance_display()->void:
+	print(content)
 
 ## Interval in seconds
 func _start_approaching_target_temperature(interval: int = 3)->void:
@@ -98,7 +106,7 @@ func _start_approaching_target_temperature(interval: int = 3)->void:
 	temperature_change_timer.start()
 	while true:
 		await temperature_change_timer.timeout
-		print(current_temperature, "->", target_temperature)
+		# print(current_temperature, "->", target_temperature)
 		if abs(target_temperature - current_temperature) <= heating_power:
 			break
 		if current_temperature > target_temperature:
@@ -117,7 +125,25 @@ else "[center][font_size=40]%dK[/font_size]
 
 
 func _on_decrease_temperature_button_pressed():
-	decrease_target_temperature()
+	if Input.is_key_pressed(KEY_SHIFT):
+		if Input.is_key_pressed(KEY_CTRL):
+			decrease_target_temperature(DEFAULT_TEMPERATURE_CHANGE*5)
+		else:
+			decrease_target_temperature(DEFAULT_TEMPERATURE_CHANGE*10)
+	elif Input.is_key_pressed(KEY_CTRL):
+		decrease_target_temperature(int(float(DEFAULT_TEMPERATURE_CHANGE)/2))
+	else:
+		decrease_target_temperature(DEFAULT_TEMPERATURE_CHANGE)
+	
+		
 
 func _on_increase_temperature_button_pressed():
-	increase_target_temperature()
+	if Input.is_key_pressed(KEY_SHIFT):
+		if Input.is_key_pressed(KEY_CTRL):
+			increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE*5)
+		else:
+			increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE*10)
+	elif Input.is_key_pressed(KEY_CTRL):
+		increase_target_temperature(int(float(DEFAULT_TEMPERATURE_CHANGE)/2))
+	else:
+		increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE)
