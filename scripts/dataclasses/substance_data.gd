@@ -29,6 +29,8 @@ extends Resource
 # 	]
 # 	possible_reactions [
 # 		SubstanceReaction {
+#       name
+#       substance_name
 # 		reacts_with
 # 		reaction_conditions
 # 			ReactionConditions {

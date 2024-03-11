@@ -34,10 +34,11 @@ var is_heating: bool:
 
 var is_cooling: bool:
 	get:
-		return target_temperature - current_temperature < 0
+		return target_temperature - current_temperature > 0
 	
 
-# TODO
+@onready var data_table = SubstanceDataTable.factory()
+
 @onready var ongoing_reactions: Array[SubstanceReaction] = []
 
 # Graphics related
@@ -50,6 +51,10 @@ func _ready():
 	current_temperature = room_temperature
 	target_temperature = current_temperature
 
+func _process(delta):
+	_update_ongoing_reactions()
+	_process_reactions(delta)
+	
 
 func self_destruct()->void:
 	print("Oh shit! Self destruct!")
@@ -116,6 +121,50 @@ func _start_approaching_target_temperature(interval: int = 3)->void:
 		
 	current_temperature = target_temperature
 	temperature_change_timer.stop()
+
+func _update_ongoing_reactions()->void:
+	var real_reactions: Array[SubstanceReaction] = []
+	for substance_name in content:
+		var substance := data_table.data[substance_name] as SubstanceData
+		for possible_reaction in substance.possible_reactions:
+			# Reactant not present
+			if possible_reaction.reacts_with not in content:
+				continue
+
+			var conditions = possible_reaction.reaction_conditions
+			# Temperature is too low or too high
+			if conditions.min_temperature > current_temperature or conditions.max_temperature < current_temperature:
+				continue
+			# You need to mix the content in ordet for reaction to occur
+			if conditions.mixing and not is_mixing:
+				continue
+			
+			# Some catalyst not present
+			var all_catalysts_present: bool = true
+			for catalyst in conditions.catalysts:
+				if catalyst not in content:
+					all_catalysts_present = false
+					break
+			if not all_catalysts_present:
+				continue
+			
+			# Reaction should occur
+			real_reactions.append(possible_reaction)
+	
+	# Difference update
+	# 1 - delete not present in real_reactions
+	for reaction_id in range(len(ongoing_reactions)):
+		var reaction = ongoing_reactions[reaction_id]
+		if reaction not in real_reactions:
+			ongoing_reactions.remove_at(reaction_id)
+	
+	# 2 - add not present in ongoing_reactions
+	for reaction in real_reactions:
+		if reaction not in ongoing_reactions:
+			ongoing_reactions.append(reaction)
+
+func _process_reactions(deata_time: float) -> void:
+	pass
 
 func _update_temperature_display()->void:
 	temperature_display.text = "[center][font_size=50]%dK[/font_size][/center]" % current_temperature \
