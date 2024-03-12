@@ -1,3 +1,4 @@
 {
-    "godot_tools.editor_path": "/home/gutek/github-repos/poison-craft/icon.svg"
+    "godot_tools.editor_path": "/home/gutek/github-repos/poison-craft/icon.svg",
+    "godotTools.editorPath.godot4": "/usr/local/bin/godot-engine"
 }
