@@ -1,7 +1,6 @@
-class_name  SubstanceData
+class_name SubstanceData
 
 extends Resource
-
 
 @export_group("Base Data")
 @export var name := SubstanceName.new()
@@ -15,6 +14,13 @@ extends Resource
 @export_group("Graphics")
 @export var icon: Image
 
+var current_state_of_matter: STATE_OF_MATTER = STATE_OF_MATTER.SOLID
+
+enum STATE_OF_MATTER {
+    GAS,
+    LIQUID,
+    SOLID
+}
 
 # Tree structure:
 # SubstanceData {
@@ -46,7 +52,7 @@ extends Resource
 # 	]
 # }
 
-func _init(p_name: SubstanceName = SubstanceName.new(), p_effects: Array[SubstanceEffect] = [], p_possible_reactions: Array[SubstanceReaction] = [], p_melting_temperature: int = 270, p_ignition_temperature: int = 500, p_vaporisation_temperature: int = 400):
+func _init(p_name: SubstanceName=SubstanceName.new(), p_effects: Array[SubstanceEffect]=[], p_possible_reactions: Array[SubstanceReaction]=[], p_melting_temperature: int=270, p_ignition_temperature: int=500, p_vaporisation_temperature: int=400):
     name = p_name
     effects = p_effects
     possible_reactions = p_possible_reactions
@@ -55,5 +61,5 @@ func _init(p_name: SubstanceName = SubstanceName.new(), p_effects: Array[Substan
     vaporisation_temperature = p_vaporisation_temperature
     icon = Image.new()
 
-func _eq(other: SubstanceData)->bool:
+func _eq(other: SubstanceData) -> bool:
     return name._eq(other.name)
