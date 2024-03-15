@@ -24,7 +24,10 @@ enum STATE_OF_MATTER {
 
 # Tree structure:
 # SubstanceData {
-# 	name
+# 	name {
+#       name: string,
+#       current_state_of_matter: SOM
+#   }
 # 	effects [
 # 		SubstanceEffect {
 # 		minimal_dose
