@@ -7,7 +7,7 @@ layout_direction = 2
 offset_right = 304.0
 offset_bottom = 95.0
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="SubstanceSymbol" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(95.355, 0)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -18,7 +18,7 @@ expand_mode = 5
 layout_mode = 2
 alignment = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer"]
+[node name="SubstanceName" type="RichTextLabel" parent="VBoxContainer"]
 layout_mode = 2
 bbcode_enabled = true
 text = "[center]JELENIAL"
@@ -26,7 +26,7 @@ fit_content = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="TextureRect2" type="TextureRect" parent="."]
+[node name="SubstanceState" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(95.355, 0)
 layout_mode = 2
 size_flags_horizontal = 0
@@ -37,7 +37,7 @@ expand_mode = 5
 layout_mode = 2
 alignment = 1
 
-[node name="RichTextLabel2" type="RichTextLabel" parent="VBoxContainer2"]
+[node name="Amount" type="RichTextLabel" parent="VBoxContainer2"]
 layout_mode = 2
 bbcode_enabled = true
 text = "[center]35g"

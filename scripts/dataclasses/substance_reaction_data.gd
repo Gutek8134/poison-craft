@@ -3,9 +3,11 @@ extends Resource
 
 ## This reaction unique name
 @export var name: String
-@export var substance_name: SubstanceName
+@export var substance_name: String
+@export var substance_state_of_matter: SubstanceData.STATE_OF_MATTER
 @export var substance_amount: int
-@export var reacts_with: SubstanceName
+@export var reacts_with: String
+@export var reactant_state_of_matter: SubstanceData.STATE_OF_MATTER
 @export var reactant_amount: int
 ## key(substance name): int
 @export var outcome_substance: Dictionary
@@ -16,7 +18,7 @@ extends Resource
 func _eq(other: SubstanceReaction) -> bool:
     return self.name == other.name
 
-func _init(p_name: String, p_substance_name: SubstanceName=SubstanceName.new(), p_substance_amount: int=0, p_reacts_with: SubstanceName=SubstanceName.new(), p_reactant_amount: int=0, p_outcome_substance: Dictionary={}, p_reaction_conditions: ReactionConditions=ReactionConditions.new(), p_reaction_time: int=5):
+func _init(p_name: String, p_substance_name: String="", p_substance_amount: int=0, p_reacts_with: String="", p_reactant_amount: int=0, p_outcome_substance: Dictionary={}, p_reaction_conditions: ReactionConditions=ReactionConditions.new(), p_reaction_time: int=5):
     name = p_name
     substance_name = p_substance_name
     substance_amount = p_substance_amount

@@ -3,7 +3,8 @@ class_name SubstanceData
 extends Resource
 
 @export_group("Base Data")
-@export var name := SubstanceName.new()
+@export var name := ""
+@export var current_state_of_matter := SubstanceData.STATE_OF_MATTER.SOLID
 @export var effects: Array[SubstanceEffect] = []
 @export var possible_reactions: Array[SubstanceReaction] = []
 ## In Kelvins
@@ -13,8 +14,6 @@ extends Resource
 
 @export_group("Graphics")
 @export var icon: Image
-
-var current_state_of_matter: STATE_OF_MATTER = STATE_OF_MATTER.SOLID
 
 enum STATE_OF_MATTER {
     GAS,
@@ -55,7 +54,7 @@ enum STATE_OF_MATTER {
 # 	]
 # }
 
-func _init(p_name: SubstanceName=SubstanceName.new(), p_effects: Array[SubstanceEffect]=[], p_possible_reactions: Array[SubstanceReaction]=[], p_melting_temperature: int=270, p_ignition_temperature: int=500, p_vaporisation_temperature: int=400):
+func _init(p_name: String="", p_effects: Array[SubstanceEffect]=[], p_possible_reactions: Array[SubstanceReaction]=[], p_melting_temperature: int=270, p_ignition_temperature: int=500, p_vaporisation_temperature: int=400):
     name = p_name
     effects = p_effects
     possible_reactions = p_possible_reactions
@@ -65,4 +64,4 @@ func _init(p_name: SubstanceName=SubstanceName.new(), p_effects: Array[Substance
     icon = Image.new()
 
 func _eq(other: SubstanceData) -> bool:
-    return name._eq(other.name)
+    return name == other.name
