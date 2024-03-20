@@ -2,7 +2,7 @@ class_name SubstanceDataTable
 
 extends Resource
 
-## key(string) : SubstanceData
+## key(substance name) : SubstanceData
 @export var data: Dictionary = {}
 @export var name: String
 
@@ -31,42 +31,42 @@ func save() -> void:
 
 func _add_temperature_reactions() -> void:
     for substance_name in data:
-        var substance = data[substance_name]
+        var substance: SubstanceData = data[substance_name]
         var temperature_reactions = [
             SubstanceReaction.new(
                 "%s melting" % substance_name,
-                SubstanceName.new(substance_name, SubstanceData.STATE_OF_MATTER.SOLID),
+                substance.name,
                 10,
-                SubstanceName.new(substance_name, SubstanceData.STATE_OF_MATTER.SOLID),
+                substance.name,
                 0,
-                {SubstanceName.new(substance_name, SubstanceData.STATE_OF_MATTER.LIQUID): 10},
+                {substance.substance_type + SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.LIQUID): 10},
                 ReactionConditions.new(substance.melting_temperature, substance_name.ignition_temperature, []),
                 1),
             SubstanceReaction.new(
                 "%s solidification" % substance_name,
-                SubstanceName.new(substance_name, SubstanceData.STATE_OF_MATTER.LIQUID),
+                substance.name,
                 10,
-                SubstanceName.new(substance_name, SubstanceData.STATE_OF_MATTER.LIQUID),
+                substance.name,
                 0,
-                {SubstanceName.new(substance_name, SubstanceData.STATE_OF_MATTER.SOLID): 10},
+                {substance.substance_type + SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.SOLID): 10},
                 ReactionConditions.new(0, substance_name.melting_temperature, []),
                 1),
             SubstanceReaction.new(
                 "%s vaporisation" % substance_name,
-                SubstanceName.new(substance_name, SubstanceData.STATE_OF_MATTER.LIQUID),
+                substance.name,
                 10,
-                SubstanceName.new(substance_name, SubstanceData.STATE_OF_MATTER.LIQUID),
+                substance.name,
                 0,
-                {SubstanceName.new(substance_name, SubstanceData.STATE_OF_MATTER.GAS): 10},
+                {substance.substance_type + SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.GAS): 10},
                 ReactionConditions.new(substance.vaporisation_temperature, substance_name.ignition_temperature, []),
                 1),
             SubstanceReaction.new(
-                "%s ignition" % substance_name,
-                SubstanceName.new(substance_name, SubstanceData.STATE_OF_MATTER.GAS),
+                "%s condensation" % substance_name,
+                substance.name,
                 10,
-                SubstanceName.new(substance_name, SubstanceData.STATE_OF_MATTER.GAS),
+                substance.name,
                 0,
-                {SubstanceName.new(substance_name, SubstanceData.STATE_OF_MATTER.LIQUID): 10},
+                {substance.substance_type + SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.LIQUID): 10},
                 ReactionConditions.new(substance.melting_temperature, substance_name.vaporisation_temperature, []),
                 1),
         ]

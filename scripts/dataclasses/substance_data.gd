@@ -3,7 +3,7 @@ class_name SubstanceData
 extends Resource
 
 @export_group("Base Data")
-@export var name := ""
+@export var substance_type := ""
 @export var current_state_of_matter := SubstanceData.STATE_OF_MATTER.SOLID
 @export var effects: Array[SubstanceEffect] = []
 @export var possible_reactions: Array[SubstanceReaction] = []
@@ -14,6 +14,10 @@ extends Resource
 
 @export_group("Graphics")
 @export var icon: Image
+
+var name: String:
+    get:
+        return substance_type + SubstanceData.state_of_matter_to_string(current_state_of_matter)
 
 enum STATE_OF_MATTER {
     GAS,
@@ -55,7 +59,7 @@ enum STATE_OF_MATTER {
 # }
 
 func _init(p_name: String="", p_effects: Array[SubstanceEffect]=[], p_possible_reactions: Array[SubstanceReaction]=[], p_melting_temperature: int=270, p_ignition_temperature: int=500, p_vaporisation_temperature: int=400):
-    name = p_name
+    substance_type = p_name
     effects = p_effects
     possible_reactions = p_possible_reactions
     melting_temperature = p_melting_temperature
@@ -65,3 +69,6 @@ func _init(p_name: String="", p_effects: Array[SubstanceEffect]=[], p_possible_r
 
 func _eq(other: SubstanceData) -> bool:
     return name == other.name
+
+static func state_of_matter_to_string(state_of_matter: STATE_OF_MATTER) -> String:
+    return SubstanceData.STATE_OF_MATTER.keys()[state_of_matter]
