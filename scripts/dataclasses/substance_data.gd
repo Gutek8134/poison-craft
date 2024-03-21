@@ -9,7 +9,9 @@ extends Resource
 @export var possible_reactions: Array[SubstanceReaction] = []
 ## In Kelvins
 @export var melting_temperature: int = 270
+## In Kelvins
 @export var ignition_temperature: int = 500
+## In Kelvins
 @export var vaporisation_temperature: int = 400
 
 @export_group("Graphics")
@@ -17,7 +19,9 @@ extends Resource
 
 var name: String:
     get:
-        return substance_type + SubstanceData.state_of_matter_to_string(current_state_of_matter)
+        return "%s (%s)" % [substance_type, SubstanceData.state_of_matter_to_string(current_state_of_matter)]
+
+var full_string_representation: bool = true
 
 enum STATE_OF_MATTER {
     GAS,
@@ -27,10 +31,9 @@ enum STATE_OF_MATTER {
 
 # Tree structure:
 # SubstanceData {
-# 	name {
-#       name: string,
-#       current_state_of_matter: SOM
-#   }
+#   substance_type: string,
+#   current_state_of_matter: SOM
+#   name: type (state_of_matter)
 # 	effects [
 # 		SubstanceEffect {
 # 		minimal_dose
@@ -70,5 +73,23 @@ func _init(p_name: String="", p_effects: Array[SubstanceEffect]=[], p_possible_r
 func _eq(other: SubstanceData) -> bool:
     return name == other.name
 
+func _to_string(max_effects: int=10, max_reactions: int=5) -> String:
+    if full_string_representation:
+        return self.full_to_string()
+    var output: String = self.name
+    output += "; " + (str(len(self.possible_reactions)) if len(self.effects) > max_effects else ", ".join(self.effects))
+    output += "; " + (str(len(self.possible_reactions)) if len(self.possible_reactions) > max_reactions else ", ".join(self.possible_reactions))
+    return output
+
+func full_to_string() -> String:
+    var output := "%s {\n\teffects:\n" % [name]
+    for effect in effects:
+        output += "\t\t%s\n" % effect
+    output += "\tpossible reactions:\n"
+    for reaction in possible_reactions:
+        output += "%s\n" % ("\t" + reaction.full_to_string().replace("\n", "\n\t"))
+    output += "}\n"
+    return output
+
 static func state_of_matter_to_string(state_of_matter: STATE_OF_MATTER) -> String:
-    return SubstanceData.STATE_OF_MATTER.keys()[state_of_matter]
+    return SubstanceData.STATE_OF_MATTER.keys()[state_of_matter].to_lower()

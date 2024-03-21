@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("2_k20nh")
-name = ""
-current_state_of_matter = 2
+substance_type = "Jelenial"
+current_state_of_matter = 0
 effects = Array[Resource("res://scripts/dataclasses/substance_effect_data.gd")]([])
 possible_reactions = Array[Resource("res://scripts/dataclasses/substance_reaction_data.gd")]([])
 melting_temperature = 270

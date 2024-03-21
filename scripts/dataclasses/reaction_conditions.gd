@@ -12,3 +12,6 @@ func _init(p_min_temperature: int=200, p_max_temperature: int=370, p_catalysts: 
     max_temperature = p_max_temperature
     catalysts = p_catalysts
     mixing = p_mixing
+
+func _to_string():
+    return "%d <= T <= %d; %s; %s" % [min_temperature, max_temperature, ", ".join(catalysts), "mix" if mixing else ""]

@@ -126,10 +126,10 @@ func _update_ongoing_reactions() -> void:
 		var substance := data_table.data[substance_name] as SubstanceData
 		for possible_reaction in substance.possible_reactions:
 			# Reactant not present
-			if possible_reaction.reacts_with not in content:
+			if possible_reaction.reactant_name not in content:
 				continue
 			# Not enough substance or reactant
-			if content[possible_reaction.substance_name] < possible_reaction.substance_amount or content[possible_reaction.reacts_with] < possible_reaction.reactant_amount:
+			if content[possible_reaction.substance_name] < possible_reaction.substance_amount or content[possible_reaction.reactant_name] < possible_reaction.reactant_amount:
 				continue
 
 			var conditions = possible_reaction.reaction_conditions
@@ -176,7 +176,7 @@ func _reaction_coroutine(reaction: SubstanceReaction):
 	while reaction.name in ongoing_reactions_timers:
 		await ongoing_reactions_timers[reaction.name]
 		content[reaction.substance_name] -= reaction.substance_amount
-		content[reaction.reacts_with] -= reaction.reactant_amount
+		content[reaction.reactant_name] -= reaction.reactant_amount
 		for substance in reaction.outcome_substance:
 			content[substance.name] += reaction.outcome_substance[substance]
 

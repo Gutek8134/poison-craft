@@ -15,14 +15,10 @@ static func factory(p_name: String="main") -> SubstanceDataTable:
         else:
             _instances[p_name] = SubstanceDataTable.new()
     _instances[p_name].name = p_name
+    _instances[p_name].data["example substance"] = SubstanceData.new("example substance")
     _instances[p_name]._add_temperature_reactions()
-    _instances[p_name].data["example substance"] = SubstanceData.new()
     print(_instances[p_name].data)
     return _instances[p_name]
-
-# TODO: substance creator
-func _init() -> void:
-    print(data)
 
 func save() -> void:
     var error := ResourceSaver.save(self, "res://content/data/%s_substance_table.tres" % name, ResourceSaver.FLAG_BUNDLE_RESOURCES)
@@ -39,8 +35,8 @@ func _add_temperature_reactions() -> void:
                 10,
                 substance.name,
                 0,
-                {substance.substance_type + SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.LIQUID): 10},
-                ReactionConditions.new(substance.melting_temperature, substance_name.ignition_temperature, []),
+                {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.LIQUID)]:10},
+                ReactionConditions.new(substance.melting_temperature, substance.ignition_temperature, []),
                 1),
             SubstanceReaction.new(
                 "%s solidification" % substance_name,
@@ -48,8 +44,8 @@ func _add_temperature_reactions() -> void:
                 10,
                 substance.name,
                 0,
-                {substance.substance_type + SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.SOLID): 10},
-                ReactionConditions.new(0, substance_name.melting_temperature, []),
+                {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.SOLID)]:10},
+                ReactionConditions.new(0, substance.melting_temperature, []),
                 1),
             SubstanceReaction.new(
                 "%s vaporisation" % substance_name,
@@ -57,8 +53,8 @@ func _add_temperature_reactions() -> void:
                 10,
                 substance.name,
                 0,
-                {substance.substance_type + SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.GAS): 10},
-                ReactionConditions.new(substance.vaporisation_temperature, substance_name.ignition_temperature, []),
+                {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.GAS)]:10},
+                ReactionConditions.new(substance.vaporisation_temperature, substance.ignition_temperature, []),
                 1),
             SubstanceReaction.new(
                 "%s condensation" % substance_name,
@@ -66,8 +62,8 @@ func _add_temperature_reactions() -> void:
                 10,
                 substance.name,
                 0,
-                {substance.substance_type + SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.LIQUID): 10},
-                ReactionConditions.new(substance.melting_temperature, substance_name.vaporisation_temperature, []),
+                {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.LIQUID)]:10},
+                ReactionConditions.new(substance.melting_temperature, substance.vaporisation_temperature, []),
                 1),
         ]
         substance.possible_reactions.append_array(temperature_reactions)
