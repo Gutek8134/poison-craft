@@ -1,11 +1,26 @@
 extends Node
 
+@export var substance: SubstanceData
+@export var amount: int
+
+var gas_image := preload ("res://content/images/states of matter/gas.png") as Texture2D
+var liquid_image := preload ("res://content/images/states of matter/liquid.png") as Texture2D
+var solid_image := preload ("res://content/images/states of matter/solid.png") as Texture2D
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+func _process(_delta):
+	($SubstanceSymbol as TextureRect).texture = substance.icon
 
+	($VBoxContainer/SubstanceName as RichTextLabel).text = "[center]%s[/center]" % [substance.substance_type.to_upper()]
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+	match substance.current_state_of_matter:
+		SubstanceData.STATE_OF_MATTER.GAS:
+			($SubstanceState as TextureRect).texture = gas_image
+
+		SubstanceData.STATE_OF_MATTER.LIQUID:
+			($SubstanceState as TextureRect).texture = liquid_image
+
+		SubstanceData.STATE_OF_MATTER.SOLID:
+			($SubstanceState as TextureRect).texture = solid_image
+
+	($VBoxContainer2/Amount as RichTextLabel).text = "[center]%dg[/center]" % [amount]

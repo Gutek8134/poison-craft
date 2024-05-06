@@ -1,11 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://daodn204vfhht"]
+[gd_scene load_steps=4 format=3 uid="uid://daodn204vfhht"]
 
+[ext_resource type="Script" path="res://scripts/ui/substance_repr.gd" id="1_85tap"]
 [ext_resource type="Texture2D" uid="uid://3ugdclamlyxd" path="res://icon.svg" id="1_rsgho"]
+[ext_resource type="Resource" uid="uid://c3w2baqpvnm2q" path="res://content/data/substance_data_resources/Jelenial_gas.tres" id="2_djful"]
 
 [node name="HFlowContainer" type="HFlowContainer"]
 layout_direction = 2
 offset_right = 304.0
 offset_bottom = 95.0
+script = ExtResource("1_85tap")
+substance = ExtResource("2_djful")
+amount = 35
 
 [node name="SubstanceSymbol" type="TextureRect" parent="."]
 custom_minimum_size = Vector2(95.355, 0)

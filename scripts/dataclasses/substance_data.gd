@@ -15,7 +15,7 @@ extends Resource
 @export var vaporisation_temperature: int = 400
 
 @export_group("Graphics")
-@export var icon: Image
+@export var icon: Texture2D
 
 var name: String:
     get:
@@ -68,7 +68,7 @@ func _init(p_name: String="", p_effects: Array[SubstanceEffect]=[], p_possible_r
     melting_temperature = p_melting_temperature
     ignition_temperature = p_ignition_temperature
     vaporisation_temperature = p_vaporisation_temperature
-    icon = Image.new()
+    icon = Texture2D.new()
 
 func _eq(other: SubstanceData) -> bool:
     return name == other.name
