@@ -1,5 +1,6 @@
 class_name Substance
 
-extends RefCounted
+extends Resource
 
 @export var data: SubstanceData
+@export var amount: int

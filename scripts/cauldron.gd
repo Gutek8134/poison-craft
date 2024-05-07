@@ -83,11 +83,11 @@ func decrease_target_temperature(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
 	target_temperature -= value
 
 ## Amount in grams
-func add_substance(substance: Substance, amount: int):
+func add_substance(substance: Substance):
 	if substance.data.name not in content:
-		content[substance.data.name] = amount
+		content[substance.data.name] = substance.amount
 	else:
-		content[substance.data.name] += amount
+		content[substance.data.name] += substance.amount
 	update_substance_display()
 
 ## Amount in grams
