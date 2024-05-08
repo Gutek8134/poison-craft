@@ -207,3 +207,6 @@ func _on_increase_temperature_button_pressed():
 		increase_target_temperature(int(float(DEFAULT_TEMPERATURE_CHANGE) / 2))
 	else:
 		increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE)
+
+func _test() -> void:
+	pass

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SubstanceData" load_steps=3 format=3 uid="uid://psfmsbp6xfv3"]
+
+[ext_resource type="Texture2D" uid="uid://3ugdclamlyxd" path="res://icon.svg" id="1_upyuv"]
+[ext_resource type="Script" path="res://scripts/dataclasses/substance_data.gd" id="2_7fhrh"]
+
+[resource]
+script = ExtResource("2_7fhrh")
+substance_type = "Jelenial"
+current_state_of_matter = 2
+effects = Array[Resource("res://scripts/dataclasses/substance_effect_data.gd")]([])
+possible_reactions = Array[Resource("res://scripts/dataclasses/substance_reaction_data.gd")]([])
+melting_temperature = 270
+ignition_temperature = 500
+vaporisation_temperature = 400
+icon = ExtResource("1_upyuv")

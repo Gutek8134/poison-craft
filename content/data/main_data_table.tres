@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="SubstanceDataTable" load_steps=2 format=3 uid="uid://4eamlarl4t1g"]
-
-[ext_resource type="Script" path="res://scripts/dataclasses/substance_table.gd" id="1_vo0rq"]
-
-[resource]
-script = ExtResource("1_vo0rq")
-data = {}
-name = "main"

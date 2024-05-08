@@ -87,7 +87,7 @@ func full_to_string() -> String:
         output += "\t\t%s\n" % effect
     output += "\tpossible reactions:\n"
     for reaction in possible_reactions:
-        output += "%s\n" % ("\t" + reaction.full_to_string().replace("\n", "\n\t"))
+        output += "%s\n" % ("\t\t" + reaction.full_to_string().replace("\n", "\n\t\t"))
     output += "}\n"
     return output
 

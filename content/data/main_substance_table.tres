@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SubstanceDataTable" load_steps=5 format=3 uid="uid://4eamlarl4t1g"]
+
+[ext_resource type="Resource" uid="uid://c3w2baqpvnm2q" path="res://content/data/substance_data_resources/Jelenial_gas.tres" id="1_d6tjo"]
+[ext_resource type="Resource" uid="uid://psfmsbp6xfv3" path="res://content/data/substance_data_resources/Jelenial_solid.tres" id="2_n6co6"]
+[ext_resource type="Resource" uid="uid://d2bou4fc2ccbe" path="res://content/data/substance_data_resources/Jelenial_liquid.tres" id="3_kovyx"]
+[ext_resource type="Script" path="res://scripts/dataclasses/substance_table.gd" id="4_pmec5"]
+
+[resource]
+script = ExtResource("4_pmec5")
+data = {
+"Jelenial (gas)": ExtResource("1_d6tjo"),
+"Jelenial (liquid)": ExtResource("3_kovyx"),
+"Jelenial (solid)": ExtResource("2_n6co6")
+}
+name = "main"
