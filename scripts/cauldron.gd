@@ -50,6 +50,7 @@ var is_cooling: bool:
 func _ready():
 	current_temperature = room_temperature
 	target_temperature = current_temperature
+	_test()
 
 func _process(_delta):
 	_update_ongoing_reactions()
@@ -168,17 +169,19 @@ func _update_ongoing_reactions() -> void:
 			timer.one_shot = false
 			timer.autostart = false
 			timer.wait_time = reaction.reaction_time
+			add_child(timer)
 			timer.start()
 			ongoing_reactions_timers[reaction.name] = timer
+			
 			_reaction_coroutine(reaction)
 
 func _reaction_coroutine(reaction: SubstanceReaction):
 	while reaction.name in ongoing_reactions_timers:
-		await ongoing_reactions_timers[reaction.name]
+		await (ongoing_reactions_timers[reaction.name] as Timer).timeout
 		content[reaction.substance_name] -= reaction.substance_amount
 		content[reaction.reactant_name] -= reaction.reactant_amount
-		for substance in reaction.outcome_substance:
-			content[substance.name] += reaction.outcome_substance[substance]
+		for substance_name: String in reaction.outcome_substances:
+			content[substance_name] = content.get(substance_name, 0) + reaction.outcome_substances[substance_name]
 
 func _update_temperature_display() -> void:
 	temperature_display.text = "[center][font_size=50]%dK[/font_size][/center]" % current_temperature \
@@ -209,4 +212,8 @@ func _on_increase_temperature_button_pressed():
 		increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE)
 
 func _test() -> void:
-	pass
+	content = {
+		"Jelenial (solid)": 10
+	}
+	_update_ongoing_reactions()
+	print(ongoing_reactions)
