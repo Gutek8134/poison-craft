@@ -11,5 +11,5 @@ effects = Array[Resource("res://scripts/dataclasses/substance_effect_data.gd")](
 possible_reactions = Array[Resource("res://scripts/dataclasses/substance_reaction_data.gd")]([])
 melting_temperature = 270
 ignition_temperature = 500
-vaporisation_temperature = 400
+vaporisation_temperature = 300
 icon = ExtResource("1_r8sdi")

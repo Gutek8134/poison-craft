@@ -11,6 +11,8 @@ const room_temperature: int = 295
 @export_group("gameplay")
 @export var temperature_change_interval: int = 3
 
+const substance_representation_scene := (preload ("res://scenes/prefabs/ui/substance_repr.tscn") as PackedScene)
+
 ## In Kelvins, don't set manually outside of testing, use set_target_temperature instead
 var current_temperature: int:
 	set = _set_current_temperature
@@ -176,10 +178,19 @@ func _update_ongoing_reactions() -> void:
 			_reaction_coroutine(reaction)
 
 func _reaction_coroutine(reaction: SubstanceReaction):
-	while reaction.name in ongoing_reactions_timers:
+	while true:
 		await (ongoing_reactions_timers[reaction.name] as Timer).timeout
+		if reaction.name not in ongoing_reactions_timers:
+			break
 		content[reaction.substance_name] -= reaction.substance_amount
 		content[reaction.reactant_name] -= reaction.reactant_amount
+
+		if content[reaction.substance_name] == 0:
+			content.erase(reaction.substance_name)
+		
+		if content[reaction.reactant_name] == 0:
+			content.erase(reaction.reactant_name)
+
 		for substance_name: String in reaction.outcome_substances:
 			content[substance_name] = content.get(substance_name, 0) + reaction.outcome_substances[substance_name]
 
@@ -213,7 +224,8 @@ func _on_increase_temperature_button_pressed():
 
 func _test() -> void:
 	content = {
-		"Jelenial (solid)": 10
+		"Jelenial (liquid)": 19
 	}
 	_update_ongoing_reactions()
-	print(ongoing_reactions)
+	var printer = func(): print("%s %s" % [ongoing_reactions, content])
+	CoroutinesLib.invoke_repeating(printer, get_tree(), self, 2, 0, 5)
