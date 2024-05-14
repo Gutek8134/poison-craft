@@ -5,9 +5,9 @@ extends RefCounted
 static var _coroutines: Dictionary = {}
 
 ## Waits offset time before calling function
+##
 ## If you want to be able to stop lambdas and partials manually, save them in a variable
-## If offset is less or equal 0, the timer starts immediately
-static func invoke(function: Callable, tree: SceneTree, offset: int=- 1) -> void:
+static func invoke(function: Callable, tree: SceneTree, offset: int=1) -> void:
 	if offset > 0:
 		await tree.create_timer(offset).timeout
 

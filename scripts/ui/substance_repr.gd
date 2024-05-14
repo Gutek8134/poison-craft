@@ -1,3 +1,5 @@
+class_name SubstanceRepresentation
+
 extends Node
 
 @export var substance: Substance
@@ -6,8 +8,14 @@ var gas_image := preload ("res://content/images/states of matter/gas.png") as Te
 var liquid_image := preload ("res://content/images/states of matter/liquid.png") as Texture2D
 var solid_image := preload ("res://content/images/states of matter/solid.png") as Texture2D
 
-# Called when the node enters the scene tree for the first time.
-func _process(_delta):
+func _init(p_substance: Substance=null):
+	if p_substance != null:
+		substance = p_substance
+
+func _ready():
+	update()
+
+func update() -> void:
 	($SubstanceSymbol as TextureRect).texture = substance.data.icon
 
 	($VBoxContainer/SubstanceName as RichTextLabel).text = "[center]%s[/center]" % [substance.data.substance_type.to_upper()]

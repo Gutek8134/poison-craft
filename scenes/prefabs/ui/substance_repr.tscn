@@ -12,8 +12,9 @@ amount = 35
 
 [node name="HFlowContainer" type="HFlowContainer"]
 layout_direction = 2
-offset_right = 304.0
+offset_right = 305.0
 offset_bottom = 95.0
+size_flags_horizontal = 3
 script = ExtResource("1_85tap")
 substance = SubResource("Resource_0ux5t")
 

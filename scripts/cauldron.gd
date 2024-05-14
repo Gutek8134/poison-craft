@@ -26,6 +26,9 @@ const DEFAULT_TEMPERATURE_CHANGE = 10
 
 ## key: string (substance name) = int (amount in grams)
 @onready var content: Dictionary = {}
+
+## key: string (substance name) = SubstanceRepresentation
+@onready var substance_representations: Dictionary = {}
 	
 @onready var is_mixing := false
 
@@ -53,9 +56,6 @@ func _ready():
 	current_temperature = room_temperature
 	target_temperature = current_temperature
 	_test()
-
-func _process(_delta):
-	_update_ongoing_reactions()
 
 func self_destruct() -> void:
 	print("Oh shit! Self destruct!")
@@ -89,20 +89,35 @@ func decrease_target_temperature(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
 func add_substance(substance: Substance):
 	if substance.data.name not in content:
 		content[substance.data.name] = substance.amount
+		var repr := substance_representation_scene.instantiate()
+		(repr as SubstanceRepresentation).substance = substance
+		content_display.add_child(repr)
+		substance_representations[substance.data.name] = repr
 	else:
 		content[substance.data.name] += substance.amount
+		((substance_representations[substance.data.name] as Node).get_script() as SubstanceRepresentation).substance.amount = content[substance.data.name]
 	update_substance_display()
+	_update_ongoing_reactions()
 
 ## Amount in grams
 func add_ingredient(ingredient: Ingredient, amount: int):
 	for substance_name in ingredient.composition:
 		if substance_name not in content:
 			content[substance_name] = amount * ingredient.composition[substance_name]
+			var repr := substance_representation_scene.instantiate()
+			(repr as SubstanceRepresentation).substance = \
+				Substance.new(data_table.data[substance_name], content[substance_name])
+			content_display.add_child(repr)
+			substance_representations[substance_name] = repr
 		else:
 			content[substance_name] += amount * ingredient.composition[substance_name]
+			(substance_representations[substance_name] as SubstanceRepresentation).substance.amount = content[substance_name]
 	update_substance_display()
+	_update_ongoing_reactions()
 
 func update_substance_display() -> void:
+	for representation: SubstanceRepresentation in substance_representations.values():
+		representation.update()
 	print(content)
 
 ## Interval in seconds
@@ -119,9 +134,11 @@ func _start_approaching_target_temperature(interval: int=3) -> void:
 			current_temperature -= heating_power * interval
 		else:
 			current_temperature += heating_power * interval
+		_update_ongoing_reactions()
 		
 	current_temperature = target_temperature
 	temperature_change_timer.stop()
+	_update_ongoing_reactions()
 
 func _update_ongoing_reactions() -> void:
 	var real_reactions: Array[SubstanceReaction] = []
@@ -193,6 +210,7 @@ func _reaction_coroutine(reaction: SubstanceReaction):
 
 		for substance_name: String in reaction.outcome_substances:
 			content[substance_name] = content.get(substance_name, 0) + reaction.outcome_substances[substance_name]
+		_update_ongoing_reactions()
 
 func _update_temperature_display() -> void:
 	temperature_display.text = "[center][font_size=50]%dK[/font_size][/center]" % current_temperature \
@@ -223,9 +241,7 @@ func _on_increase_temperature_button_pressed():
 		increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE)
 
 func _test() -> void:
-	content = {
-		"Jelenial (liquid)": 19
-	}
+	add_substance(Substance.new(data_table.data["Jelenial (liquid)"], 19))
 	_update_ongoing_reactions()
-	var printer = func(): print("%s %s" % [ongoing_reactions, content])
-	CoroutinesLib.invoke_repeating(printer, get_tree(), self, 2, 0, 5)
+	# var printer = func(): print("%s %s" % [ongoing_reactions, content])
+	# CoroutinesLib.invoke_repeating(printer, get_tree(), self, 2, 0, 5)

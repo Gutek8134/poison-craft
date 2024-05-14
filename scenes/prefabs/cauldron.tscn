@@ -1,10 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bveoo716ac81d"]
+[gd_scene load_steps=5 format=3 uid="uid://bveoo716ac81d"]
 
 [ext_resource type="Script" path="res://scripts/cauldron.gd" id="1_t4s4w"]
 [ext_resource type="Texture2D" uid="uid://d2paw5vc8p2xk" path="res://content/images/cauldron-t.png" id="2_fy3fo"]
 [ext_resource type="Texture2D" uid="uid://dful5kmhtcxmm" path="res://content/images/plus-t.png" id="3_plr1v"]
 [ext_resource type="Texture2D" uid="uid://h01ytmr31lmw" path="res://content/images/minus-t.png" id="4_42w8m"]
-[ext_resource type="PackedScene" uid="uid://daodn204vfhht" path="res://scenes/prefabs/ui/substance_repr.tscn" id="5_tjpe5"]
 
 [node name="Cauldron" type="Node2D"]
 script = ExtResource("1_t4s4w")
@@ -56,7 +55,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 692.0
 offset_top = 35.0
-offset_right = 1013.0
+offset_right = 1040.0
 offset_bottom = 310.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -69,19 +68,6 @@ vertical_scroll_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="SubstanceRepr" parent="substance_scroll/substance_grid" instance=ExtResource("5_tjpe5")]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="SubstanceRepr2" parent="substance_scroll/substance_grid" instance=ExtResource("5_tjpe5")]
-layout_mode = 2
-
-[node name="SubstanceRepr3" parent="substance_scroll/substance_grid" instance=ExtResource("5_tjpe5")]
-layout_mode = 2
-
-[node name="SubstanceRepr4" parent="substance_scroll/substance_grid" instance=ExtResource("5_tjpe5")]
-layout_mode = 2
 
 [connection signal="pressed" from="cauldron_sprite/increase_temperature" to="." method="_on_increase_temperature_button_pressed"]
 [connection signal="pressed" from="cauldron_sprite/decrease_temperature" to="." method="_on_decrease_temperature_button_pressed"]
