@@ -40,7 +40,7 @@ func _add_temperature_reactions() -> void:
                     substance.name,
                     0,
                     {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.LIQUID)]:10},
-                    ReactionConditions.new(substance.melting_temperature, substance.vaporisation_temperature, []),
+                    ReactionConditions.new(substance.melting_temperature, substance.vaporisation_temperature - 1, []),
                     1),
         ]
         if substance.current_state_of_matter == SubstanceData.STATE_OF_MATTER.LIQUID:
@@ -52,7 +52,7 @@ func _add_temperature_reactions() -> void:
                     substance.name,
                     0,
                     {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.SOLID)]:10},
-                    ReactionConditions.new(0, substance.melting_temperature, []),
+                    ReactionConditions.new(0, substance.melting_temperature - 1, []),
                     1),
                 SubstanceReaction.new(
                     "%s vaporisation" % substance_name,
@@ -61,7 +61,7 @@ func _add_temperature_reactions() -> void:
                     substance.name,
                     0,
                     {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.GAS)]:10},
-                    ReactionConditions.new(substance.vaporisation_temperature, substance.ignition_temperature, []),
+                    ReactionConditions.new(substance.vaporisation_temperature, substance.ignition_temperature - 1, []),
                     1),
             ]
         if substance.current_state_of_matter == SubstanceData.STATE_OF_MATTER.SOLID:
@@ -73,7 +73,7 @@ func _add_temperature_reactions() -> void:
                 substance.name,
                 0,
                 {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.LIQUID)]:10},
-                ReactionConditions.new(substance.melting_temperature, substance.ignition_temperature, []),
+                ReactionConditions.new(substance.melting_temperature, substance.ignition_temperature - 1, []),
                 1),
             ]
         data[substance_name].possible_reactions.append_array(temperature_reactions)
