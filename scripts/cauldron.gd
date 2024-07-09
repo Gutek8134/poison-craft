@@ -13,7 +13,7 @@ const room_temperature: int = 295
 
 const substance_representation_scene := (preload ("res://scenes/prefabs/ui/substance_repr.tscn") as PackedScene)
 
-## In Kelvins, don't set manually outside of testing, use set_target_temperature instead
+## In Kelvins, use set_target_temperature for 
 var current_temperature: int:
 	set = _set_current_temperature
 ## In Kelvins
@@ -159,7 +159,14 @@ func _update_ongoing_reactions() -> void:
 				continue
 			# Not enough substance or reactant
 			if content[possible_reaction.substance_name] < possible_reaction.substance_amount or content[possible_reaction.reactant_name] < possible_reaction.reactant_amount:
-				continue
+				# still may scale down
+				if not possible_reaction.scaling:
+					continue
+
+				possible_reaction = possible_reaction.scaled()
+				# check if there is enough substances if it can
+				if content[possible_reaction.substance_name] < possible_reaction.substance_amount or content[possible_reaction.reactant_name] < possible_reaction.reactant_amount:
+					continue
 
 			var conditions = possible_reaction.reaction_conditions
 			# Temperature is too low or too high
@@ -215,7 +222,9 @@ func _reaction_coroutine(reaction: SubstanceReaction):
 
 		for substance_name: String in reaction.outcome_substances:
 			_add_substance(data_table.data[substance_name], reaction.outcome_substances[substance_name])
-			
+		
+		current_temperature += reaction.temperature_change
+
 		_update_ongoing_reactions()
 		_update_substance_display()
 

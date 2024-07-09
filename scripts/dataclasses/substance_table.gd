@@ -41,7 +41,9 @@ func _add_temperature_reactions() -> void:
                     0,
                     {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.LIQUID)]:10},
                     ReactionConditions.new(substance.melting_temperature, substance.vaporisation_temperature - 1, []),
-                    1),
+                    1,
+                    0,
+                    true),
         ]
         if substance.current_state_of_matter == SubstanceData.STATE_OF_MATTER.LIQUID:
             temperature_reactions = [
@@ -53,7 +55,8 @@ func _add_temperature_reactions() -> void:
                     0,
                     {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.SOLID)]:10},
                     ReactionConditions.new(0, substance.melting_temperature - 1, []),
-                    1),
+                    1,
+                    true),
                 SubstanceReaction.new(
                     "%s vaporisation" % substance_name,
                     substance.name,
@@ -62,7 +65,9 @@ func _add_temperature_reactions() -> void:
                     0,
                     {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.GAS)]:10},
                     ReactionConditions.new(substance.vaporisation_temperature, substance.ignition_temperature - 1, []),
-                    1),
+                    1,
+                    0,
+                    true),
             ]
         if substance.current_state_of_matter == SubstanceData.STATE_OF_MATTER.SOLID:
             temperature_reactions = [
@@ -74,6 +79,8 @@ func _add_temperature_reactions() -> void:
                 0,
                 {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.LIQUID)]:10},
                 ReactionConditions.new(substance.melting_temperature, substance.ignition_temperature - 1, []),
-                1),
+                1,
+                0,
+                true),
             ]
         data[substance_name].possible_reactions.append_array(temperature_reactions)
