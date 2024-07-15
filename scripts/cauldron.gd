@@ -1,7 +1,5 @@
 extends Node2D
 
-const room_temperature: int = 295
-
 @export_group("limits")
 @export var max_temperature: int = 570
 @export var min_temperature: int = 280
@@ -11,7 +9,7 @@ const room_temperature: int = 295
 @export_group("gameplay")
 @export var temperature_change_interval: int = 3
 
-const substance_representation_scene := (preload ("res://scenes/prefabs/ui/substance_repr.tscn") as PackedScene)
+const substance_container_scene := (preload ("res://scenes/prefabs/container.tscn") as PackedScene)
 
 ## In Kelvins, use set_target_temperature for 
 var current_temperature: int:
@@ -25,12 +23,7 @@ const DEFAULT_TEMPERATURE_CHANGE = 10
 # Related to causing reactions
 
 ## key: string (substance name) = int (amount in grams)
-@onready var content: Dictionary = {}
-
-## key: string (substance name) = SubstanceRepresentation
-@onready var substance_representations: Dictionary = {}
-	
-@onready var is_mixing := false
+@onready var content: SubstanceContainer
 
 var is_heating: bool:
 	get:
@@ -49,12 +42,15 @@ var is_cooling: bool:
 # Graphics related
 
 @onready var temperature_display := $cauldron_sprite/temperature_display as RichTextLabel
-@onready var content_display := $substance_scroll/substance_grid as GridContainer
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	current_temperature = room_temperature
+	content = substance_container_scene.instantiate()
+	content.data_table = data_table
+	content.timers_parent_node = self
+	current_temperature = SubstanceContainer.room_temperature
 	target_temperature = current_temperature
+	add_child(content)
 	_test()
 
 func self_destruct() -> void:
@@ -64,6 +60,7 @@ func self_destruct() -> void:
 ## In Kelvins
 func _set_current_temperature(new_temperature: int) -> void:
 	current_temperature = new_temperature
+	content.current_temperature = new_temperature
 	_update_temperature_display()
 	if current_temperature > max_temperature or current_temperature < min_temperature:
 		self_destruct()
@@ -76,9 +73,6 @@ func set_target_temperature(new_temperature: int) -> void:
 		target_temperature = clamp(new_temperature, min_temperature, max_temperature)
 	_update_temperature_display()
 
-func start_mixing() -> void:
-	is_mixing = true
-
 func increase_target_temperature(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
 	target_temperature += value
 
@@ -86,48 +80,19 @@ func decrease_target_temperature(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
 	target_temperature -= value
 
 ## Amount in grams
-func _add_substance(substance: SubstanceData, amount: int):
-	if amount == 0:
-		return
-
-	content[substance.name] = content.get(substance.name, 0) + amount
-
-	assert(content[substance.name] >= 0, "Content's value became negative, WTF?!")
-	
-	if amount > 0:
-		if substance.name not in substance_representations:
-			var repr := substance_representation_scene.instantiate() as SubstanceRepresentation
-			repr.substance = Substance.new(substance, amount)
-			content_display.add_child(repr)
-			substance_representations[substance.name] = repr
-			return
-
-	elif content[substance.name] == 0:
-		(substance_representations[substance.name] as SubstanceRepresentation).queue_free()
-		substance_representations.erase(substance.name)
-		return
-
-	(substance_representations[substance.name] as SubstanceRepresentation).substance.amount = content[substance.name]
-
-## Amount in grams
 func add_substance(substance: SubstanceData, amount: int):
-	_add_substance(substance, amount)
-	_update_substance_display()
-	_update_ongoing_reactions()
+	content.add_substance(substance, amount)
+	content.update_substance_display()
+	content.update_ongoing_reactions()
 
 ## Amount in grams
 func add_ingredient(ingredient: Ingredient, amount: int):
 	for substance_name in ingredient.composition:
 		var substance_amount = amount * ingredient.composition[substance_name]
-		_add_substance(data_table.data[substance_name], substance_amount)
+		content.add_substance(data_table.data[substance_name], substance_amount)
 		
-	_update_substance_display()
-	_update_ongoing_reactions()
-
-func _update_substance_display() -> void:
-	for representation: SubstanceRepresentation in substance_representations.values():
-		representation.update()
-	print(content)
+	content.update_substance_display()
+	content.update_ongoing_reactions()
 
 ## Interval in seconds
 func _start_approaching_target_temperature(interval: int=3) -> void:
@@ -143,90 +108,11 @@ func _start_approaching_target_temperature(interval: int=3) -> void:
 			current_temperature -= heating_power * interval
 		else:
 			current_temperature += heating_power * interval
-		_update_ongoing_reactions()
+		content.update_ongoing_reactions()
 		
 	current_temperature = target_temperature
 	temperature_change_timer.stop()
-	_update_ongoing_reactions()
-
-func _update_ongoing_reactions() -> void:
-	var real_reactions: Array[SubstanceReaction] = []
-	for substance_name in content:
-		var substance := data_table.data[substance_name] as SubstanceData
-		for possible_reaction in substance.possible_reactions:
-			# Reactant not present
-			if possible_reaction.reactant_name not in content:
-				continue
-			# Not enough substance or reactant
-			if content[possible_reaction.substance_name] < possible_reaction.substance_amount or content[possible_reaction.reactant_name] < possible_reaction.reactant_amount:
-				# still may scale down
-				if not possible_reaction.scaling:
-					continue
-
-				possible_reaction = possible_reaction.scaled()
-				# check if there is enough substances if it can
-				if content[possible_reaction.substance_name] < possible_reaction.substance_amount or content[possible_reaction.reactant_name] < possible_reaction.reactant_amount:
-					continue
-
-			var conditions = possible_reaction.reaction_conditions
-			# Temperature is too low or too high
-			if conditions.min_temperature > current_temperature or conditions.max_temperature < current_temperature:
-				continue
-			# You need to mix the content in ordet for reaction to occur
-			if conditions.mixing and not is_mixing:
-				continue
-			
-			# Some catalyst not present
-			var all_catalysts_present: bool = true
-			for catalyst in conditions.catalysts:
-				if catalyst not in content:
-					all_catalysts_present = false
-					break
-			if not all_catalysts_present:
-				continue
-			
-			# Reaction should occur
-			real_reactions.append(possible_reaction)
-	
-	# Difference update
-	# 1 - delete not present in real_reactions
-	for reaction_id in range(len(ongoing_reactions)):
-		var reaction = ongoing_reactions[reaction_id]
-		if reaction not in real_reactions:
-			ongoing_reactions.remove_at(reaction_id)
-			ongoing_reactions_timers.erase(reaction.name)
-	
-	# 2 - add not present in ongoing_reactions
-	for reaction in real_reactions:
-		if reaction not in ongoing_reactions:
-			ongoing_reactions.append(reaction)
-			var timer = Timer.new()
-			timer.one_shot = false
-			timer.autostart = false
-			timer.wait_time = reaction.reaction_time
-			add_child(timer)
-			timer.start()
-			ongoing_reactions_timers[reaction.name] = timer
-			
-			_reaction_coroutine(reaction)
-
-func _reaction_coroutine(reaction: SubstanceReaction):
-	var reaction_timer := (ongoing_reactions_timers[reaction.name] as Timer)
-	while true:
-		await reaction_timer.timeout
-		if reaction.name not in ongoing_reactions_timers:
-			break
-		
-		_add_substance(data_table.data[reaction.substance_name], -reaction.substance_amount)
-		_add_substance(data_table.data[reaction.reactant_name], -reaction.reactant_amount)
-
-		for substance_name: String in reaction.outcome_substances:
-			_add_substance(data_table.data[substance_name], reaction.outcome_substances[substance_name])
-		
-		current_temperature += reaction.temperature_change
-
-		_update_ongoing_reactions()
-		_update_substance_display()
+	content.update_ongoing_reactions()
 
 func _update_temperature_display() -> void:
 	temperature_display.text = "[center][font_size=50]%dK[/font_size][/center]" % current_temperature \

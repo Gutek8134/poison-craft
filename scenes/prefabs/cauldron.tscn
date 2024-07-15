@@ -48,26 +48,5 @@ text = "[center][font_size=40]295K[/font_size]
 scroll_active = false
 text_direction = 1
 
-[node name="substance_scroll" type="ScrollContainer" parent="."]
-layout_direction = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 692.0
-offset_top = 35.0
-offset_right = 1040.0
-offset_bottom = 310.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-vertical_scroll_mode = 2
-
-[node name="substance_grid" type="GridContainer" parent="substance_scroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
 [connection signal="pressed" from="cauldron_sprite/increase_temperature" to="." method="_on_increase_temperature_button_pressed"]
 [connection signal="pressed" from="cauldron_sprite/decrease_temperature" to="." method="_on_decrease_temperature_button_pressed"]
