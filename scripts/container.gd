@@ -23,7 +23,7 @@ var data_table
 ## key(string - reaction name): Timer
 @onready var ongoing_reactions_timers: Dictionary = {}
 
-var timers_parent_node: Node
+@onready var timers_parent_node: Node = self
 @onready var content_display := $substance_scroll/substance_grid as GridContainer
 
 func update_substance_display() -> void:
@@ -76,6 +76,7 @@ func update_ongoing_reactions() -> void:
 		var reaction = ongoing_reactions[reaction_id]
 		if reaction not in real_reactions:
 			ongoing_reactions.remove_at(reaction_id)
+			ongoing_reactions_timers[reaction.name].queue_free()
 			ongoing_reactions_timers.erase(reaction.name)
 	
 	# 2 - add not present in ongoing_reactions
