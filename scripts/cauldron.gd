@@ -44,7 +44,7 @@ var is_cooling: bool:
 @onready var temperature_display := $cauldron_sprite/temperature_display as RichTextLabel
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	content = $Container
 	content.data_table = data_table
 	content.timers_parent_node = self
@@ -79,13 +79,13 @@ func decrease_target_temperature(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
 	target_temperature -= value
 
 ## Amount in grams
-func add_substance(substance: SubstanceData, amount: int):
+func add_substance(substance: SubstanceData, amount: int) -> void:
 	content.add_substance(substance, amount)
 	content.update_substance_display()
 	content.update_ongoing_reactions()
 
 ## Amount in grams
-func add_ingredient(ingredient: Ingredient, amount: int):
+func add_ingredient(ingredient: Ingredient, amount: int) -> void:
 	for substance_name in ingredient.composition:
 		var substance_amount = amount * ingredient.composition[substance_name]
 		content.add_substance(data_table.data[substance_name], substance_amount)
@@ -119,7 +119,7 @@ if target_temperature == current_temperature \
 else "[center][font_size=40]%dK[/font_size]
 [font_size=30](%dK)[/font_size][/center]" % [target_temperature, current_temperature]
 
-func _on_decrease_temperature_button_pressed():
+func _on_decrease_temperature_button_pressed() -> void:
 	if Input.is_key_pressed(KEY_SHIFT):
 		if Input.is_key_pressed(KEY_CTRL):
 			decrease_target_temperature(DEFAULT_TEMPERATURE_CHANGE * 5)
@@ -130,7 +130,7 @@ func _on_decrease_temperature_button_pressed():
 	else:
 		decrease_target_temperature(DEFAULT_TEMPERATURE_CHANGE)
 
-func _on_increase_temperature_button_pressed():
+func _on_increase_temperature_button_pressed() -> void:
 	if Input.is_key_pressed(KEY_SHIFT):
 		if Input.is_key_pressed(KEY_CTRL):
 			increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE * 5)

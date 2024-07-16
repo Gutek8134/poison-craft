@@ -93,7 +93,7 @@ func update_ongoing_reactions() -> void:
 			
 			_reaction_coroutine(reaction)
 
-func _reaction_coroutine(reaction: SubstanceReaction):
+func _reaction_coroutine(reaction: SubstanceReaction) -> void:
 	var reaction_timer := (ongoing_reactions_timers[reaction.name] as Timer)
 	while true:
 		await reaction_timer.timeout
@@ -111,13 +111,13 @@ func _reaction_coroutine(reaction: SubstanceReaction):
 		update_ongoing_reactions()
 		update_substance_display()
 
-func add_substance(substance: SubstanceData, amount: int):
+func add_substance(substance: SubstanceData, amount: int) -> void:
 	_add_substance(substance, amount)
 	update_ongoing_reactions()
 	update_substance_display()
 
 ## Amount in grams
-func _add_substance(substance: SubstanceData, amount: int):
+func _add_substance(substance: SubstanceData, amount: int) -> void:
 	if amount == 0:
 		return
 
@@ -146,7 +146,7 @@ func start_mixing() -> void:
 func stop_mixing() -> void:
 	is_mixing = false
 
-func _set_current_temperature(new_temperature: int):
+func _set_current_temperature(new_temperature: int) -> void:
 	current_temperature = new_temperature
 	update_ongoing_reactions()
 	update_substance_display()
