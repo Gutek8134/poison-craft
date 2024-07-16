@@ -68,6 +68,7 @@ func scaled(scale: int=- 1, scale_reaction_time: bool=false, scale_temperature_c
     else:
         new_outcome_substances = outcome_substances.duplicate()
 
+    @warning_ignore("integer_division")
     return SubstanceReaction.new("%s (scaled by %d)" % [name, scale],
     substance_name,
     (substance_amount / scale),
