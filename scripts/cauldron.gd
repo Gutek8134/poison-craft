@@ -60,9 +60,10 @@ func self_destruct() -> void:
 func _set_current_temperature(new_temperature: int) -> void:
 	current_temperature = new_temperature
 	content.current_temperature = new_temperature
-	_update_temperature_display()
 	if current_temperature > max_temperature or current_temperature < min_temperature:
 		self_destruct()
+	_update_temperature_display()
+	_update_ongoing_reactions()
 
 func set_target_temperature(new_temperature: int) -> void:
 	if target_temperature == current_temperature:
@@ -107,11 +108,9 @@ func _start_approaching_target_temperature(interval: int=3) -> void:
 			current_temperature -= heating_power * interval
 		else:
 			current_temperature += heating_power * interval
-		content.update_ongoing_reactions()
 		
 	current_temperature = target_temperature
 	temperature_change_timer.stop()
-	content.update_ongoing_reactions()
 
 func _update_temperature_display() -> void:
 	temperature_display.text = "[center][font_size=50]%dK[/font_size][/center]" % current_temperature \
