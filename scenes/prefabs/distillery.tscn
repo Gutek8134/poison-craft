@@ -1,0 +1,61 @@
+[gd_scene load_steps=6 format=3 uid="uid://b6txnvg0anq2e"]
+
+[ext_resource type="Script" path="res://scripts/distillery.gd" id="1_v10g5"]
+[ext_resource type="Texture2D" uid="uid://d2paw5vc8p2xk" path="res://content/images/cauldron-t.png" id="2_5v0sp"]
+[ext_resource type="PackedScene" uid="uid://chv6qeqta4eot" path="res://scenes/prefabs/container.tscn" id="2_l51i3"]
+[ext_resource type="Texture2D" uid="uid://dful5kmhtcxmm" path="res://content/images/plus-t.png" id="3_8wrvh"]
+[ext_resource type="Texture2D" uid="uid://h01ytmr31lmw" path="res://content/images/minus-t.png" id="4_kldqf"]
+
+[node name="Distillery" type="Node2D"]
+script = ExtResource("1_v10g5")
+
+[node name="temperature_timer" type="Timer" parent="."]
+
+[node name="gases_movement_timer" type="Timer" parent="."]
+
+[node name="distillery_sprite" type="Sprite2D" parent="."]
+position = Vector2(673, 400)
+scale = Vector2(0.473046, 0.473046)
+texture = ExtResource("2_5v0sp")
+
+[node name="increase_temperature" type="Button" parent="distillery_sprite"]
+offset_left = 112.0
+offset_top = 348.0
+offset_right = 360.0
+offset_bottom = 596.0
+scale = Vector2(0.376711, 0.376711)
+action_mode = 0
+icon = ExtResource("3_8wrvh")
+
+[node name="decrease_temperature" type="Button" parent="distillery_sprite"]
+offset_left = -362.0
+offset_top = 346.0
+offset_right = -114.0
+offset_bottom = 594.0
+scale = Vector2(0.376711, 0.376711)
+icon = ExtResource("4_kldqf")
+
+[node name="temperature_display" type="RichTextLabel" parent="distillery_sprite"]
+anchors_preset = -1
+anchor_left = 0.285
+anchor_top = 0.876
+anchor_right = 0.581
+anchor_bottom = 0.958
+offset_left = -563.765
+offset_top = -476.936
+offset_right = -560.949
+offset_bottom = -459.688
+bbcode_enabled = true
+text = "[center][font_size=40]295K[/font_size]
+[font_size=30](100K)[/font_size][/center]"
+scroll_active = false
+text_direction = 1
+
+[node name="container_right" parent="." instance=ExtResource("2_l51i3")]
+position = Vector2(741, 37)
+
+[node name="container_left" parent="." instance=ExtResource("2_l51i3")]
+position = Vector2(23, 26)
+
+[connection signal="pressed" from="distillery_sprite/increase_temperature" to="." method="_on_increase_temperature_button_pressed"]
+[connection signal="pressed" from="distillery_sprite/decrease_temperature" to="." method="_on_decrease_temperature_button_pressed"]
