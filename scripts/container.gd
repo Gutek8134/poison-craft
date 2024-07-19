@@ -72,12 +72,18 @@ func update_ongoing_reactions() -> void:
 	
 	# Difference update
 	# 1 - delete not present in real_reactions
+	var ongoing_reactions_copy := ongoing_reactions.duplicate()
+	var offset: int = 0
+
 	for reaction_id in range(len(ongoing_reactions)):
 		var reaction = ongoing_reactions[reaction_id]
 		if reaction not in real_reactions:
-			ongoing_reactions.remove_at(reaction_id)
+			ongoing_reactions_copy.remove_at(reaction_id - offset)
+			offset += 1
 			ongoing_reactions_timers[reaction.name].queue_free()
 			ongoing_reactions_timers.erase(reaction.name)
+			
+	ongoing_reactions = ongoing_reactions_copy
 	
 	# 2 - add not present in ongoing_reactions
 	for reaction in real_reactions:
