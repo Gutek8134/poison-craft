@@ -63,7 +63,7 @@ func _set_current_temperature(new_temperature: int) -> void:
 	if current_temperature > max_temperature or current_temperature < min_temperature:
 		self_destruct()
 	_update_temperature_display()
-	_update_ongoing_reactions()
+	content._update_ongoing_reactions()
 
 func set_target_temperature(new_temperature: int) -> void:
 	if target_temperature == current_temperature:
