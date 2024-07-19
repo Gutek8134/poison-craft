@@ -14,22 +14,29 @@ extends Node2D
 @export var gas_movement_interval: int = 1
 
 ## In Kelvins
-var current_temperature: int:
-	set = _set_current_temperature
+var current_temperature_left: int:
+	set = _set_current_temperature_left
 ## In Kelvins
-var target_temperature: int:
-	set = set_target_temperature
+var target_temperature_left: int:
+	set = set_target_temperature_left
+## In Kelvins
+var current_temperature_right: int:
+	set = _set_current_temperature_right
+## In Kelvins
+var target_temperature_right: int:
+	set = set_target_temperature_right
 
 var is_heating: bool:
 	get:
-		return target_temperature - current_temperature < 0
+		return target_temperature_left - current_temperature_left < 0
 
 var is_cooling: bool:
 	get:
-		return target_temperature - current_temperature > 0
+		return target_temperature_left - current_temperature_left > 0
 
 const DEFAULT_TEMPERATURE_CHANGE = 10
-@onready var temperature_change_timer := $temperature_timer as Timer
+@onready var temperature_change_timer_left := $temperature_timer_left as Timer
+@onready var temperature_change_timer_right := $temperature_timer_right as Timer
 @onready var gases_movement_timer := $gases_movement_timer as Timer
 
 @onready var content_left := $container_left as SubstanceContainer
@@ -43,15 +50,18 @@ const DEFAULT_TEMPERATURE_CHANGE = 10
 
 # Graphics related
 
-@onready var temperature_display := $distillery_sprite/temperature_display as RichTextLabel
+@onready var temperature_display_left := $distillery_sprite/temperature_display_left as RichTextLabel
+@onready var temperature_display_right := $distillery_sprite/temperature_display_right as RichTextLabel
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	current_temperature = SubstanceContainer.room_temperature
-	target_temperature = current_temperature
-	content_left.current_temperature = current_temperature
+	current_temperature_left = SubstanceContainer.room_temperature
+	target_temperature_left = SubstanceContainer.room_temperature
+	current_temperature_right = SubstanceContainer.room_temperature
+	target_temperature_right = SubstanceContainer.room_temperature
+	content_left.current_temperature = current_temperature_left
 	content_left.data_table = data_table
-	content_right.current_temperature = current_temperature
+	content_right.current_temperature = current_temperature_right
 	content_right.data_table = data_table
 	_test()
 
@@ -60,39 +70,74 @@ func self_destruct() -> void:
 	queue_free()
 
 ## In Kelvins
-func _set_current_temperature(new_temperature: int) -> void:
-	current_temperature = new_temperature
-	content_left.current_temperature = current_temperature
-	if current_temperature > max_temperature or current_temperature < min_temperature:
+func _set_current_temperature_left(new_temperature: int) -> void:
+	current_temperature_left = new_temperature
+	content_left.current_temperature = current_temperature_left
+	if current_temperature_left > max_temperature or current_temperature_left < min_temperature:
 		self_destruct()
 	_update_temperature_display()
 	_update_ongoing_reactions()
 
-func set_target_temperature(new_temperature: int) -> void:
-	if target_temperature == current_temperature:
-		target_temperature = clamp(new_temperature, min_temperature, max_temperature)
-		_start_approaching_target_temperature(temperature_change_interval)
+## In Kelvins
+func _set_current_temperature_right(new_temperature: int) -> void:
+	current_temperature_right = new_temperature
+	content_right.current_temperature = current_temperature_right
+	if current_temperature_right > max_temperature or current_temperature_right < min_temperature:
+		self_destruct()
+	_update_temperature_display()
+	_update_ongoing_reactions()
+
+func set_target_temperature_left(new_temperature: int) -> void:
+	if target_temperature_left == current_temperature_left:
+		target_temperature_left = clamp(new_temperature, min_temperature, max_temperature)
+		_start_approaching_target_temperature_left(temperature_change_interval)
 	else:
-		target_temperature = clamp(new_temperature, min_temperature, max_temperature)
+		target_temperature_left = clamp(new_temperature, min_temperature, max_temperature)
+	_update_temperature_display()
+
+func set_target_temperature_right(new_temperature: int) -> void:
+	if target_temperature_right == current_temperature_right:
+		target_temperature_right = clamp(new_temperature, min_temperature, max_temperature)
+		_start_approaching_target_temperature_right(temperature_change_interval)
+	else:
+		target_temperature_right = clamp(new_temperature, min_temperature, max_temperature)
 	_update_temperature_display()
 
 ## Interval in seconds
-func _start_approaching_target_temperature(interval: int=3) -> void:
+func _start_approaching_target_temperature_left(interval: int=3) -> void:
 	# Changes current temperature in static interval
-	temperature_change_timer.wait_time = interval
-	temperature_change_timer.start()
+	temperature_change_timer_left.wait_time = interval
+	temperature_change_timer_left.start()
 	while true:
-		await temperature_change_timer.timeout
-		# print(current_temperature, "->", target_temperature)
-		if abs(target_temperature - current_temperature) <= heating_power * interval:
+		await temperature_change_timer_left.timeout
+		# print(current_temperature_left, "->", target_temperature_left)
+		if abs(target_temperature_left - current_temperature_left) <= heating_power * interval:
 			break
-		if current_temperature > target_temperature:
-			current_temperature -= heating_power * interval
+		if current_temperature_left > target_temperature_left:
+			current_temperature_left -= heating_power * interval
 		else:
-			current_temperature += heating_power * interval
+			current_temperature_left += heating_power * interval
 		
-	current_temperature = target_temperature
-	temperature_change_timer.stop()
+	current_temperature_left = target_temperature_left
+	temperature_change_timer_left.stop()
+
+## Interval in seconds
+func _start_approaching_target_temperature_right(interval: int=3) -> void:
+	# Changes current temperature in static interval
+	temperature_change_timer_right.wait_time = interval
+	temperature_change_timer_right.start()
+	while true:
+		await temperature_change_timer_right.timeout
+		# print(current_temperature_right, "->", target_temperature_right)
+		if abs(target_temperature_right - current_temperature_right) <= heating_power * interval:
+			break
+		if current_temperature_right > target_temperature_right:
+			current_temperature_right -= heating_power * interval
+		else:
+			current_temperature_right += heating_power * interval
+		
+	current_temperature_right = target_temperature_right
+	temperature_change_timer_right.stop()
 
 func _start_moving_gases(interval: int=1) -> void:
 	gases_movement_timer.wait_time = interval
@@ -128,38 +173,71 @@ func _start_moving_gases(interval: int=1) -> void:
 	_update_substance_display()
 
 func _update_temperature_display() -> void:
-	temperature_display.text = "[center][font_size=50]%dK[/font_size][/center]" % current_temperature \
-if target_temperature == current_temperature \
+	temperature_display_left.text = "[center][font_size=50]%dK[/font_size][/center]" % current_temperature_left \
+if target_temperature_left == current_temperature_left \
 else "[center][font_size=40]%dK[/font_size]
-[font_size=30](%dK)[/font_size][/center]" % [target_temperature, current_temperature]
+[font_size=30](%dK)[/font_size][/center]" % [target_temperature_left, current_temperature_left]
+	
+	temperature_display_right.text = "[center][font_size=50]%dK[/font_size][/center]" % current_temperature_right \
+if target_temperature_right == current_temperature_right \
+else "[center][font_size=40]%dK[/font_size]
+[font_size=30](%dK)[/font_size][/center]" % [target_temperature_right, current_temperature_right]
 
-func increase_target_temperature(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
-	target_temperature += value
+func increase_target_temperature_left(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
+	target_temperature_left += value
 
-func decrease_target_temperature(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
-	target_temperature -= value
+func decrease_target_temperature_left(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
+	target_temperature_left -= value
 
-func _on_decrease_temperature_button_pressed() -> void:
+func increase_target_temperature_right(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
+	target_temperature_right += value
+
+func decrease_target_temperature_right(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
+	target_temperature_right -= value
+
+func _on_decrease_temperature_left_button_pressed() -> void:
 	if Input.is_key_pressed(KEY_SHIFT):
 		if Input.is_key_pressed(KEY_CTRL):
-			decrease_target_temperature(DEFAULT_TEMPERATURE_CHANGE * 5)
+			decrease_target_temperature_left(DEFAULT_TEMPERATURE_CHANGE * 5)
 		else:
-			decrease_target_temperature(DEFAULT_TEMPERATURE_CHANGE * 10)
+			decrease_target_temperature_left(DEFAULT_TEMPERATURE_CHANGE * 10)
 	elif Input.is_key_pressed(KEY_CTRL):
-		decrease_target_temperature(int(float(DEFAULT_TEMPERATURE_CHANGE) / 2))
+		decrease_target_temperature_left(int(float(DEFAULT_TEMPERATURE_CHANGE) / 2))
 	else:
-		decrease_target_temperature(DEFAULT_TEMPERATURE_CHANGE)
+		decrease_target_temperature_left(DEFAULT_TEMPERATURE_CHANGE)
 
-func _on_increase_temperature_button_pressed() -> void:
+func _on_increase_temperature_left_button_pressed() -> void:
 	if Input.is_key_pressed(KEY_SHIFT):
 		if Input.is_key_pressed(KEY_CTRL):
-			increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE * 5)
+			increase_target_temperature_left(DEFAULT_TEMPERATURE_CHANGE * 5)
 		else:
-			increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE * 10)
+			increase_target_temperature_left(DEFAULT_TEMPERATURE_CHANGE * 10)
 	elif Input.is_key_pressed(KEY_CTRL):
-		increase_target_temperature(int(float(DEFAULT_TEMPERATURE_CHANGE) / 2))
+		increase_target_temperature_left(int(float(DEFAULT_TEMPERATURE_CHANGE) / 2))
 	else:
-		increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE)
+		increase_target_temperature_left(DEFAULT_TEMPERATURE_CHANGE)
+
+func _on_decrease_temperature_right_button_pressed() -> void:
+	if Input.is_key_pressed(KEY_SHIFT):
+		if Input.is_key_pressed(KEY_CTRL):
+			decrease_target_temperature_right(DEFAULT_TEMPERATURE_CHANGE * 5)
+		else:
+			decrease_target_temperature_right(DEFAULT_TEMPERATURE_CHANGE * 10)
+	elif Input.is_key_pressed(KEY_CTRL):
+		decrease_target_temperature_right(int(float(DEFAULT_TEMPERATURE_CHANGE) / 2))
+	else:
+		decrease_target_temperature_right(DEFAULT_TEMPERATURE_CHANGE)
+
+func _on_increase_temperature_right_button_pressed() -> void:
+	if Input.is_key_pressed(KEY_SHIFT):
+		if Input.is_key_pressed(KEY_CTRL):
+			increase_target_temperature_right(DEFAULT_TEMPERATURE_CHANGE * 5)
+		else:
+			increase_target_temperature_right(DEFAULT_TEMPERATURE_CHANGE * 10)
+	elif Input.is_key_pressed(KEY_CTRL):
+		increase_target_temperature_right(int(float(DEFAULT_TEMPERATURE_CHANGE) / 2))
+	else:
+		increase_target_temperature_right(DEFAULT_TEMPERATURE_CHANGE)
 
 ## Amount in grams
 func add_substance_left(substance: SubstanceData, amount: int) -> void:
