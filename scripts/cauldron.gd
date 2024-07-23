@@ -6,8 +6,10 @@ extends Node2D
 @export_group("attributes")
 ## Kelvins per second
 @export var heating_power: int = 2
+@export var cauldron_width: int = 50
 @export_group("gameplay")
 @export var temperature_change_interval: int = 3
+@export var gas_movement_interval: int = 1
 
 const substance_container_scene := (preload ("res://scenes/prefabs/container.tscn") as PackedScene)
 
@@ -38,6 +40,10 @@ var is_cooling: bool:
 @onready var ongoing_reactions: Array[SubstanceReaction] = []
 ## key(string - reaction name): Timer
 @onready var ongoing_reactions_timers: Dictionary = {}
+@onready var gases_movement_timer := $gases_movement_timer as Timer
+
+## Queue of gases that will escape the cauldron
+@onready var gases_queue: Array[String] = []
 
 # Graphics related
 
@@ -63,7 +69,7 @@ func _set_current_temperature(new_temperature: int) -> void:
 	if current_temperature > max_temperature or current_temperature < min_temperature:
 		self_destruct()
 	_update_temperature_display()
-	content.update_ongoing_reactions()
+	_update_ongoing_reactions()
 
 func set_target_temperature(new_temperature: int) -> void:
 	if target_temperature == current_temperature:
@@ -82,8 +88,8 @@ func decrease_target_temperature(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
 ## Amount in grams
 func add_substance(substance: SubstanceData, amount: int) -> void:
 	content.add_substance(substance, amount)
-	content.update_substance_display()
-	content.update_ongoing_reactions()
+	_update_substance_display()
+	_update_ongoing_reactions()
 
 ## Amount in grams
 func add_ingredient(ingredient: Ingredient, amount: int) -> void:
@@ -91,8 +97,8 @@ func add_ingredient(ingredient: Ingredient, amount: int) -> void:
 		var substance_amount = amount * ingredient.composition[substance_name]
 		content.add_substance(data_table.data[substance_name], substance_amount)
 		
-	content.update_substance_display()
-	content.update_ongoing_reactions()
+	_update_substance_display()
+	_update_ongoing_reactions()
 
 ## Interval in seconds
 func _start_approaching_target_temperature(interval: int=3) -> void:
@@ -139,6 +145,51 @@ func _on_increase_temperature_button_pressed() -> void:
 		increase_target_temperature(int(float(DEFAULT_TEMPERATURE_CHANGE) / 2))
 	else:
 		increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE)
+
+func _start_moving_gases(interval: int=1) -> void:
+	gases_movement_timer.wait_time = interval
+	gases_movement_timer.start()
+	while true:
+		await gases_movement_timer.timeout
+		
+		if gases_queue.is_empty():
+			break
+		
+		var width_left := cauldron_width
+		while content.content[gases_queue[0]] <= width_left:
+			width_left -= content.content[gases_queue[0]]
+			content.add_substance(data_table.data[gases_queue[0]], -content.content[gases_queue[0]])
+			gases_queue.remove_at(0)
+			
+			# Maybe all of the gases have been transported
+			if gases_queue.is_empty():
+				break
+		
+		if gases_queue.is_empty():
+			break
+
+		content.add_substance(data_table.data[gases_queue[0]], -width_left)
+		
+		_update_ongoing_reactions()
+		_update_substance_display()
+
+	gases_movement_timer.stop()
+	_update_ongoing_reactions()
+	_update_substance_display()
+
+func _update_ongoing_reactions() -> void:
+	for substance_name: String in content.content:
+		var substance: SubstanceData = data_table.data[substance_name]
+		if substance.current_state_of_matter == SubstanceData.STATE_OF_MATTER.GAS and gases_queue.count(substance.name) == 0:
+			gases_queue.push_back(substance.name)
+	
+	if gases_movement_timer.is_stopped():
+		_start_moving_gases(gas_movement_interval)
+	
+	content.update_ongoing_reactions()
+
+func _update_substance_display() -> void:
+	content.update_substance_display()
 
 func _test() -> void:
 	add_substance(data_table.data["Jelenial (liquid)"], 19)

@@ -9,6 +9,8 @@
 [node name="Cauldron" type="Node2D"]
 script = ExtResource("1_t4s4w")
 
+[node name="gases_movement_timer" type="Timer" parent="."]
+
 [node name="Timer" type="Timer" parent="."]
 
 [node name="cauldron_sprite" type="Sprite2D" parent="."]
