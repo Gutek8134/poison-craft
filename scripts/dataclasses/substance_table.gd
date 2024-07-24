@@ -56,6 +56,7 @@ func _add_temperature_reactions() -> void:
                     {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.SOLID)]:10},
                     ReactionConditions.new(0, substance.melting_temperature - 1, []),
                     1,
+                    0,
                     true),
                 SubstanceReaction.new(
                     "%s vaporisation" % substance_name,
