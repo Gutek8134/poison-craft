@@ -54,5 +54,14 @@ text_direction = 1
 [node name="Container" parent="." instance=ExtResource("5_jy1nj")]
 position = Vector2(769, 17)
 
+[node name="Button" type="Button" parent="."]
+offset_left = 462.0
+offset_top = 163.0
+offset_right = 622.72
+offset_bottom = 229.155
+toggle_mode = true
+text = "Lid"
+
 [connection signal="pressed" from="cauldron_sprite/increase_temperature" to="." method="_on_increase_temperature_button_pressed"]
 [connection signal="pressed" from="cauldron_sprite/decrease_temperature" to="." method="_on_decrease_temperature_button_pressed"]
+[connection signal="toggled" from="Button" to="." method="_on_lid_toggled"]

@@ -2,7 +2,7 @@ extends Node2D
 
 @export_group("limits")
 @export var max_temperature: int = 570
-@export var min_temperature: int = 280
+@export var min_temperature: int = 260
 @export_group("attributes")
 ## Kelvins per second
 @export var heating_power: int = 2
@@ -29,11 +29,11 @@ const DEFAULT_TEMPERATURE_CHANGE = 10
 
 var is_heating: bool:
 	get:
-		return target_temperature - current_temperature < 0
+		return target_temperature - current_temperature > 0
 
 var is_cooling: bool:
 	get:
-		return target_temperature - current_temperature > 0
+		return target_temperature - current_temperature < 0
 
 @onready var data_table = SubstanceDataTable.factory()
 
@@ -178,13 +178,14 @@ func _start_moving_gases(interval: int=1) -> void:
 	_update_substance_display()
 
 func _update_ongoing_reactions() -> void:
-	for substance_name: String in content.content:
-		var substance: SubstanceData = data_table.data[substance_name]
-		if substance.current_state_of_matter == SubstanceData.STATE_OF_MATTER.GAS and gases_queue.count(substance.name) == 0:
-			gases_queue.push_back(substance.name)
-	
-	if gases_movement_timer.is_stopped():
-		_start_moving_gases(gas_movement_interval)
+	if not content.is_closed:
+		for substance_name: String in content.content:
+			var substance: SubstanceData = data_table.data[substance_name]
+			if substance.current_state_of_matter == SubstanceData.STATE_OF_MATTER.GAS and gases_queue.count(substance.name) == 0:
+				gases_queue.push_back(substance.name)
+		
+		if gases_movement_timer.is_stopped():
+			_start_moving_gases(gas_movement_interval)
 	
 	content.update_ongoing_reactions()
 
@@ -195,3 +196,9 @@ func _test() -> void:
 	add_substance(data_table.data["Jelenial (liquid)"], 19)
 	# var printer = func(): print("%s %s" % [ongoing_reactions, content])
 	# CoroutinesLib.invoke_repeating(printer, get_tree(), self, 1, 0, 5)
+
+func _on_lid_toggled(toggled_on: bool):
+	if toggled_on:
+		content.close()
+	else:
+		content.open()

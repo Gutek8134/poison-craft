@@ -10,6 +10,7 @@ var current_temperature: int:
 	set = _set_current_temperature
 
 @onready var is_mixing: bool = false
+@onready var is_closed: bool = false
 
 ## key: string (substance name) = int (amount in grams)
 @onready var content: Dictionary = {}
@@ -151,6 +152,12 @@ func start_mixing() -> void:
 
 func stop_mixing() -> void:
 	is_mixing = false
+
+func close() -> void:
+	is_closed = true
+
+func open() -> void:
+	is_closed = false
 
 func _set_current_temperature(new_temperature: int) -> void:
 	current_temperature = new_temperature

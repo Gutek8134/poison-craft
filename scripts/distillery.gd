@@ -28,11 +28,11 @@ var target_temperature_right: int:
 
 var is_heating: bool:
 	get:
-		return target_temperature_left - current_temperature_left < 0
+		return target_temperature_left - current_temperature_left > 0
 
 var is_cooling: bool:
 	get:
-		return target_temperature_left - current_temperature_left > 0
+		return target_temperature_left - current_temperature_left < 0
 
 const DEFAULT_TEMPERATURE_CHANGE = 10
 @onready var temperature_change_timer_left := $temperature_timer_left as Timer
