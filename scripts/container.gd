@@ -30,7 +30,7 @@ var data_table
 func update_substance_display() -> void:
 	for representation: SubstanceRepresentation in substance_representations.values():
 		representation.update()
-	print(content)
+	# print(content)
 
 func update_ongoing_reactions() -> void:
 	var real_reactions: Array[SubstanceReaction] = []
@@ -119,6 +119,9 @@ func _reaction_coroutine(reaction: SubstanceReaction) -> void:
 		update_substance_display()
 
 func add_substance(substance: SubstanceData, amount: int) -> void:
+	if is_closed:
+		print("Can't add a substance while the container is closed bro")
+		return
 	_add_substance(substance, amount)
 	update_ongoing_reactions()
 	update_substance_display()

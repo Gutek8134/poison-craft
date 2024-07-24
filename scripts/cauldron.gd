@@ -87,6 +87,9 @@ func decrease_target_temperature(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
 
 ## Amount in grams
 func add_substance(substance: SubstanceData, amount: int) -> void:
+	if content.is_closed:
+		print("Can't add a substance while the container is closed bro")
+		return
 	content.add_substance(substance, amount)
 	_update_substance_display()
 	_update_ongoing_reactions()

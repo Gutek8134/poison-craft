@@ -63,6 +63,7 @@ func _ready() -> void:
 	content_left.data_table = data_table
 	content_right.current_temperature = current_temperature_right
 	content_right.data_table = data_table
+	content_right.close()
 	_test()
 
 func self_destruct() -> void:
@@ -241,12 +242,18 @@ func _on_increase_temperature_right_button_pressed() -> void:
 
 ## Amount in grams
 func add_substance_left(substance: SubstanceData, amount: int) -> void:
+	if content_left.is_closed:
+		print("Can't add a substance while the container is closed bro")
+		return
 	content_left.add_substance(substance, amount)
 	content_left.update_substance_display()
 	content_left.update_ongoing_reactions()
 
 ## Amount in grams
 func add_substance_right(substance: SubstanceData, amount: int) -> void:
+	if content_right.is_closed:
+		print("Can't add a substance while the container is closed bro")
+		return
 	content_right.add_substance(substance, amount)
 	content_right.update_substance_display()
 	content_right.update_ongoing_reactions()
