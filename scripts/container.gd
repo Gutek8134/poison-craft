@@ -6,7 +6,7 @@ static var room_temperature: int = 295
 
 const substance_representation_scene := (preload ("res://scenes/prefabs/ui/substance_repr.tscn") as PackedScene)
 
-var current_temperature: int:
+var current_temperature: int = room_temperature:
 	set = _set_current_temperature
 
 @onready var is_mixing: bool = false
@@ -18,7 +18,7 @@ var current_temperature: int:
 ## key: string (substance name) = SubstanceRepresentation
 @onready var substance_representations: Dictionary = {}
 
-var data_table
+@onready var data_table = SubstanceDataTable.factory()
 
 @onready var ongoing_reactions: Array[SubstanceReaction] = []
 ## key(string - reaction name): Timer

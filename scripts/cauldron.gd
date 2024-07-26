@@ -52,7 +52,6 @@ var is_cooling: bool:
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	content = $Container
-	content.data_table = data_table
 	content.timers_parent_node = self
 	current_temperature = SubstanceContainer.room_temperature
 	target_temperature = current_temperature

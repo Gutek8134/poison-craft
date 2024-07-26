@@ -1,15 +1,21 @@
-[gd_resource type="Resource" script_class="SubstanceDataTable" load_steps=5 format=3 uid="uid://4eamlarl4t1g"]
+[gd_resource type="Resource" script_class="SubstanceDataTable" load_steps=8 format=3 uid="uid://4eamlarl4t1g"]
 
 [ext_resource type="Resource" uid="uid://c3w2baqpvnm2q" path="res://content/data/substance_data_resources/Jelenial_gas.tres" id="1_d6tjo"]
 [ext_resource type="Resource" uid="uid://psfmsbp6xfv3" path="res://content/data/substance_data_resources/Jelenial_solid.tres" id="2_n6co6"]
 [ext_resource type="Resource" uid="uid://d2bou4fc2ccbe" path="res://content/data/substance_data_resources/Jelenial_liquid.tres" id="3_kovyx"]
 [ext_resource type="Script" path="res://scripts/dataclasses/substance_table.gd" id="4_pmec5"]
+[ext_resource type="Resource" uid="uid://cg6r26me8x58y" path="res://content/data/substance_data_resources/Ogr_gas.tres" id="4_u0np0"]
+[ext_resource type="Resource" uid="uid://bthgoyc6fysst" path="res://content/data/substance_data_resources/Ogr_liquid.tres" id="5_fjbo2"]
+[ext_resource type="Resource" uid="uid://cbbcy222n1r4d" path="res://content/data/substance_data_resources/Ogr_solid.tres" id="6_gxfxj"]
 
 [resource]
 script = ExtResource("4_pmec5")
 data = {
 "Jelenial (gas)": ExtResource("1_d6tjo"),
 "Jelenial (liquid)": ExtResource("3_kovyx"),
-"Jelenial (solid)": ExtResource("2_n6co6")
+"Jelenial (solid)": ExtResource("2_n6co6"),
+"Ogr (gas)": ExtResource("4_u0np0"),
+"Ogr (liquid)": ExtResource("5_fjbo2"),
+"Ogr (solid)": ExtResource("6_gxfxj")
 }
 name = "main"

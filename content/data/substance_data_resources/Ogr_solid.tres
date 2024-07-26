@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SubstanceData" load_steps=3 format=3 uid="uid://cbbcy222n1r4d"]
+
+[ext_resource type="Texture2D" uid="uid://h0h38cc5iqhp" path="res://content/images/substances/ogr.png" id="1_6gbv1"]
+[ext_resource type="Script" path="res://scripts/dataclasses/substance_data.gd" id="2_mvthl"]
+
+[resource]
+script = ExtResource("2_mvthl")
+substance_type = "Ogr"
+current_state_of_matter = 2
+effects = Array[Resource("res://scripts/dataclasses/substance_effect_data.gd")]([])
+possible_reactions = Array[Resource("res://scripts/dataclasses/substance_reaction_data.gd")]([])
+melting_temperature = 400
+ignition_temperature = 850
+vaporisation_temperature = 1000
+icon = ExtResource("1_6gbv1")

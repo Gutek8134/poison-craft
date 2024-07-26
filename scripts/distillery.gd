@@ -60,9 +60,7 @@ func _ready() -> void:
 	current_temperature_right = SubstanceContainer.room_temperature
 	target_temperature_right = SubstanceContainer.room_temperature
 	content_left.current_temperature = current_temperature_left
-	content_left.data_table = data_table
 	content_right.current_temperature = current_temperature_right
-	content_right.data_table = data_table
 	content_right.close()
 	_test()
 
