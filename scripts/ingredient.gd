@@ -5,7 +5,7 @@ extends Sprite2D
 ## key: string (substance name) = int (percentage)
 @export var composition: Dictionary = {}
 
-func normalize_composition()->void:
+func normalize_composition() -> void:
     var total: int = 0
     for value in composition.values():
         total += value
@@ -14,6 +14,6 @@ func normalize_composition()->void:
         return
     
     # More or less correct
-    var factor: float = 100.0/total
+    var factor: float = 100.0 / total
     for key in composition:
-        composition[key] = (composition[key]*factor) as int
+        composition[key] = int(composition[key] * factor)
