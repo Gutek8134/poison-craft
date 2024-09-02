@@ -24,11 +24,9 @@ scale = Vector2(0.524296, 0.524296)
 texture = ExtResource("2_k4kkv")
 
 [node name="Area2D" type="Area2D" parent="Sprite"]
-scale = Vector2(1, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/Area2D"]
 position = Vector2(5.72195, 2.86104)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_3tc6n")
 
 [node name="Container" parent="." instance=ExtResource("2_kimrc")]
@@ -37,13 +35,12 @@ position = Vector2(132, -250)
 
 [node name="Area2D" type="Area2D" parent="Container"]
 position = Vector2(174, 131)
-scale = Vector2(1, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Container/Area2D"]
 position = Vector2(0.999939, 5)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_61cj4")
 
+[connection signal="input_event" from="Sprite/Area2D" to="." method="_on_input_event"]
 [connection signal="mouse_entered" from="Sprite/Area2D" to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Sprite/Area2D" to="." method="_on_mouse_exited"]
 [connection signal="mouse_entered" from="Container/Area2D" to="." method="_on_container_mouse_entered"]
