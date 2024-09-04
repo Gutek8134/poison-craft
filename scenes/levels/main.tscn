@@ -1,3 +1,17 @@
-[gd_scene format=3 uid="uid://dbuqro12ohuni"]
+[gd_scene load_steps=3 format=3 uid="uid://dbuqro12ohuni"]
+
+[ext_resource type="PackedScene" uid="uid://dn5av2vus4bfk" path="res://scenes/prefabs/ingredients/Blue Leaf.tscn" id="1_bqp0l"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_34rbh"]
+size = Vector2(1150.5, 90)
 
 [node name="Level" type="Node2D"]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(575.75, 598)
+shape = SubResource("RectangleShape2D_34rbh")
+
+[node name="BlueLeaf" parent="." instance=ExtResource("1_bqp0l")]
+position = Vector2(411, 263)

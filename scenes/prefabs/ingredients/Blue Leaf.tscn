@@ -5,33 +5,33 @@
 [ext_resource type="PackedScene" uid="uid://chv6qeqta4eot" path="res://scenes/prefabs/container.tscn" id="2_kimrc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3tc6n"]
-size = Vector2(637.045, 223.157)
+size = Vector2(347, 127)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_61cj4"]
 size = Vector2(354, 278)
 
-[node name="BlueLeaf" type="Node2D"]
-position = Vector2(222, 345)
+[node name="Blue Leaf" type="RigidBody2D"]
+position = Vector2(215, 93)
+input_pickable = true
+freeze_mode = 1
+constant_force = Vector2(0, -0.285)
 script = ExtResource("1_8wk1p")
 composition = {
 "Jelenial (liquid)": 1,
 "Ogr (solid)": 9
 }
 
-[node name="Sprite" type="Sprite2D" parent="."]
-position = Vector2(168, 58)
-scale = Vector2(0.524296, 0.524296)
-texture = ExtResource("2_k4kkv")
-
-[node name="Area2D" type="Area2D" parent="Sprite"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/Area2D"]
-position = Vector2(5.72195, 2.86104)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2.5, -1.5)
 shape = SubResource("RectangleShape2D_3tc6n")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+scale = Vector2(0.525, 0.525)
+texture = ExtResource("2_k4kkv")
 
 [node name="Container" parent="." instance=ExtResource("2_kimrc")]
 visible = false
-position = Vector2(132, -250)
+position = Vector2(-36, -308)
 
 [node name="Area2D" type="Area2D" parent="Container"]
 position = Vector2(174, 131)
@@ -40,8 +40,8 @@ position = Vector2(174, 131)
 position = Vector2(0.999939, 5)
 shape = SubResource("RectangleShape2D_61cj4")
 
-[connection signal="input_event" from="Sprite/Area2D" to="." method="_on_input_event"]
-[connection signal="mouse_entered" from="Sprite/Area2D" to="." method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="Sprite/Area2D" to="." method="_on_mouse_exited"]
+[connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
 [connection signal="mouse_entered" from="Container/Area2D" to="." method="_on_container_mouse_entered"]
 [connection signal="mouse_exited" from="Container/Area2D" to="." method="_on_container_mouse_exited"]

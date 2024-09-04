@@ -1,6 +1,6 @@
 class_name Ingredient
 
-extends Node2D
+extends RigidBody2D
 
 ## key: string (substance name) = int (percentage)
 @export var composition: Dictionary = {}
@@ -17,10 +17,25 @@ var __container_show_timer: SceneTreeTimer
 var __container_hide_timer: SceneTreeTimer
 
 func _ready():
+	mass = amount / 1000.
 	normalize_composition()
 	var data_table = SubstanceDataTable.factory()
 	for substance_name: String in composition:
 		container.add_substance(data_table.data[substance_name], amount * composition[substance_name] / 100)
+
+func _process(_delta):
+	if __dragging:
+		apply_force(get_global_mouse_position() - global_position)
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and __dragging:
+		if event.button_index == MOUSE_BUTTON_LEFT and !event.pressed:
+			__dragging = false
+			gravity_scale = 1
+			__container_show_timer = get_tree().create_timer(time_to_show_container)
+			await __container_show_timer.timeout
+			if __mouse_hovering_over and not __dragging:
+				container.visible = true
 
 func normalize_composition() -> void:
 	var total: int = 0
@@ -50,7 +65,6 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	__mouse_hovering_over = false
-	__dragging = false
 
 	if not container.visible:
 		if __container_show_timer:
@@ -89,6 +103,7 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			__dragging = event.pressed
+			gravity_scale = !event.pressed
 			if event.pressed:
 				container.visible = false
 			else:
@@ -96,6 +111,3 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
 				await __container_show_timer.timeout
 				if __mouse_hovering_over and not __dragging:
 					container.visible = true
-	
-	if __dragging and event is InputEventMouseMotion:
-		position += event.get_screen_relative()
