@@ -4,7 +4,7 @@ extends Node2D
 
 static var room_temperature: int = 295
 
-const substance_representation_scene := (preload ("res://scenes/prefabs/ui/substance_repr.tscn") as PackedScene)
+const substance_representation_scene := (preload("res://scenes/prefabs/ui/substance_repr.tscn") as PackedScene)
 
 var current_temperature: int = room_temperature:
 	set = _set_current_temperature
@@ -34,9 +34,18 @@ func update_substance_display() -> void:
 
 func update_ongoing_reactions() -> void:
 	var real_reactions: Array[SubstanceReaction] = []
+	var real_reactions_names: Array[String] = []
+	var handled_substances: Array[String] = []
+
 	for substance_name in content:
+		# Ask not, I don't understand it myself
+		if substance_name in handled_substances:
+			continue
 		var substance := data_table.data[substance_name] as SubstanceData
 		for possible_reaction in substance.possible_reactions:
+			# Duplicates
+			if possible_reaction.name in real_reactions_names:
+				continue
 			# Reactant not present
 			if possible_reaction.reactant_name not in content:
 				continue
@@ -70,7 +79,11 @@ func update_ongoing_reactions() -> void:
 			
 			# Reaction should occur
 			real_reactions.append(possible_reaction)
+			real_reactions_names.append(possible_reaction.name)
+			
+		handled_substances.append(substance_name)
 	
+
 	# Difference update
 	# 1 - delete not present in real_reactions
 	var ongoing_reactions_copy := ongoing_reactions.duplicate()
