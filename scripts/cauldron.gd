@@ -11,7 +11,7 @@ extends Node2D
 @export var temperature_change_interval: int = 3
 @export var gas_movement_interval: int = 1
 
-const substance_container_scene := (preload ("res://scenes/prefabs/container.tscn") as PackedScene)
+const substance_container_scene := (preload("res://scenes/prefabs/container.tscn") as PackedScene)
 
 ## In Kelvins, use set_target_temperature for 
 var current_temperature: int:
@@ -78,10 +78,10 @@ func set_target_temperature(new_temperature: int) -> void:
 		target_temperature = clamp(new_temperature, min_temperature, max_temperature)
 	_update_temperature_display()
 
-func increase_target_temperature(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
+func increase_target_temperature(value: int = DEFAULT_TEMPERATURE_CHANGE) -> void:
 	target_temperature += value
 
-func decrease_target_temperature(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
+func decrease_target_temperature(value: int = DEFAULT_TEMPERATURE_CHANGE) -> void:
 	target_temperature -= value
 
 ## Amount in grams
@@ -103,7 +103,7 @@ func add_ingredient(ingredient: Ingredient, amount: int) -> void:
 	_update_ongoing_reactions()
 
 ## Interval in seconds
-func _start_approaching_target_temperature(interval: int=3) -> void:
+func _start_approaching_target_temperature(interval: int = 3) -> void:
 	# Changes current temperature in static interval
 	temperature_change_timer.wait_time = interval
 	temperature_change_timer.start()
@@ -148,7 +148,7 @@ func _on_increase_temperature_button_pressed() -> void:
 	else:
 		increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE)
 
-func _start_moving_gases(interval: int=1) -> void:
+func _start_moving_gases(interval: int = 1) -> void:
 	gases_movement_timer.wait_time = interval
 	gases_movement_timer.start()
 	while true:
@@ -195,7 +195,8 @@ func _update_substance_display() -> void:
 	content.update_substance_display()
 
 func _test() -> void:
-	add_substance(data_table.data["Jelenial (liquid)"], 19)
+	add_substance(data_table.data["Jelenial (liquid)"], 50)
+	add_substance(data_table.data["Ogr (solid)"], 20)
 	# var printer = func(): print("%s %s" % [ongoing_reactions, content])
 	# CoroutinesLib.invoke_repeating(printer, get_tree(), self, 1, 0, 5)
 
