@@ -1,16 +1,39 @@
-[gd_resource type="Resource" script_class="SubstanceData" load_steps=5 format=3 uid="uid://cbbcy222n1r4d"]
+[gd_resource type="Resource" script_class="SubstanceData" load_steps=8 format=3 uid="uid://cbbcy222n1r4d"]
 
 [ext_resource type="Texture2D" uid="uid://h0h38cc5iqhp" path="res://content/images/substances/ogr.png" id="1_6gbv1"]
 [ext_resource type="Script" path="res://scripts/dataclasses/substance_effect_data.gd" id="1_g5yvv"]
 [ext_resource type="Script" path="res://scripts/dataclasses/substance_data.gd" id="2_mvthl"]
 [ext_resource type="Script" path="res://scripts/dataclasses/substance_reaction_data.gd" id="3_5glqh"]
+[ext_resource type="Script" path="res://scripts/dataclasses/reaction_conditions.gd" id="4_cd4ra"]
+
+[sub_resource type="Resource" id="Resource_glptp"]
+script = ExtResource("4_cd4ra")
+min_temperature = 270
+max_temperature = 290
+catalysts = Array[String]([])
+mixing = false
+
+[sub_resource type="Resource" id="Resource_aoxum"]
+script = ExtResource("3_5glqh")
+name = "R1"
+substance_name = "Ogr (solid)"
+substance_amount = 5
+reactant_name = "Jelenial (liquid)"
+reactant_amount = 2
+outcome_substances = {
+"Ogr (solid)": 7
+}
+reaction_conditions = SubResource("Resource_glptp")
+reaction_time = 3
+temperature_change = 0
+scaling = false
 
 [resource]
 script = ExtResource("2_mvthl")
 substance_type = "Ogr"
 current_state_of_matter = 2
 effects = Array[ExtResource("1_g5yvv")]([])
-possible_reactions = Array[ExtResource("3_5glqh")]([])
+possible_reactions = Array[ExtResource("3_5glqh")]([SubResource("Resource_aoxum")])
 melting_temperature = 400
 ignition_temperature = 850
 vaporisation_temperature = 1000
