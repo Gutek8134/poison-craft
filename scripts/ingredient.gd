@@ -27,7 +27,7 @@ func _process(_delta):
 	if __dragging:
 		apply_force(get_global_mouse_position() - global_position)
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and __dragging:
 		if event.button_index == MOUSE_BUTTON_LEFT and !event.pressed:
 			__dragging = false
