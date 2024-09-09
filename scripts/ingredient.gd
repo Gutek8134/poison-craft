@@ -34,10 +34,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT and !event.pressed:
 			__dragging = false
 			gravity_scale = _gravity_scale
-			__container_show_timer = get_tree().create_timer(time_to_show_container)
-			await __container_show_timer.timeout
-			if __mouse_hovering_over and not __dragging:
-				container.visible = true
+			if __mouse_hovering_over:
+				_on_mouse_entered()
 
 func normalize_composition() -> void:
 	var total: int = 0
@@ -62,7 +60,7 @@ func _on_mouse_entered() -> void:
 
 	__container_show_timer = get_tree().create_timer(time_to_show_container)
 	await __container_show_timer.timeout
-	if __mouse_hovering_over and not __dragging:
+	if __mouse_hovering_over and not __dragging and linear_velocity == Vector2.ZERO:
 		container.visible = true
 
 func _on_mouse_exited() -> void:
