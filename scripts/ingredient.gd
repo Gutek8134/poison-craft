@@ -10,6 +10,7 @@ static var time_to_show_container: float = 0.6
 static var time_to_hide_container: float = 0.2
 
 @onready var container := $Container as SubstanceContainer
+@export var _gravity_scale: float = 1.3
 var __mouse_hovering_over := false
 var __mouse_hovering_over_container := false
 var __dragging := false
@@ -18,6 +19,7 @@ var __container_hide_timer: SceneTreeTimer
 
 func _ready():
 	mass = amount / 1000.
+	gravity_scale = _gravity_scale
 	normalize_composition()
 	var data_table = SubstanceDataTable.factory()
 	for substance_name: String in composition:
@@ -31,7 +33,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and __dragging:
 		if event.button_index == MOUSE_BUTTON_LEFT and !event.pressed:
 			__dragging = false
-			gravity_scale = 1
+			gravity_scale = _gravity_scale
 			__container_show_timer = get_tree().create_timer(time_to_show_container)
 			await __container_show_timer.timeout
 			if __mouse_hovering_over and not __dragging:

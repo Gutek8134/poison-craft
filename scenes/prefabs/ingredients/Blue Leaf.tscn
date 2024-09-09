@@ -14,12 +14,14 @@ size = Vector2(354, 278)
 position = Vector2(215, 93)
 input_pickable = true
 freeze_mode = 1
+linear_damp = 1.33
 constant_force = Vector2(0, -0.285)
 script = ExtResource("1_8wk1p")
 composition = {
 "Jelenial (liquid)": 1,
 "Ogr (solid)": 9
 }
+_gravity_scale = 1.5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(2.5, -1.5)

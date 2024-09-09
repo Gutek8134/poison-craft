@@ -15,3 +15,5 @@ shape = SubResource("RectangleShape2D_34rbh")
 
 [node name="BlueLeaf" parent="." instance=ExtResource("1_bqp0l")]
 position = Vector2(411, 263)
+linear_damp = 1.33
+_gravity_scale = 1.5
