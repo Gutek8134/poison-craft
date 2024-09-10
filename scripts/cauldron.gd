@@ -96,7 +96,7 @@ func add_substance(substance: SubstanceData, amount: int) -> void:
 ## Amount in grams
 func add_ingredient(ingredient: Ingredient, amount: int) -> void:
 	for substance_name in ingredient.composition:
-		var substance_amount = amount * ingredient.composition[substance_name]
+		var substance_amount: int = amount * ingredient.composition[substance_name] / 100
 		content.add_substance(data_table.data[substance_name], substance_amount)
 		
 	_update_substance_display()
@@ -148,6 +148,18 @@ func _on_increase_temperature_button_pressed() -> void:
 	else:
 		increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE)
 
+func _on_lid_toggled(toggled_on: bool):
+	if toggled_on:
+		content.close()
+	else:
+		content.open()
+
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	if body is Ingredient:
+		add_ingredient(body, body.amount)
+		body.queue_free()
+
 func _start_moving_gases(interval: int = 1) -> void:
 	gases_movement_timer.wait_time = interval
 	gases_movement_timer.start()
@@ -195,13 +207,8 @@ func _update_substance_display() -> void:
 	content.update_substance_display()
 
 func _test() -> void:
-	add_substance(data_table.data["Jelenial (liquid)"], 50)
-	add_substance(data_table.data["Ogr (solid)"], 20)
+	pass
+	# add_substance(data_table.data["Jelenial (liquid)"], 50)
+	# add_substance(data_table.data["Ogr (solid)"], 20)
 	# var printer = func(): print("%s %s" % [ongoing_reactions, content])
 	# CoroutinesLib.invoke_repeating(printer, get_tree(), self, 1, 0, 5)
-
-func _on_lid_toggled(toggled_on: bool):
-	if toggled_on:
-		content.close()
-	else:
-		content.open()

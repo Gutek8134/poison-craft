@@ -1,10 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://bveoo716ac81d"]
+[gd_scene load_steps=8 format=3 uid="uid://bveoo716ac81d"]
 
 [ext_resource type="Script" path="res://scripts/cauldron.gd" id="1_t4s4w"]
 [ext_resource type="Texture2D" uid="uid://d2paw5vc8p2xk" path="res://content/images/cauldron-t.png" id="2_fy3fo"]
 [ext_resource type="Texture2D" uid="uid://dful5kmhtcxmm" path="res://content/images/plus-t.png" id="3_plr1v"]
 [ext_resource type="Texture2D" uid="uid://h01ytmr31lmw" path="res://content/images/minus-t.png" id="4_42w8m"]
 [ext_resource type="PackedScene" uid="uid://chv6qeqta4eot" path="res://scenes/prefabs/container.tscn" id="5_jy1nj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b76ds"]
+size = Vector2(111, 328)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ixwrd"]
+size = Vector2(333, 71)
 
 [node name="Cauldron" type="Node2D"]
 script = ExtResource("1_t4s4w")
@@ -62,6 +68,26 @@ offset_bottom = 229.155
 toggle_mode = true
 text = "Lid"
 
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(305, 140)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(62.5, 290)
+shape = SubResource("RectangleShape2D_b76ds")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(385, 285)
+shape = SubResource("RectangleShape2D_b76ds")
+
+[node name="Area2D" type="Area2D" parent="."]
+input_pickable = false
+monitorable = false
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(551.5, 523.5)
+shape = SubResource("RectangleShape2D_ixwrd")
+
 [connection signal="pressed" from="cauldron_sprite/increase_temperature" to="." method="_on_increase_temperature_button_pressed"]
 [connection signal="pressed" from="cauldron_sprite/decrease_temperature" to="." method="_on_decrease_temperature_button_pressed"]
 [connection signal="toggled" from="Button" to="." method="_on_lid_toggled"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
