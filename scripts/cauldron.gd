@@ -149,6 +149,7 @@ func _on_increase_temperature_button_pressed() -> void:
 		increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE)
 
 func _on_lid_toggled(toggled_on: bool):
+	$LidStaticBody.process_mode = Node.PROCESS_MODE_ALWAYS if toggled_on else Node.PROCESS_MODE_DISABLED
 	if toggled_on:
 		content.close()
 	else:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bveoo716ac81d"]
+[gd_scene load_steps=9 format=3 uid="uid://bveoo716ac81d"]
 
 [ext_resource type="Script" path="res://scripts/cauldron.gd" id="1_t4s4w"]
 [ext_resource type="Texture2D" uid="uid://d2paw5vc8p2xk" path="res://content/images/cauldron-t.png" id="2_fy3fo"]
@@ -11,6 +11,9 @@ size = Vector2(111, 328)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ixwrd"]
 size = Vector2(333, 71)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jkt4d"]
+size = Vector2(391.5, 57)
 
 [node name="Cauldron" type="Node2D"]
 script = ExtResource("1_t4s4w")
@@ -80,12 +83,21 @@ position = Vector2(385, 285)
 shape = SubResource("RectangleShape2D_b76ds")
 
 [node name="Area2D" type="Area2D" parent="."]
+position = Vector2(340, 504)
 input_pickable = false
 monitorable = false
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(551.5, 523.5)
+position = Vector2(186, -11)
 shape = SubResource("RectangleShape2D_ixwrd")
+
+[node name="LidStaticBody" type="StaticBody2D" parent="."]
+process_mode = 4
+position = Vector2(379, 200)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LidStaticBody"]
+position = Vector2(163.25, 74)
+shape = SubResource("RectangleShape2D_jkt4d")
 
 [connection signal="pressed" from="cauldron_sprite/increase_temperature" to="." method="_on_increase_temperature_button_pressed"]
 [connection signal="pressed" from="cauldron_sprite/decrease_temperature" to="." method="_on_decrease_temperature_button_pressed"]
