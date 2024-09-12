@@ -8,8 +8,8 @@ extends Resource
 
 static var _instances: Dictionary = {}
 
-static func factory(p_name: String="main") -> SubstanceDataTable:
-    print("res://content/data/%s_substance_table.tres" % p_name)
+static func factory(p_name: String = "main") -> SubstanceDataTable:
+    # print("res://content/data/%s_substance_table.tres" % p_name)
     if p_name not in _instances:
         if FileAccess.file_exists("res://content/data/%s_substance_table.tres" % p_name):
             _instances[p_name] = load("res://content/data/%s_substance_table.tres" % p_name)
@@ -39,7 +39,7 @@ func _add_temperature_reactions() -> void:
                     10,
                     substance.name,
                     0,
-                    {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.LIQUID)]:10},
+                    {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.LIQUID)]: 10},
                     ReactionConditions.new(substance.melting_temperature, substance.vaporisation_temperature - 1, []),
                     1,
                     0,
@@ -53,7 +53,7 @@ func _add_temperature_reactions() -> void:
                     10,
                     substance.name,
                     0,
-                    {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.SOLID)]:10},
+                    {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.SOLID)]: 10},
                     ReactionConditions.new(0, substance.melting_temperature - 1, []),
                     1,
                     0,
@@ -64,7 +64,7 @@ func _add_temperature_reactions() -> void:
                     10,
                     substance.name,
                     0,
-                    {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.GAS)]:10},
+                    {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.GAS)]: 10},
                     ReactionConditions.new(substance.vaporisation_temperature, substance.ignition_temperature - 1, []),
                     1,
                     0,
@@ -78,7 +78,7 @@ func _add_temperature_reactions() -> void:
                 10,
                 substance.name,
                 0,
-                {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.LIQUID)]:10},
+                {"%s (%s)" % [substance.substance_type, SubstanceData.state_of_matter_to_string(SubstanceData.STATE_OF_MATTER.LIQUID)]: 10},
                 ReactionConditions.new(substance.melting_temperature, substance.ignition_temperature - 1, []),
                 1,
                 0,

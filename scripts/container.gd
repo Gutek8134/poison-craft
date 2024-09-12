@@ -131,6 +131,7 @@ func _reaction_coroutine(reaction: SubstanceReaction) -> void:
 		update_ongoing_reactions()
 		update_substance_display()
 
+## Also used for removing substances
 func add_substance(substance: SubstanceData, amount: int) -> void:
 	if is_closed:
 		print("Can't add a substance while the container is closed bro")
@@ -162,6 +163,13 @@ func _add_substance(substance: SubstanceData, amount: int) -> void:
 		return
 
 	(substance_representations[substance.name] as SubstanceRepresentation).substance.amount = content[substance.name]
+
+func clear_content() -> void:
+	content.clear()
+	for representation in substance_representations.values():
+		representation.queue_free()
+	substance_representations.clear()
+	ongoing_reactions.clear()
 
 func start_mixing() -> void:
 	is_mixing = true

@@ -1,41 +1,37 @@
-[gd_scene load_steps=6 format=3 uid="uid://dn5av2vus4bfk"]
+[gd_scene load_steps=6 format=3 uid="uid://bdilluiv601gs"]
 
-[ext_resource type="Script" path="res://scripts/ingredient.gd" id="1_8wk1p"]
-[ext_resource type="Texture2D" uid="uid://h2im7atgb2n4" path="res://content/images/ingredients/blue leaf.png" id="2_k4kkv"]
-[ext_resource type="PackedScene" uid="uid://chv6qeqta4eot" path="res://scenes/prefabs/container.tscn" id="2_kimrc"]
+[ext_resource type="Script" path="res://scripts/ingredient.gd" id="1_i7pe7"]
+[ext_resource type="Texture2D" uid="uid://dnqsnlrs5qsto" path="res://content/images/ingredients/potion.png" id="2_2ejqn"]
+[ext_resource type="PackedScene" uid="uid://chv6qeqta4eot" path="res://scenes/prefabs/container.tscn" id="3_hdnru"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3tc6n"]
-size = Vector2(91, 32)
+size = Vector2(45, 42)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_61cj4"]
 size = Vector2(354, 278)
 
-[node name="Blue Leaf" type="RigidBody2D"]
-z_index = -1
+[node name="Potion" type="RigidBody2D"]
 position = Vector2(1, 3)
 input_pickable = true
 freeze_mode = 1
 linear_damp = 5.769
 angular_damp = 5.549
 constant_force = Vector2(0, -0.285)
-script = ExtResource("1_8wk1p")
-composition = {
-"Jelenial (liquid)": 1,
-"Ogr (solid)": 9
-}
+script = ExtResource("1_i7pe7")
 _gravity_scale = 1.5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(1, 1)
+position = Vector2(-1.5, -1)
 shape = SubResource("RectangleShape2D_3tc6n")
 
 [node name="Sprite" type="Sprite2D" parent="."]
 position = Vector2(-2, -2)
-scale = Vector2(0.125001, 0.125001)
-texture = ExtResource("2_k4kkv")
+scale = Vector2(0.0174825, 0.0174825)
+texture = ExtResource("2_2ejqn")
 
-[node name="Container" parent="." instance=ExtResource("2_kimrc")]
+[node name="Container" parent="." instance=ExtResource("3_hdnru")]
 visible = false
+z_index = -1
 position = Vector2(12, -294)
 
 [node name="Area2D" type="Area2D" parent="Container"]

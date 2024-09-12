@@ -3,6 +3,7 @@ class_name Ingredient
 extends RigidBody2D
 
 ## key: string (substance name) = int (percentage)
+## Normalized to sum up to 100
 @export var composition: Dictionary = {}
 @export var amount: int = 100
 
@@ -16,8 +17,10 @@ var __mouse_hovering_over_container := false
 var __dragging := false
 var __container_show_timer: SceneTreeTimer
 var __container_hide_timer: SceneTreeTimer
+var __container_position_offset: Vector2
 
 func _ready():
+	__container_position_offset = container.global_position - global_position
 	mass = amount / 1000.
 	gravity_scale = _gravity_scale
 	normalize_composition()
@@ -60,8 +63,10 @@ func _on_mouse_entered() -> void:
 
 	__container_show_timer = get_tree().create_timer(time_to_show_container)
 	await __container_show_timer.timeout
-	if __mouse_hovering_over and not __dragging and linear_velocity == Vector2.ZERO:
+	if __mouse_hovering_over and not __dragging and linear_velocity.is_zero_approx():
 		container.visible = true
+		container.global_rotation = 0
+		container.global_position = global_position + __container_position_offset
 
 func _on_mouse_exited() -> void:
 	__mouse_hovering_over = false
@@ -111,3 +116,5 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
 				await __container_show_timer.timeout
 				if __mouse_hovering_over and not __dragging:
 					container.visible = true
+					container.global_rotation = 0
+					container.global_position = global_position + __container_position_offset

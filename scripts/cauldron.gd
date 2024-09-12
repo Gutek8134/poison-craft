@@ -12,6 +12,7 @@ extends Node2D
 @export var gas_movement_interval: int = 1
 
 const substance_container_scene := (preload("res://scenes/prefabs/container.tscn") as PackedScene)
+const potion_scene := (preload("res://scenes/prefabs/ingredients/Potion.tscn") as PackedScene)
 
 ## In Kelvins, use set_target_temperature for 
 var current_temperature: int:
@@ -133,7 +134,7 @@ func _on_decrease_temperature_button_pressed() -> void:
 		else:
 			decrease_target_temperature(DEFAULT_TEMPERATURE_CHANGE * 10)
 	elif Input.is_key_pressed(KEY_CTRL):
-		decrease_target_temperature(int(float(DEFAULT_TEMPERATURE_CHANGE) / 2))
+		decrease_target_temperature(int(DEFAULT_TEMPERATURE_CHANGE / 2.))
 	else:
 		decrease_target_temperature(DEFAULT_TEMPERATURE_CHANGE)
 
@@ -144,17 +145,33 @@ func _on_increase_temperature_button_pressed() -> void:
 		else:
 			increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE * 10)
 	elif Input.is_key_pressed(KEY_CTRL):
-		increase_target_temperature(int(float(DEFAULT_TEMPERATURE_CHANGE) / 2))
+		increase_target_temperature(int(DEFAULT_TEMPERATURE_CHANGE / 2.))
 	else:
 		increase_target_temperature(DEFAULT_TEMPERATURE_CHANGE)
 
-func _on_lid_toggled(toggled_on: bool):
+func _on_lid_toggled(toggled_on: bool) -> void:
 	$LidStaticBody.process_mode = Node.PROCESS_MODE_ALWAYS if toggled_on else Node.PROCESS_MODE_DISABLED
 	if toggled_on:
 		content.close()
 	else:
 		content.open()
 
+func _on_take_out() -> void:
+	if content.content.is_empty():
+		return
+
+	var new_potion := (potion_scene.instantiate() as Ingredient)
+	new_potion.composition = content.content.duplicate()
+	new_potion.normalize_composition()
+	var sum: int = 0
+	for amount in content.content.values():
+		sum += amount
+	new_potion.amount = sum
+	new_potion.mass = sum / 1000.
+	new_potion.position = $Button2.position
+	new_potion.z_index = -1
+	content.clear_content()
+	get_tree().current_scene.add_child(new_potion)
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body is Ingredient:

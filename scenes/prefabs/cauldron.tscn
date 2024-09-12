@@ -17,6 +17,12 @@ size = Vector2(391.5, 57)
 
 [node name="Cauldron" type="Node2D"]
 script = ExtResource("1_t4s4w")
+max_temperature = null
+min_temperature = null
+heating_power = null
+cauldron_width = null
+temperature_change_interval = null
+gas_movement_interval = null
 
 [node name="gases_movement_timer" type="Timer" parent="."]
 
@@ -71,6 +77,13 @@ offset_bottom = 229.155
 toggle_mode = true
 text = "Lid"
 
+[node name="Button2" type="Button" parent="."]
+offset_left = 788.0
+offset_top = 419.0
+offset_right = 900.0
+offset_bottom = 459.0
+text = "Take out"
+
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 position = Vector2(305, 140)
 
@@ -102,4 +115,5 @@ shape = SubResource("RectangleShape2D_jkt4d")
 [connection signal="pressed" from="cauldron_sprite/increase_temperature" to="." method="_on_increase_temperature_button_pressed"]
 [connection signal="pressed" from="cauldron_sprite/decrease_temperature" to="." method="_on_decrease_temperature_button_pressed"]
 [connection signal="toggled" from="Button" to="." method="_on_lid_toggled"]
+[connection signal="pressed" from="Button2" to="." method="_on_take_out"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
