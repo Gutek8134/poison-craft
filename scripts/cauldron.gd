@@ -56,11 +56,17 @@ func _ready() -> void:
 	content.timers_parent_node = self
 	current_temperature = SubstanceContainer.room_temperature
 	target_temperature = current_temperature
+	content.inner_temperature_change.connect(_external_temperature_change)
 	_test()
 
 func self_destruct() -> void:
 	print("Oh shit! Self destruct!")
 	queue_free()
+
+func _external_temperature_change() -> void:
+	current_temperature = content.current_temperature
+	_start_approaching_target_temperature()
+	_update_temperature_display()
 
 ## In Kelvins
 func _set_current_temperature(new_temperature: int) -> void:

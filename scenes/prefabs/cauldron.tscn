@@ -17,12 +17,6 @@ size = Vector2(391.5, 57)
 
 [node name="Cauldron" type="Node2D"]
 script = ExtResource("1_t4s4w")
-max_temperature = null
-min_temperature = null
-heating_power = null
-cauldron_width = null
-temperature_change_interval = null
-gas_movement_interval = null
 
 [node name="gases_movement_timer" type="Timer" parent="."]
 

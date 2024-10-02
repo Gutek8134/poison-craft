@@ -2,6 +2,8 @@ class_name SubstanceContainer
 
 extends Node2D
 
+signal inner_temperature_change
+
 static var room_temperature: int = 295
 
 const substance_representation_scene := (preload("res://scenes/prefabs/ui/substance_repr.tscn") as PackedScene)
@@ -130,6 +132,7 @@ func _reaction_coroutine(reaction: SubstanceReaction) -> void:
 
 		update_ongoing_reactions()
 		update_substance_display()
+		inner_temperature_change.emit()
 
 ## Also used for removing substances
 func add_substance(substance: SubstanceData, amount: int) -> void:

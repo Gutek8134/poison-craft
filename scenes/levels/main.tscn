@@ -19,5 +19,16 @@ position = Vector2(98, 444)
 linear_damp = 1.754
 angular_damp = 0.159
 
+[node name="BlueLeaf2" parent="." instance=ExtResource("1_bqp0l")]
+position = Vector2(174, 431)
+linear_damp = 1.754
+angular_damp = 0.159
+
 [node name="Cauldron" parent="." instance=ExtResource("2_3v6fd")]
 position = Vector2(15, 25)
+max_temperature = 570
+min_temperature = 260
+heating_power = 2
+cauldron_width = 50
+temperature_change_interval = 3
+gas_movement_interval = 1

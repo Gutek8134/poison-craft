@@ -25,7 +25,7 @@ outcome_substances = {
 }
 reaction_conditions = SubResource("Resource_glptp")
 reaction_time = 3
-temperature_change = 0
+temperature_change = 2
 scaling = false
 
 [resource]
