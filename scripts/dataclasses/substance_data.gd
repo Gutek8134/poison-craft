@@ -61,7 +61,7 @@ enum STATE_OF_MATTER {
 # 	]
 # }
 
-func _init(p_name: String="", p_effects: Array[SubstanceEffect]=[], p_possible_reactions: Array[SubstanceReaction]=[], p_melting_temperature: int=270, p_ignition_temperature: int=500, p_vaporisation_temperature: int=400):
+func _init(p_name: String = "", p_effects: Array[SubstanceEffect] = [], p_possible_reactions: Array[SubstanceReaction] = [], p_melting_temperature: int = 270, p_ignition_temperature: int = 500, p_vaporisation_temperature: int = 400):
     substance_type = p_name
     effects = p_effects
     possible_reactions = p_possible_reactions
@@ -73,7 +73,7 @@ func _init(p_name: String="", p_effects: Array[SubstanceEffect]=[], p_possible_r
 func _eq(other: SubstanceData) -> bool:
     return name == other.name
 
-func _to_string(max_effects: int=10, max_reactions: int=5) -> String:
+func _to_string(max_effects: int = 10, max_reactions: int = 5) -> String:
     if full_string_representation:
         return self.full_to_string()
     var output: String = self.name
