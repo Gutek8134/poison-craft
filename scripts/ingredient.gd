@@ -11,6 +11,7 @@ static var time_to_show_container: float = 0.6
 static var time_to_hide_container: float = 0.2
 
 @onready var container := $Container as SubstanceContainer
+@onready var data_table := SubstanceDataTable.factory()
 @export var _gravity_scale: float = 1.3
 var __mouse_hovering_over := false
 var __mouse_hovering_over_container := false
@@ -19,12 +20,13 @@ var __container_show_timer: SceneTreeTimer
 var __container_hide_timer: SceneTreeTimer
 var __container_position_offset: Vector2
 
+var split_slider_scene := preload("res://scenes/prefabs/ui/split_slider.tscn")
+
 func _ready():
 	__container_position_offset = container.global_position - global_position
 	mass = amount / 1000.
 	gravity_scale = _gravity_scale
 	normalize_composition()
-	var data_table = SubstanceDataTable.factory()
 	for substance_name: String in composition:
 		container.add_substance(data_table.data[substance_name], amount * composition[substance_name] / 100)
 
@@ -104,13 +106,41 @@ func _on_container_mouse_exited() -> void:
 	if not __mouse_hovering_over and not __mouse_hovering_over_container:
 		container.visible = false
 
+var double_clicked := false
 func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.double_click:
+				double_clicked = true
+				print("double click!")
+				var split_slider := split_slider_scene.instantiate()
+				(split_slider.get_node("MinimumValueText") as RichTextLabel).text = "[center]0[/center]"
+				(split_slider.get_node("MaximumValueText") as RichTextLabel).text = "[center]%d[/center]"%amount
+				var split_value_slider := (split_slider.get_node("ValueSlider") as Slider)
+				split_value_slider.min_value = 0
+				split_value_slider.max_value = amount
+				get_tree().root.add_child(split_slider)
+				await (split_slider.get_node("Button") as Button).pressed
+				var duplicate_ingredient := self.duplicate() as Ingredient
+				duplicate_ingredient.composition = self.composition
+				duplicate_ingredient.amount = split_value_slider.value as int
+				duplicate_ingredient.mass = split_value_slider.value / 1000
+				duplicate_ingredient.position = self.position + Vector2(0, -50)
+				duplicate_ingredient.z_index = self.z_index
+				self.amount -= split_value_slider.value as int
+				self.mass = self.amount / 1000.
+				for substance_name: String in composition:
+					container.add_substance(data_table.data[substance_name], -split_value_slider.value * composition[substance_name] / 100)
+				get_tree().current_scene.add_child(duplicate_ingredient)
+				split_slider.queue_free()
+				return
 			__dragging = event.pressed
 			gravity_scale = !event.pressed
 			if event.pressed:
-				container.visible = false
+				double_clicked = false
+				await get_tree().create_timer(time_to_hide_container).timeout
+				if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and not double_clicked:
+					container.visible = false
 			else:
 				__container_show_timer = get_tree().create_timer(time_to_show_container)
 				await __container_show_timer.timeout
