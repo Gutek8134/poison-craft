@@ -6,13 +6,18 @@ extends RigidBody2D
 ## Normalized to sum up to 100
 @export var composition: Dictionary = {}
 @export var amount: int = 100
+@export var _gravity_scale: float = 1.3
+@export var _force_scale: float = 0.5
+@export var _velocity_damp_scale: float = 0.8
+@export var _maximum_force: int = 300
+@export var _minimum_force: int = -300
+# @export var _throw_velocity_scale: float = 2.5
 
 static var time_to_show_container: float = 0.6
 static var time_to_hide_container: float = 0.2
 
 @onready var container := $Container as SubstanceContainer
 @onready var data_table := SubstanceDataTable.factory()
-@export var _gravity_scale: float = 1.3
 var __mouse_hovering_over := false
 var __mouse_hovering_over_container := false
 var __dragging := false
@@ -32,13 +37,19 @@ func _ready():
 
 func _process(_delta):
 	if __dragging:
-		apply_force(get_global_mouse_position() - global_position)
+		var dragging_vector = (get_global_mouse_position() - global_position)
+		dragging_vector.x = dragging_vector.x * abs(dragging_vector.x)
+		dragging_vector.y = dragging_vector.y * abs(dragging_vector.y)
+		var minimum_force_vector := Vector2(_minimum_force, _minimum_force)
+		var maximum_force_vector := Vector2(_maximum_force, _maximum_force)
+		apply_force((dragging_vector * mass * _force_scale - linear_velocity * _velocity_damp_scale).clamp(minimum_force_vector, maximum_force_vector))
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and __dragging:
 		if event.button_index == MOUSE_BUTTON_LEFT and !event.pressed:
 			__dragging = false
 			gravity_scale = _gravity_scale
+			# linear_velocity *= _throw_velocity_scale
 			if __mouse_hovering_over:
 				_on_mouse_entered()
 
