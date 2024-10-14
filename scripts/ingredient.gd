@@ -35,14 +35,14 @@ func _ready():
 	for substance_name: String in composition:
 		container.add_substance(data_table.data[substance_name], amount * composition[substance_name] / 100)
 
-func _process(_delta):
+func _physics_process(_delta):
 	if __dragging:
 		var dragging_vector = (get_global_mouse_position() - global_position)
 		dragging_vector.x = dragging_vector.x * abs(dragging_vector.x)
 		dragging_vector.y = dragging_vector.y * abs(dragging_vector.y)
 		var minimum_force_vector := Vector2(_minimum_force, _minimum_force)
 		var maximum_force_vector := Vector2(_maximum_force, _maximum_force)
-		apply_force((dragging_vector * mass * _force_scale - linear_velocity * _velocity_damp_scale).clamp(minimum_force_vector, maximum_force_vector))
+		apply_force((dragging_vector * mass * _force_scale - linear_velocity * _velocity_damp_scale * sqrt(mass)).clamp(minimum_force_vector, maximum_force_vector))
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and __dragging:

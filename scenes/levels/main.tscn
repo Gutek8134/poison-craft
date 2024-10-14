@@ -18,11 +18,24 @@ shape = SubResource("RectangleShape2D_34rbh")
 position = Vector2(98, 444)
 linear_damp = 1.754
 angular_damp = 0.159
+amount = 1000
+_maximum_force = 1000
+_minimum_force = -1000
 
 [node name="BlueLeaf2" parent="." instance=ExtResource("1_bqp0l")]
 position = Vector2(174, 431)
 linear_damp = 1.754
 angular_damp = 0.159
+_maximum_force = 1000
+_minimum_force = -1000
+
+[node name="BlueLeaf3" parent="." instance=ExtResource("1_bqp0l")]
+position = Vector2(267, 456)
+linear_damp = 1.754
+angular_damp = 0.159
+amount = 10
+_maximum_force = 1000
+_minimum_force = -1000
 
 [node name="Cauldron" parent="." instance=ExtResource("2_3v6fd")]
 position = Vector2(15, 25)

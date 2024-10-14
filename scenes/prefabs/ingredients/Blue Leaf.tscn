@@ -24,6 +24,7 @@ composition = {
 "Ogr (solid)": 9
 }
 _gravity_scale = 1.5
+_force_scale = 0.2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(1, 1)
