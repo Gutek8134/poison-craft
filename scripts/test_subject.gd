@@ -25,17 +25,26 @@ func apply_effect(effect: SubstanceEffect) -> void:
 
 	match effect.effect_type:
 		SubstanceEffect.effect_enum.DEATH:
-			die()
+			_die()
 
 		SubstanceEffect.effect_enum.BLINDNESS:
-			pass
+			_get_blind()
 
 		SubstanceEffect.effect_enum.BLEEDING:
-			pass
+			_start_bleeding()
 
 		SubstanceEffect.effect_enum.MEMORY_LOSS:
-			pass
+			_lose_memory()
 
 
-func die() -> void:
+func _die() -> void:
 	queue_free()
+
+func _get_blind() -> void:
+	pass
+
+func _start_bleeding() -> void:
+	pass
+
+func _lose_memory() -> void:
+	pass
