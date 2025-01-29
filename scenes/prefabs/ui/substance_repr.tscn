@@ -10,7 +10,7 @@ script = ExtResource("3_ln1gv")
 data = ExtResource("2_djful")
 amount = 35
 
-[node name="HFlowContainer" type="HFlowContainer"]
+[node name="SubstanceRepresentation" type="HFlowContainer"]
 layout_direction = 2
 offset_right = 305.0
 offset_bottom = 95.0

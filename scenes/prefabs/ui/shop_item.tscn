@@ -1,0 +1,52 @@
+[gd_scene load_steps=2 format=3 uid="uid://drjqsug8tgsxf"]
+
+[ext_resource type="Texture2D" uid="uid://3ugdclamlyxd" path="res://icon.svg" id="1_3gnhr"]
+
+[node name="ShopItem" type="Control"]
+custom_minimum_size = Vector2(320, 180)
+layout_mode = 3
+anchor_right = 0.276
+anchor_bottom = 0.335
+offset_right = 0.0479736
+offset_bottom = -0.0800018
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FlowContainer" type="FlowContainer" parent="."]
+layout_mode = 0
+offset_right = 266.0
+offset_bottom = 122.0
+
+[node name="SubstanceSymbol" type="TextureRect" parent="FlowContainer"]
+custom_minimum_size = Vector2(95.355, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("1_3gnhr")
+expand_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FlowContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="SubstanceName" type="RichTextLabel" parent="FlowContainer/VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]JELENIAL"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="SubstanceState" type="TextureRect" parent="FlowContainer"]
+custom_minimum_size = Vector2(95.355, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+texture = ExtResource("1_3gnhr")
+expand_mode = 5
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 98.0
+offset_right = 266.0
+offset_bottom = 162.0
+text = "Buy (20g)"

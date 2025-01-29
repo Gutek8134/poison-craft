@@ -1,0 +1,38 @@
+[gd_scene load_steps=2 format=3 uid="uid://4utasimisca2"]
+
+[ext_resource type="PackedScene" uid="uid://drjqsug8tgsxf" path="res://scenes/prefabs/ui/shop_item.tscn" id="1_csf3d"]
+
+[node name="Shop" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.997
+offset_right = -183.0
+offset_bottom = -0.0560303
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 3
+
+[node name="ShopItem" parent="ScrollContainer/GridContainer" instance=ExtResource("1_csf3d")]
+custom_minimum_size = Vector2(318.095, 173.21)
+layout_mode = 2
+
+[node name="ShopItem2" parent="ScrollContainer/GridContainer" instance=ExtResource("1_csf3d")]
+layout_mode = 2
+
+[node name="ShopItem3" parent="ScrollContainer/GridContainer" instance=ExtResource("1_csf3d")]
+layout_mode = 2
+
+[node name="ShopItem4" parent="ScrollContainer/GridContainer" instance=ExtResource("1_csf3d")]
+layout_mode = 2
