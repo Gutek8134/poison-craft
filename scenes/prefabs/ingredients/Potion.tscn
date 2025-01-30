@@ -18,6 +18,7 @@ linear_damp = 5.769
 angular_damp = 5.549
 constant_force = Vector2(0, -0.285)
 script = ExtResource("1_i7pe7")
+ingredient_name = "Unknown Potion"
 _gravity_scale = 1.5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

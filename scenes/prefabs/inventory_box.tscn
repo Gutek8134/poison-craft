@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://xxt3l4dvx281"]
+
+[ext_resource type="Script" path="res://scripts/inventory_box.gd" id="1_kok2h"]
+[ext_resource type="Texture2D" uid="uid://davu505cl3sjn" path="res://content/images/nicubunu-Open-box-3443310808.png" id="2_mdrpp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yiapr"]
+size = Vector2(162.5, 25)
+
+[node name="InventoryBox" type="Node2D"]
+script = ExtResource("1_kok2h")
+
+[node name="Nicubunu-open-box-3443310808" type="Sprite2D" parent="."]
+scale = Vector2(0.0866667, 0.0866667)
+texture = ExtResource("2_mdrpp")
+
+[node name="Area2D" type="Area2D" parent="Nicubunu-open-box-3443310808"]
+position = Vector2(23.0769, -150)
+scale = Vector2(11.5385, 11.5385)
+input_pickable = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Nicubunu-open-box-3443310808/Area2D"]
+shape = SubResource("RectangleShape2D_yiapr")
+
+[connection signal="body_entered" from="Nicubunu-open-box-3443310808/Area2D" to="." method="_on_area_2d_body_entered"]

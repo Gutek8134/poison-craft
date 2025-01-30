@@ -4,6 +4,7 @@ extends RigidBody2D
 
 ## key: string (substance name) = int (percentage)
 ## Normalized to sum up to 100
+@export var ingredient_name: String
 @export var composition: Dictionary = {}
 @export var amount: int = 100
 @export var _gravity_scale: float = 1.3

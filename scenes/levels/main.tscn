@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dbuqro12ohuni"]
+[gd_scene load_steps=5 format=3 uid="uid://dbuqro12ohuni"]
 
 [ext_resource type="PackedScene" uid="uid://dn5av2vus4bfk" path="res://scenes/prefabs/ingredients/Blue Leaf.tscn" id="1_bqp0l"]
 [ext_resource type="PackedScene" uid="uid://bveoo716ac81d" path="res://scenes/prefabs/cauldron.tscn" id="2_3v6fd"]
+[ext_resource type="PackedScene" uid="uid://xxt3l4dvx281" path="res://scenes/prefabs/inventory_box.tscn" id="3_wkdsw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_34rbh"]
 size = Vector2(1150.5, 90)
@@ -39,3 +40,6 @@ _minimum_force = -1000
 
 [node name="Cauldron" parent="." instance=ExtResource("2_3v6fd")]
 position = Vector2(15, 25)
+
+[node name="InventoryBox" parent="." instance=ExtResource("3_wkdsw")]
+position = Vector2(1008, 553)

@@ -19,6 +19,7 @@ static func factory(p_name: String = "main") -> SubstanceDataTable:
             printerr("%s data table does not exist, returning empty" % [p_name])
 
     _instances[p_name]._add_temperature_reactions()
+    _instances[p_name].name = p_name
     # print(_instances[p_name].data)
     return _instances[p_name]
 
