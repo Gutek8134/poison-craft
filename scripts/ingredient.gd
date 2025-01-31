@@ -25,6 +25,8 @@ var __dragging := false
 var __container_show_timer: SceneTreeTimer
 var __container_hide_timer: SceneTreeTimer
 var __container_position_offset: Vector2
+var __minimum_force_vector: Vector2
+var __maximum_force_vector: Vector2
 
 var split_slider_scene := preload("res://scenes/prefabs/ui/split_slider.tscn")
 
@@ -33,6 +35,8 @@ func _ready():
 	mass = amount / 1000.
 	gravity_scale = _gravity_scale
 	normalize_composition()
+	__minimum_force_vector = Vector2(_minimum_force, _minimum_force)
+	__maximum_force_vector = Vector2(_maximum_force, _maximum_force)
 	for substance_name: String in composition:
 		container.add_substance(data_table.data[substance_name], amount * composition[substance_name] / 100)
 
@@ -41,9 +45,7 @@ func _physics_process(_delta):
 		var dragging_vector = (get_global_mouse_position() - global_position)
 		dragging_vector.x = dragging_vector.x * abs(dragging_vector.x)
 		dragging_vector.y = dragging_vector.y * abs(dragging_vector.y)
-		var minimum_force_vector := Vector2(_minimum_force, _minimum_force)
-		var maximum_force_vector := Vector2(_maximum_force, _maximum_force)
-		apply_force((dragging_vector * mass * _force_scale - linear_velocity * _velocity_damp_scale * sqrt(mass)).clamp(minimum_force_vector, maximum_force_vector))
+		apply_force((dragging_vector * mass * _force_scale - linear_velocity * _velocity_damp_scale * sqrt(mass)).clamp(__minimum_force_vector, __maximum_force_vector))
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and __dragging:

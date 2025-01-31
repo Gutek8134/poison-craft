@@ -1,5 +1,6 @@
 extends Node
 
+@onready var gold: int = 100
 ## key: string (ingredient name) = int (amount in inventory)
 @onready var inventory: Dictionary = {}
 @onready var ingredient_table := IngredientDataTable.factory()
@@ -29,3 +30,11 @@ func remove_from_inventory(ingredient_name: String, amount: int) -> void:
 
     inventory[ingredient_name] -= amount
     print(inventory)
+
+func add_gold(amount: int):
+    gold += amount
+    print(gold)
+
+func remove_gold(amount: int):
+    gold -= amount
+    print(gold)
