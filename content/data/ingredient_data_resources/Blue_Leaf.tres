@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="IngredientData" load_steps=3 format=3 uid="uid://d15ie3wf1j3dc"]
+
+[ext_resource type="Script" path="res://scripts/dataclasses/ingredient_data.gd" id="1_njorx"]
+[ext_resource type="Texture2D" uid="uid://h2im7atgb2n4" path="res://content/images/ingredients/blue leaf.png" id="2_81211"]
+
+[resource]
+script = ExtResource("1_njorx")
+composition = {
+"Jelenial (liquid)": 1,
+"Ogr (solid)": 9
+}
+sprite = ExtResource("2_81211")

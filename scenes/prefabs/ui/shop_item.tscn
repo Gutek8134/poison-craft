@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://drjqsug8tgsxf"]
 
-[ext_resource type="Texture2D" uid="uid://3ugdclamlyxd" path="res://icon.svg" id="1_3gnhr"]
 [ext_resource type="Script" path="res://scripts/shop_item.gd" id="1_71ygj"]
+[ext_resource type="PackedScene" uid="uid://buhsda2dovrb7" path="res://scenes/prefabs/ui/ingredient_repr.tscn" id="2_68oha"]
 
 [node name="ShopItem" type="Control"]
 custom_minimum_size = Vector2(320, 180)
@@ -16,36 +16,8 @@ grow_vertical = 2
 script = ExtResource("1_71ygj")
 ingredient_name = "Blue Leaf"
 
-[node name="IngredientRepresentation" type="FlowContainer" parent="."]
+[node name="IngredientRepresentation" parent="." instance=ExtResource("2_68oha")]
 layout_mode = 0
-offset_right = 287.0
-offset_bottom = 122.0
-
-[node name="IngredientSymbol" type="TextureRect" parent="IngredientRepresentation"]
-custom_minimum_size = Vector2(95.355, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-texture = ExtResource("1_3gnhr")
-expand_mode = 5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="IngredientRepresentation"]
-layout_mode = 2
-alignment = 1
-
-[node name="IngredientName" type="RichTextLabel" parent="IngredientRepresentation/VBoxContainer"]
-layout_mode = 2
-bbcode_enabled = true
-text = "[center]BLUE LEAF"
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
-
-[node name="IngredientState" type="TextureRect" parent="IngredientRepresentation"]
-custom_minimum_size = Vector2(95.355, 0)
-layout_mode = 2
-size_flags_horizontal = 0
-texture = ExtResource("1_3gnhr")
-expand_mode = 5
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0

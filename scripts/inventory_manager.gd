@@ -31,10 +31,10 @@ func remove_from_inventory(ingredient_name: String, amount: int) -> void:
     inventory[ingredient_name] -= amount
     print(inventory)
 
-func add_gold(amount: int):
+func add_gold(amount: int) -> void:
     gold += amount
     print(gold)
 
-func remove_gold(amount: int):
+func remove_gold(amount: int) -> void:
     gold -= amount
     print(gold)

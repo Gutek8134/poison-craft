@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://bexapishuju6r"]
+
+[ext_resource type="PackedScene" uid="uid://buhsda2dovrb7" path="res://scenes/prefabs/ui/ingredient_repr.tscn" id="1_wqw88"]
+
+[node name="InventoryItem" type="Control"]
+custom_minimum_size = Vector2(36.435, 15.855)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 367.0
+offset_bottom = 167.0
+
+[node name="IngredientRepresentation" parent="." instance=ExtResource("1_wqw88")]
+layout_mode = 0
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = -3.0
+offset_top = 95.0
+offset_right = 349.0
+offset_bottom = 158.0
+text = "Take out"

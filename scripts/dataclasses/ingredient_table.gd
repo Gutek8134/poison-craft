@@ -2,7 +2,7 @@ class_name IngredientDataTable
 
 extends Resource
 
-## key(ingredient name) : Ingredient composition (dictionary)
+## key(ingredient name) : Ingredient Data
 @export var data: Dictionary = {}
 @export var name: String
 
