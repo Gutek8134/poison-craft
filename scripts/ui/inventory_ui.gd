@@ -1,18 +1,73 @@
 extends Control
 
+@export var x_offset: float = 460
+@export var time_to_show_inventory: float = 0.75
+
 const inventory_item_scene: PackedScene = preload("res://scenes/prefabs/ui/inventory_item.tscn") as PackedScene
 const slider_scene: PackedScene = preload("res://scenes/prefabs/ui/split_slider.tscn") as PackedScene
 var ingredient_data_table = IngredientDataTable.factory()
-@onready var previous_shown_inventory: Dictionary = {}
+
+var __inventory_show_timer: SceneTreeTimer
+var __inventory_hide_timer: SceneTreeTimer
+
 @onready var representations: Dictionary = {}
 
+@onready var original_x = position.x
+
+# Primitive lock, should suffice
+@onready var updating: bool = false
+signal __update_ready()
+
 func _ready() -> void:
-    InventoryManager.add_to_inventory("Blue Leaf", 25)
-    update()
+    visible = false
+    position.x -= x_offset
+    InventoryManager.inventory_ui = self
+
+func _process(_delta):
+    if Input.is_action_just_pressed("inventory"):
+        toggle_visibility()
+
+    if __inventory_hide_timer and __inventory_hide_timer.time_left > 0:
+        position.x = original_x - lerpf(x_offset, 0, __inventory_hide_timer.time_left / time_to_show_inventory)
+    
+    if __inventory_show_timer and __inventory_show_timer.time_left > 0:
+        position.x = original_x - lerpf(0, x_offset, __inventory_show_timer.time_left / time_to_show_inventory)
+        
+    
+func toggle_visibility():
+        # Needs to hide itself
+        if visible:
+            # It's already hiding, no need to do anything
+            if __inventory_hide_timer and __inventory_hide_timer.time_left > 0:
+                return
+
+            # Start hiding
+            __inventory_hide_timer = get_tree().create_timer(time_to_show_inventory)
+            await __inventory_hide_timer.timeout
+            position.x = original_x - x_offset
+            visible = false
+
+        # Needs to show itself
+        else:
+            # It's already showing, no need to do anything
+            if __inventory_show_timer and __inventory_show_timer.time_left > 0:
+                return
+            
+            # Start showing
+            update()
+            __inventory_show_timer = get_tree().create_timer(time_to_show_inventory)
+            visible = true
+            await __inventory_show_timer.timeout
+            position.x = original_x
+
 
 func update() -> void:
-    var to_remove: Array = previous_shown_inventory.keys().filter(func(x): return not InventoryManager.inventory.has(x))
-    var to_add: Array = InventoryManager.inventory.keys().filter(func(x): return not previous_shown_inventory.has(x))
+    if updating:
+        await __update_ready
+    
+    updating = true
+    var to_remove: Array = representations.keys().filter(func(x): return not InventoryManager.inventory.has(x))
+    var to_add: Array = InventoryManager.inventory.keys().filter(func(x): return not representations.has(x))
 
     for element in to_remove:
         remove_representation(element)
@@ -24,9 +79,12 @@ func update() -> void:
         var element = representations[ingredient_name]
         (element.get_node("IngredientRepresentation/IngredientAmount") as RichTextLabel).text = "[center]%d[/center]" % [InventoryManager.inventory[ingredient_name]]
 
-    previous_shown_inventory = InventoryManager.inventory
+    print("UPDATE", representations, InventoryManager.inventory)
+    updating = false
+    __update_ready.emit()
 
 func add_representation(ingredient_name: String) -> void:
+    print("adding repr")
     var data: IngredientData = ingredient_data_table.data[ingredient_name]
     var ingredient_representation: Control = inventory_item_scene.instantiate()
     (ingredient_representation.get_node("IngredientRepresentation/IngredientSymbol") as TextureRect).texture = data.sprite
@@ -56,7 +114,6 @@ func _take_out(ingredient_name: String, amount: int) -> void:
     InventoryManager.remove_from_inventory(ingredient_name, amount)
     if amount == InventoryManager.inventory[ingredient_name]:
         remove_representation(ingredient_name)
-        previous_shown_inventory.erase(ingredient_name)
     else:
         (representations[ingredient_name].get_node("IngredientRepresentation/IngredientAmount") as RichTextLabel).text = "[center]%d[/center]" % [InventoryManager.inventory[ingredient_name]]
         
@@ -68,3 +125,4 @@ func _take_out_slider(ingredient_name: String, slider: HSlider) -> void:
 
 func remove_representation(ingredient_name: String) -> void:
     (representations[ingredient_name] as Control).queue_free()
+    representations.erase(ingredient_name)
