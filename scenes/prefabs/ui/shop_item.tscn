@@ -4,13 +4,13 @@
 [ext_resource type="PackedScene" uid="uid://buhsda2dovrb7" path="res://scenes/prefabs/ui/ingredient_repr.tscn" id="2_68oha"]
 
 [node name="ShopItem" type="Control"]
-custom_minimum_size = Vector2(320, 180)
+custom_minimum_size = Vector2(370, 180)
 layout_mode = 3
-anchor_right = 0.276
-anchor_bottom = 0.335
+anchor_right = 0.317
+anchor_bottom = 0.298
 offset_left = -1.0
-offset_right = 1.048
-offset_bottom = -0.0800018
+offset_right = -0.18399
+offset_bottom = -0.104004
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_71ygj")
@@ -20,11 +20,14 @@ ingredient_name = "Blue Leaf"
 layout_mode = 0
 
 [node name="Button" type="Button" parent="."]
-layout_mode = 0
-offset_left = 2.0
-offset_top = 98.0
-offset_right = 266.0
-offset_bottom = 162.0
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.012
+anchor_bottom = 0.59
+offset_left = 37.0
+offset_top = 96.0
+offset_right = -22.84
+offset_bottom = 31.97
 text = "Buy (20g)"
 
 [connection signal="pressed" from="Button" to="." method="_on_buy"]

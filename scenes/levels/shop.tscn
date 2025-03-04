@@ -12,11 +12,11 @@ grow_vertical = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 0.997
-offset_right = -183.0
-offset_bottom = -0.0560303
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
 layout_mode = 2
@@ -25,7 +25,6 @@ size_flags_vertical = 3
 columns = 3
 
 [node name="ShopItem" parent="ScrollContainer/GridContainer" instance=ExtResource("1_csf3d")]
-custom_minimum_size = Vector2(318.095, 173.21)
 layout_mode = 2
 
 [node name="ShopItem2" parent="ScrollContainer/GridContainer" instance=ExtResource("1_csf3d")]

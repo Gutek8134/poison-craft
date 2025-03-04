@@ -10,6 +10,14 @@ size = Vector2(1150.5, 90)
 
 [node name="Level" type="Node2D"]
 
+[node name="CurrentGold" type="RichTextLabel" parent="."]
+offset_left = 976.0
+offset_top = 1.0
+offset_right = 1153.0
+offset_bottom = 41.0
+bbcode_enabled = true
+text = "[right]Current gold: 0[/right]"
+
 [node name="InventoryUI" parent="." instance=ExtResource("1_ljw8p")]
 anchors_preset = 0
 anchor_right = 0.0
@@ -19,7 +27,6 @@ offset_bottom = 648.0
 grow_horizontal = 1
 grow_vertical = 1
 x_offset = 600.0
-time_to_show_inventory = null
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
