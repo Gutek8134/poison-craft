@@ -4,14 +4,15 @@ const inventory_ui_class = preload("res://scripts/ui/inventory_ui.gd")
 
 @onready var gold: int = 100
 ## key: string (ingredient name) = int (amount in inventory)
-@onready var inventory: Dictionary = {}
+@onready var inventory: Dictionary = {"Blue Leaf": 100}
 @onready var ingredient_table := IngredientDataTable.factory()
 var inventory_ui: inventory_ui_class
 var gold_display: RichTextLabel
 
 func _ready() -> void:
     gold_display = get_tree().current_scene.get_node("CurrentGold") as RichTextLabel
-    gold_display.text = "[right]Current gold: %d[/right]" % [gold]
+    if gold_display:
+        gold_display.text = "[right]Current gold: %d[/right]" % [gold]
     # var _a = ((ingredient_table.data["Blue Leaf"] as PackedScene).get_state().get_script() as Ingredient).composition
 
 func add_to_inventory(ingredient_name: String, amount: int) -> void:
@@ -39,8 +40,10 @@ func remove_from_inventory(ingredient_name: String, amount: int) -> void:
 
 func add_gold(amount: int) -> void:
     gold += amount
-    gold_display.text = "[right]Current gold: %d[/right]" % [gold]
+    if gold_display:
+        gold_display.text = "[right]Current gold: %d[/right]" % [gold]
 
 func remove_gold(amount: int) -> void:
     gold -= amount
-    gold_display.text = "[right]Current gold: %d[/right]" % [gold]
+    if gold_display:
+        gold_display.text = "[right]Current gold: %d[/right]" % [gold]

@@ -11,7 +11,7 @@ var __inventory_show_timer: SceneTreeTimer
 var __inventory_hide_timer: SceneTreeTimer
 
 @onready var representations: Dictionary = {}
-
+@onready var ingredient_spawn_position: Vector2
 @onready var original_x = position.x
 
 # Primitive lock, should suffice
@@ -22,6 +22,9 @@ func _ready() -> void:
     visible = false
     position.x -= x_offset
     InventoryManager.inventory_ui = self
+    update()
+    var spawn_node: Node2D = get_tree().current_scene.get_node("IngredientSpawn")
+    ingredient_spawn_position = spawn_node.global_position
 
 func _process(_delta):
     if Input.is_action_just_pressed("inventory"):
@@ -100,22 +103,25 @@ func _choose_value(ingredient_name: String) -> void:
         return
 
     var slider: Control = slider_scene.instantiate()
+    slider.position = get_viewport_rect().get_center()
     var value_slider: Slider = slider.get_node("ValueSlider")
     value_slider.min_value = 0
     value_slider.max_value = InventoryManager.inventory[ingredient_name]
-    (slider.get_node("MinimumValueText") as RichTextLabel).text = "[center]%d[/center]" % [value_slider.min_value]
-    (slider.get_node("MaximumValueText") as RichTextLabel).text = "[center]%d[/center]" % [value_slider.max_value]
+    (slider.get_node("ValueSlider/MinimumValueText") as RichTextLabel).text = "[center]%d[/center]" % [value_slider.min_value]
+    (slider.get_node("ValueSlider/MaximumValueText") as RichTextLabel).text = "[center]%d[/center]" % [value_slider.max_value]
     (slider.get_node("Button") as Button).button_down.connect(_take_out_slider.bind(ingredient_name, value_slider))
     get_tree().current_scene.add_child(slider)
 
 func _take_out(ingredient_name: String, amount: int) -> void:
-    for i in range(amount):
-        get_tree().current_scene.add_child((load("res://scenes/prefabs/ingredients/%s.tscn" % ingredient_name) as PackedScene).instantiate())
-    InventoryManager.remove_from_inventory(ingredient_name, amount)
+    var ingredient_instance := (load("res://scenes/prefabs/ingredients/%s.tscn" % ingredient_name) as PackedScene).instantiate() as Ingredient
+    ingredient_instance.amount = amount
+    ingredient_instance.global_position = ingredient_spawn_position
+    get_tree().current_scene.add_child(ingredient_instance)
     if amount == InventoryManager.inventory[ingredient_name]:
         remove_representation(ingredient_name)
     else:
         (representations[ingredient_name].get_node("IngredientRepresentation/IngredientAmount") as RichTextLabel).text = "[center]%d[/center]" % [InventoryManager.inventory[ingredient_name]]
+    InventoryManager.remove_from_inventory(ingredient_name, amount)
         
 
 func _take_out_slider(ingredient_name: String, slider: HSlider) -> void:

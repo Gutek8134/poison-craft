@@ -38,6 +38,7 @@ texture = ExtResource("2_k4kkv")
 
 [node name="Container" parent="." instance=ExtResource("2_kimrc")]
 visible = false
+z_index = 2
 position = Vector2(12, -294)
 
 [node name="Area2D" type="Area2D" parent="Container"]

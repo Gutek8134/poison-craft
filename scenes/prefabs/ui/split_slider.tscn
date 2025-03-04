@@ -11,45 +11,19 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_duapj")
 
-[node name="MinimumValueText" type="RichTextLabel" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.259
-anchor_top = 0.5
-anchor_right = 0.259
-anchor_bottom = 0.5
-offset_left = -95.368
-offset_top = -40.0
-offset_right = 90.632
-offset_bottom = -3.0
-bbcode_enabled = true
-text = "[center]0[/center]"
-
-[node name="MaximumValueText" type="RichTextLabel" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.727
-anchor_top = 0.5
-anchor_right = 0.727
-anchor_bottom = 0.5
-offset_left = -92.5041
-offset_top = -44.0
-offset_right = 93.4959
-offset_bottom = -8.0
-bbcode_enabled = true
-text = "[center]100[/center]"
-
 [node name="Button" type="Button" parent="."]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.487
-anchor_top = 0.665
-anchor_right = 0.487
-anchor_bottom = 0.665
-offset_left = -185.024
-offset_top = -46.92
-offset_right = 173.976
-offset_bottom = 42.08
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = 46.0
+offset_right = 109.0
+offset_bottom = 115.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Confirm"
 
 [node name="ValueSlider" type="HSlider" parent="."]
@@ -63,6 +37,34 @@ offset_left = -259.0
 offset_top = -50.0
 offset_right = 255.0
 offset_bottom = 52.0
+
+[node name="MinimumValueText" type="RichTextLabel" parent="ValueSlider"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.259
+anchor_top = 0.5
+anchor_right = 0.259
+anchor_bottom = 0.5
+offset_left = -247.126
+offset_top = -41.0
+offset_right = -61.126
+offset_bottom = -4.0
+bbcode_enabled = true
+text = "[center]0[/center]"
+
+[node name="MaximumValueText" type="RichTextLabel" parent="ValueSlider"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.727
+anchor_top = 0.5
+anchor_right = 0.727
+anchor_bottom = 0.5
+offset_left = 54.3219
+offset_top = -45.0
+offset_right = 240.322
+offset_bottom = -9.0
+bbcode_enabled = true
+text = "[center]100[/center]"
 
 [node name="ValueText" type="LineEdit" parent="."]
 layout_mode = 1
