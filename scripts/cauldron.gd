@@ -196,7 +196,7 @@ func _start_moving_gases(interval: int = 1) -> void:
 		var width_left := cauldron_width
 		while content.content[gases_queue[0]] <= width_left:
 			width_left -= content.content[gases_queue[0]]
-			content.add_substance(data_table.data[gases_queue[0]], -content.content[gases_queue[0]])
+			content.add_substance(data_table.data[gases_queue[0]], - content.content[gases_queue[0]])
 			gases_queue.remove_at(0)
 			
 			# Maybe all of the gases have been transported
@@ -206,7 +206,7 @@ func _start_moving_gases(interval: int = 1) -> void:
 		if gases_queue.is_empty():
 			break
 
-		content.add_substance(data_table.data[gases_queue[0]], -width_left)
+		content.add_substance(data_table.data[gases_queue[0]], - width_left)
 		
 		_update_ongoing_reactions()
 		_update_substance_display()
@@ -224,7 +224,7 @@ func _update_ongoing_reactions() -> void:
 		
 		if gases_movement_timer.is_stopped():
 			_start_moving_gases(gas_movement_interval)
-	
+
 	content.update_ongoing_reactions()
 
 func _update_substance_display() -> void:
@@ -232,6 +232,9 @@ func _update_substance_display() -> void:
 
 func _test() -> void:
 	pass
+	# var customer = Customer.generate_random_customer()
+	# get_tree().current_scene.add_child.call_deferred(customer)
+	# print(customer)
 	# add_substance(data_table.data["Jelenial (liquid)"], 50)
 	# add_substance(data_table.data["Ogr (solid)"], 20)
 	# var printer = func(): print("%s %s" % [ongoing_reactions, content])

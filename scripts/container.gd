@@ -122,8 +122,8 @@ func _reaction_coroutine(reaction: SubstanceReaction) -> void:
 		if reaction.name not in ongoing_reactions_timers:
 			break
 		
-		_add_substance(data_table.data[reaction.substance_name], -reaction.substance_amount)
-		_add_substance(data_table.data[reaction.reactant_name], -reaction.reactant_amount)
+		_add_substance(data_table.data[reaction.substance_name], - reaction.substance_amount)
+		_add_substance(data_table.data[reaction.reactant_name], - reaction.reactant_amount)
 
 		for substance_name: String in reaction.outcome_substances:
 			_add_substance(data_table.data[substance_name], reaction.outcome_substances[substance_name])
