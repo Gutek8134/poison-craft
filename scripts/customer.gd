@@ -63,6 +63,27 @@ static func generate_random_customer() -> Customer:
         
     return new_customer
 
+func get_final_price(potion: Ingredient) -> int:
+    var potion_effects: Array[SubstanceEffect] = potion.container.get_effects_list().filter(func(x: SubstanceEffect): return x.minimal_dose <= potion.amount)
+    var potion_effects_names: Array[Array] = potion_effects.map(func(x: SubstanceEffect): return [x.effect_type, x.effect_strength])
+
+    var missing_effects: int = len(expected_effects.filter(func(x): return x not in potion_effects_names))
+    var side_effects: int = len(potion_effects_names.filter(func(x): return x not in expected_effects))
+
+    var time_to_poison: int = min(potion_effects.map(func(x: SubstanceEffect): return x.seconds_to_start))
+
+    var mistakes: int = (missing_effects + side_effects + floori(max((escape_time - time_to_poison), 0.0) / 30))
+
+    if mistakes == 0:
+        return offered_purchase_price
+
+    if mistakes <= roundi(tolerance * 10):
+        # See https://www.desmos.com/calculator/a9orntjsht
+        # x - mistakes, a - tolerance
+        return int(offered_purchase_price / ((1 - tolerance ** 2) * mistakes + 1))
+        
+    return 0
+        
 func _to_string() -> String:
     return "%s (%s): I need something with effects: %s. %s. My tolerance is %.2f, and I will pay %s!" % [
                 customer_name,

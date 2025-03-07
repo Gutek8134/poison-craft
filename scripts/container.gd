@@ -143,6 +143,22 @@ func add_substance(substance: SubstanceData, amount: int) -> void:
 	update_ongoing_reactions()
 	update_substance_display()
 
+# LRU cache of size 1
+var __cached_effects: Array[SubstanceEffect]
+var __cached_content: Dictionary
+
+func get_effects_list() -> Array[SubstanceEffect]:
+	if __cached_content and content == __cached_content and __cached_effects:
+		return __cached_effects
+
+	var effects = []
+	for substance_name in content:
+		effects.append_array((data_table.data[substance_name] as SubstanceData).effects)
+
+	__cached_content = content
+	__cached_effects = effects
+	return effects
+
 ## Amount in grams
 func _add_substance(substance: SubstanceData, amount: int) -> void:
 	if amount == 0:
