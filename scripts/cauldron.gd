@@ -167,6 +167,7 @@ func _on_take_out() -> void:
 		return
 
 	var new_potion := (potion_scene.instantiate() as Ingredient)
+	new_potion.is_potion = true
 	new_potion.composition = content.content.duplicate()
 	new_potion.normalize_composition()
 	var sum: int = 0

@@ -28,9 +28,9 @@ grow_horizontal = 1
 grow_vertical = 1
 x_offset = 600.0
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
+[node name="floor" type="StaticBody2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="floor"]
 position = Vector2(575.75, 598)
 shape = SubResource("RectangleShape2D_34rbh")
 

@@ -2,7 +2,7 @@ class_name Customer
 
 extends Node2D
 
-
+@export var sprite_size := Vector2(150, 400)
 var expected_effects: Array
 var escape_needed: bool
 ## In seconds
@@ -30,7 +30,9 @@ static func generate_random_customer() -> Customer:
     new_customer.customer_type = customer_ranges.keys().pick_random()
     var customer_range: CustomerRange = customer_ranges[new_customer.customer_type]
 
-    (new_customer.get_node("Sprite2D") as Sprite2D).texture = customer_sprites[new_customer.customer_type]
+    var sprite = new_customer.get_node("Area2D/CollisionShape2D/Sprite2D") as Sprite2D
+    sprite.texture = customer_sprites[new_customer.customer_type]
+    sprite.scale = new_customer.sprite_size / sprite.texture.get_size()
     new_customer.customer_name = customer_names.pick_random()
 
     new_customer.escape_needed = randf() < customer_range.escape_needed
@@ -63,6 +65,25 @@ static func generate_random_customer() -> Customer:
         
     return new_customer
 
+func _enter_tree() -> void:
+    var spawn: Node2D = get_tree().current_scene.get_node("CustomerSpawn")
+    if spawn:
+        global_position = spawn.global_position
+    else:
+        global_position = get_viewport_rect().get_center()
+
+func say(_text: String) -> void:
+    print(_text)
+
+func try_buy_potion(potion: Ingredient) -> void:
+    var price = get_final_price(potion)
+    if price == 0:
+        say("This is worthless!")
+        return
+    
+    say("Thank you")
+    InventoryManager.add_gold(price)
+
 func get_final_price(potion: Ingredient) -> int:
     var potion_effects: Array[SubstanceEffect] = potion.container.get_effects_list().filter(func(x: SubstanceEffect): return x.minimal_dose <= potion.amount)
     var potion_effects_names: Array[Array] = potion_effects.map(func(x: SubstanceEffect): return [x.effect_type, x.effect_strength])
@@ -72,7 +93,7 @@ func get_final_price(potion: Ingredient) -> int:
 
     var time_to_poison: int = min(potion_effects.map(func(x: SubstanceEffect): return x.seconds_to_start))
 
-    var mistakes: int = (missing_effects + side_effects + floori(max((escape_time - time_to_poison), 0.0) / 30))
+    var mistakes: int = (missing_effects + side_effects + int(max((escape_time - time_to_poison), 0.0) / 30))
 
     if mistakes == 0:
         return offered_purchase_price
@@ -93,6 +114,15 @@ func _to_string() -> String:
                 tolerance,
                 offered_purchase_price
             ]
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+    if body is Ingredient:
+        if not body.is_potion:
+            say("Why are you giving this to me?")
+            return
+        
+        try_buy_potion(body)
+        return
 
 class CustomerRange:
     ## distribution - dictionary of chances; string->int; can sum up to anything, not needed to normalize

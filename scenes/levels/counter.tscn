@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3 uid="uid://dtqoorsault2c"]
+
+[ext_resource type="PackedScene" uid="uid://lnmnarbx60gl" path="res://scenes/prefabs/ui/inventory_ui.tscn" id="1_xiolu"]
+[ext_resource type="PackedScene" uid="uid://xxt3l4dvx281" path="res://scenes/prefabs/inventory_box.tscn" id="2_a0a0u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f01uo"]
+size = Vector2(1150.5, 90)
+
+[node name="Counter" type="Node2D"]
+
+[node name="floor" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="floor"]
+position = Vector2(575.75, 598)
+shape = SubResource("RectangleShape2D_f01uo")
+
+[node name="CurrentGold" type="RichTextLabel" parent="."]
+offset_left = 970.0
+offset_top = 4.0
+offset_right = 1147.0
+offset_bottom = 44.0
+bbcode_enabled = true
+text = "[right]Current gold: 0[/right]"
+
+[node name="InventoryUI" parent="." instance=ExtResource("1_xiolu")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 1149.0
+offset_bottom = 648.0
+grow_horizontal = 1
+grow_vertical = 1
+x_offset = 600.0
+
+[node name="InventoryBox" parent="." instance=ExtResource("2_a0a0u")]
+position = Vector2(1008, 553)
+
+[node name="IngredientSpawn" type="Node2D" parent="."]
+position = Vector2(177, 363)
+
+[node name="CustomerSpawn" type="Node2D" parent="."]
+position = Vector2(845, 276)

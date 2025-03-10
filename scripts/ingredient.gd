@@ -19,6 +19,7 @@ static var time_to_hide_container: float = 0.2
 
 @onready var container := $Container as SubstanceContainer
 @onready var data_table := SubstanceDataTable.factory()
+@onready var is_potion: bool = false
 var __mouse_hovering_over := false
 var __mouse_hovering_over_container := false
 var __dragging := false
@@ -144,7 +145,7 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
 				self.amount -= split_value_slider.value as int
 				self.mass = self.amount / 1000.
 				for substance_name: String in composition:
-					container.add_substance(data_table.data[substance_name], -split_value_slider.value * composition[substance_name] / 100)
+					container.add_substance(data_table.data[substance_name], - split_value_slider.value * composition[substance_name] / 100)
 				get_tree().current_scene.add_child(duplicate_ingredient)
 				split_slider.queue_free()
 				return
