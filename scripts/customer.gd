@@ -12,6 +12,12 @@ var offered_purchase_price: int
 var customer_type: String
 var customer_name: String
 
+@onready var dialogue_box_1: Node2D = $DialogueBox
+@onready var dialogue_box_2: Node2D = $DialogueBox2
+@onready var dialogue_box_1_text_label: RichTextLabel = $DialogueBox/PanelContainer/RichTextLabel as RichTextLabel
+@onready var dialogue_box_2_text_label: RichTextLabel = $DialogueBox2/PanelContainer/RichTextLabel as RichTextLabel
+
+
 static func generate_random_customer() -> Customer:
     const customer_scene: PackedScene = preload("res://scenes/customer.tscn")
     const customer_names = ["Bob"]
@@ -72,16 +78,47 @@ func _enter_tree() -> void:
     else:
         global_position = get_viewport_rect().get_center()
 
-func say(_text: String) -> void:
-    print(_text)
+var previous_timer_1: Timer
+var previous_timer_2: Timer
+func say(_text: String, time: int = -1, force_box: int = 0) -> void:
+    if (not dialogue_box_1.visible or force_box == 1) and force_box != 2:
+        if previous_timer_1 and is_instance_valid(previous_timer_1):
+            previous_timer_1.timeout.emit()
+        dialogue_box_1.visible = true
+        dialogue_box_1_text_label.text = "[font_size=45]%s[/font_size]" % _text
+        if time > 0:
+            previous_timer_1 = Timer.new()
+            get_tree().root.add_child(previous_timer_1)
+            previous_timer_1.wait_time = time
+            previous_timer_1.one_shot = true
+            previous_timer_1.start()
+            await previous_timer_1.timeout
+            previous_timer_1.queue_free()
+            dialogue_box_1.visible = false
+        return
+    
+    if previous_timer_2 and is_instance_valid(previous_timer_2):
+        previous_timer_2.timeout.emit()
+    dialogue_box_2.visible = true
+    dialogue_box_2_text_label.text = "[font_size=45]%s[/font_size]" % _text
+    if time > 0:
+        previous_timer_2 = Timer.new()
+        get_tree().root.add_child(previous_timer_2)
+        previous_timer_2.wait_time = time
+        previous_timer_2.one_shot = true
+        previous_timer_2.start()
+        await previous_timer_2.timeout
+        previous_timer_2.queue_free()
+        dialogue_box_2.visible = false
+    
 
 func try_buy_potion(potion: Ingredient) -> void:
     var price = get_final_price(potion)
     if price == 0:
-        say("This is worthless!")
+        say("This is worthless!", 5, 2)
         return
     
-    say("Thank you")
+    say("Thank you", 3, 2)
     InventoryManager.add_gold(price)
 
 func get_final_price(potion: Ingredient) -> int:
@@ -118,7 +155,7 @@ func _to_string() -> String:
 func _on_area_2d_body_entered(body: Node2D) -> void:
     if body is Ingredient:
         if not body.is_potion:
-            say("Why are you giving this to me?")
+            say("Why are you giving this to me?", 3)
             return
         
         try_buy_potion(body)
