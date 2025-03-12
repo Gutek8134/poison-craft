@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://4nue4xefeiqq"]
 
-[ext_resource type="Script" path="res://scripts/customer.gd" id="1_sjcmo"]
-[ext_resource type="Texture2D" uid="uid://c5e6dwpofpp6b" path="res://content/images/dialogue_box.png" id="2_358un"]
+[ext_resource type="Script" path="res://scripts/customer.gd" id="1_l1nte"]
+[ext_resource type="Texture2D" uid="uid://c5e6dwpofpp6b" path="res://content/images/dialogue_box.png" id="2_3cmkg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pbuwa"]
 size = Vector2(150, 400)
@@ -10,7 +10,7 @@ size = Vector2(150, 400)
 
 [node name="Customer" type="Node2D"]
 z_index = -2
-script = ExtResource("1_sjcmo")
+script = ExtResource("1_l1nte")
 
 [node name="Area2D" type="Area2D" parent="."]
 input_pickable = false
@@ -25,7 +25,7 @@ shape = SubResource("RectangleShape2D_pbuwa")
 visible = false
 position = Vector2(-222, -158)
 scale = Vector2(0.688333, 0.6475)
-texture = ExtResource("2_358un")
+texture = ExtResource("2_3cmkg")
 
 [node name="PanelContainer" type="PanelContainer" parent="DialogueBox"]
 offset_left = -190.315
@@ -46,7 +46,7 @@ fit_content = true
 visible = false
 position = Vector2(-193, 71)
 scale = Vector2(0.6, 0.639)
-texture = ExtResource("2_358un")
+texture = ExtResource("2_3cmkg")
 flip_v = true
 
 [node name="PanelContainer" type="PanelContainer" parent="DialogueBox2"]

@@ -19,7 +19,7 @@ var customer_name: String
 
 
 static func generate_random_customer() -> Customer:
-    const customer_scene: PackedScene = preload("res://scenes/customer.tscn")
+    const customer_scene: PackedScene = preload("res://scenes/prefabs/customer.tscn")
     const customer_names = ["Bob"]
 
     # TODO: add more
@@ -72,7 +72,11 @@ static func generate_random_customer() -> Customer:
     return new_customer
 
 func _enter_tree() -> void:
-    var spawn: Node2D = get_tree().current_scene.get_node("CustomerSpawn")
+    var spawn: Node2D
+    if get_tree().current_scene is not MainScene:
+        spawn = get_tree().current_scene.get_node("CustomerSpawn")
+    else:
+        spawn = (get_tree().current_scene as MainScene).counter_scene.get_node("CustomerSpawn")
     if spawn:
         global_position = spawn.global_position
     else:

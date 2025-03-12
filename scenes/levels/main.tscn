@@ -1,22 +1,19 @@
-[gd_scene load_steps=6 format=3 uid="uid://dbuqro12ohuni"]
+[gd_scene load_steps=5 format=3 uid="uid://de5nuji5x8nqt"]
 
-[ext_resource type="PackedScene" uid="uid://dn5av2vus4bfk" path="res://scenes/prefabs/ingredients/Blue Leaf.tscn" id="1_bqp0l"]
+[ext_resource type="Script" path="res://scenes/levels/main_scene.gd" id="1_0y1bn"]
 [ext_resource type="PackedScene" uid="uid://lnmnarbx60gl" path="res://scenes/prefabs/ui/inventory_ui.tscn" id="1_ljw8p"]
-[ext_resource type="PackedScene" uid="uid://bveoo716ac81d" path="res://scenes/prefabs/cauldron.tscn" id="2_3v6fd"]
-[ext_resource type="PackedScene" uid="uid://xxt3l4dvx281" path="res://scenes/prefabs/inventory_box.tscn" id="3_wkdsw"]
+[ext_resource type="PackedScene" uid="uid://dbuqro12ohuni" path="res://scenes/levels/cauldron_stand.tscn" id="2_7uyl8"]
+[ext_resource type="PackedScene" uid="uid://dtqoorsault2c" path="res://scenes/levels/counter.tscn" id="3_ouv6r"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_34rbh"]
-size = Vector2(1150.5, 90)
+[node name="Main" type="Node2D"]
+script = ExtResource("1_0y1bn")
 
-[node name="Level" type="Node2D"]
+[node name="Scenes" type="Node2D" parent="."]
 
-[node name="CurrentGold" type="RichTextLabel" parent="."]
-offset_left = 970.0
-offset_top = 4.0
-offset_right = 1147.0
-offset_bottom = 44.0
-bbcode_enabled = true
-text = "[right]Current gold: 0[/right]"
+[node name="CauldronScene" parent="Scenes" instance=ExtResource("2_7uyl8")]
+
+[node name="Counter" parent="Scenes" instance=ExtResource("3_ouv6r")]
+position = Vector2(1157, 0)
 
 [node name="InventoryUI" parent="." instance=ExtResource("1_ljw8p")]
 anchors_preset = 0
@@ -28,40 +25,10 @@ grow_horizontal = 1
 grow_vertical = 1
 x_offset = 600.0
 
-[node name="floor" type="StaticBody2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="floor"]
-position = Vector2(575.75, 598)
-shape = SubResource("RectangleShape2D_34rbh")
-
-[node name="BlueLeaf" parent="." instance=ExtResource("1_bqp0l")]
-position = Vector2(98, 444)
-linear_damp = 1.754
-angular_damp = 0.159
-amount = 1000
-_maximum_force = 1000
-_minimum_force = -1000
-
-[node name="BlueLeaf2" parent="." instance=ExtResource("1_bqp0l")]
-position = Vector2(174, 431)
-linear_damp = 1.754
-angular_damp = 0.159
-_maximum_force = 1000
-_minimum_force = -1000
-
-[node name="BlueLeaf3" parent="." instance=ExtResource("1_bqp0l")]
-position = Vector2(267, 456)
-linear_damp = 1.754
-angular_damp = 0.159
-amount = 10
-_maximum_force = 1000
-_minimum_force = -1000
-
-[node name="Cauldron" parent="." instance=ExtResource("2_3v6fd")]
-position = Vector2(15, 25)
-
-[node name="InventoryBox" parent="." instance=ExtResource("3_wkdsw")]
-position = Vector2(1008, 553)
-
-[node name="IngredientSpawn" type="Node2D" parent="."]
-position = Vector2(177, 363)
+[node name="CurrentGold" type="RichTextLabel" parent="."]
+offset_left = 970.0
+offset_top = 4.0
+offset_right = 1147.0
+offset_bottom = 44.0
+bbcode_enabled = true
+text = "[right]Current gold: 0[/right]"

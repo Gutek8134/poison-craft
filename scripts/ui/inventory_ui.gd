@@ -23,8 +23,12 @@ func _ready() -> void:
     position.x -= x_offset
     InventoryManager.inventory_ui = self
     update()
-    var spawn_node: Node2D = get_tree().current_scene.get_node("IngredientSpawn")
-    ingredient_spawn_position = spawn_node.global_position
+    var spawn_node: Node2D
+    if get_tree().current_scene is not MainScene:
+        spawn_node = get_tree().current_scene.get_node("IngredientSpawn")
+        ingredient_spawn_position = spawn_node.global_position
+    else:
+        ingredient_spawn_position = Vector2.ZERO
 
 func _process(_delta):
     if Input.is_action_just_pressed("inventory"):
@@ -85,6 +89,10 @@ func update() -> void:
     print("UPDATE", representations, InventoryManager.inventory)
     updating = false
     __update_ready.emit()
+
+func update_spawn_node() -> void:
+    var spawn_node: Node2D = (get_tree().current_scene as MainScene).currently_selected_scene.get_node("IngredientSpawn")
+    ingredient_spawn_position = spawn_node.global_position
 
 func add_representation(ingredient_name: String) -> void:
     print("adding repr")

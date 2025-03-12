@@ -10,7 +10,8 @@ var inventory_ui: inventory_ui_class
 var gold_display: RichTextLabel
 
 func _ready() -> void:
-    gold_display = get_tree().current_scene.get_node("CurrentGold") as RichTextLabel
+    if get_tree().current_scene is not MainScene:
+        gold_display = get_tree().current_scene.get_node("CurrentGold") as RichTextLabel
     if gold_display:
         gold_display.text = "[right]Current gold: %d[/right]" % [gold]
     # var _a = ((ingredient_table.data["Blue Leaf"] as PackedScene).get_state().get_script() as Ingredient).composition
