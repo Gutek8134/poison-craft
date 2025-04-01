@@ -24,3 +24,23 @@ vertical_scroll_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="effect_scroll" type="ScrollContainer" parent="."]
+layout_direction = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_right = 348.0
+offset_bottom = 276.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="effect_grid" type="GridContainer" parent="effect_scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3

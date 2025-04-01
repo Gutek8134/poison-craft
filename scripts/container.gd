@@ -7,6 +7,7 @@ signal inner_temperature_change
 static var room_temperature: int = 295
 
 const substance_representation_scene := (preload("res://scenes/prefabs/ui/substance_repr.tscn") as PackedScene)
+const effect_representation_scene := (preload("res://scenes/prefabs/ui/effect_repr.tscn") as PackedScene)
 
 var current_temperature: int = room_temperature:
 	set = _set_current_temperature
@@ -19,6 +20,8 @@ var current_temperature: int = room_temperature:
 
 ## key: string (substance name) = SubstanceRepresentation
 @onready var substance_representations: Dictionary = {}
+## key: string (SubstanceEffect) = EffectRepresentation
+@onready var effect_representations: Dictionary = {}
 
 @onready var data_table = SubstanceDataTable.factory()
 
@@ -28,12 +31,57 @@ var current_temperature: int = room_temperature:
 
 @onready var timers_parent_node: Node = self
 @onready var content_display := $substance_scroll/substance_grid as GridContainer
+@onready var effect_display := $effect_scroll/effect_grid as GridContainer
+
+##TODO: show effects on right-click
+
+func _ready() -> void:
+	content_display.visible = true
+	effect_display.visible = false
+	visibility_changed.connect(
+		func():
+		content_display.visible = true
+		effect_display.visible = false
+			)
+
+func _input(event):
+	if not visible or not event.is_action_pressed("Switch Container Display"):
+		return
+	effect_display.visible = !effect_display.visible
+	content_display.visible = !content_display.visible
 
 func update_substance_display() -> void:
 	for representation: SubstanceRepresentation in substance_representations.values():
 		representation.update()
 	# print(content)
 
+func update_effect_display() -> void:
+	for representation: EffectRepresentation in effect_representations.values():
+		representation.update()
+
+func update_effect_list() -> void:
+	var real_effects: Array[SubstanceEffect] = []
+	for substance_name in content.keys():
+		var substance_data: SubstanceData = data_table.data[substance_name]
+		var amount: int = content[substance_name]
+		real_effects.append_array(substance_data.effects.filter(func(x: SubstanceEffect): return x.minimal_dose <= amount and x not in real_effects))
+
+	# Difference update
+	# 1 - delete not present in real_effects
+	for effect in effect_representations.keys().duplicate():
+		if effect not in real_effects:
+			effect_representations[effect].queue_free()
+			effect_representations.erase(effect)
+
+	# 2 - add not present representations
+	for effect in real_effects:
+		if not effect_representations.has(effect):
+			var representation := effect_representation_scene.instantiate() as EffectRepresentation
+			representation.effect = effect
+			effect_display.add_child(representation)
+			effect_representations[effect] = representation
+
+			
 func update_ongoing_reactions() -> void:
 	var real_reactions: Array[SubstanceReaction] = []
 	var real_reactions_names: Array[String] = []
@@ -66,7 +114,7 @@ func update_ongoing_reactions() -> void:
 			# Temperature is too low or too high
 			if conditions.min_temperature > current_temperature or conditions.max_temperature < current_temperature:
 				continue
-			# You need to mix the content in ordet for reaction to occur
+			# You need to mix the content in order for reaction to occur
 			if conditions.mixing and not is_mixing:
 				continue
 			
@@ -132,6 +180,8 @@ func _reaction_coroutine(reaction: SubstanceReaction) -> void:
 
 		update_ongoing_reactions()
 		update_substance_display()
+		update_effect_list()
+		update_effect_display()
 		inner_temperature_change.emit()
 
 ## Also used for removing substances
@@ -142,6 +192,8 @@ func add_substance(substance: SubstanceData, amount: int) -> void:
 	_add_substance(substance, amount)
 	update_ongoing_reactions()
 	update_substance_display()
+	update_effect_list()
+	update_effect_display()
 
 # LRU cache of size 1
 var __cached_effects: Array[SubstanceEffect]
@@ -206,3 +258,5 @@ func _set_current_temperature(new_temperature: int) -> void:
 	current_temperature = new_temperature
 	update_ongoing_reactions()
 	update_substance_display()
+	update_effect_list()
+	update_effect_display()

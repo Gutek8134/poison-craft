@@ -1,15 +1,22 @@
-[gd_resource type="Resource" script_class="SubstanceData" load_steps=5 format=3 uid="uid://d2bou4fc2ccbe"]
+[gd_resource type="Resource" script_class="SubstanceData" load_steps=6 format=3 uid="uid://d2bou4fc2ccbe"]
 
 [ext_resource type="Script" path="res://scripts/dataclasses/substance_effect_data.gd" id="1_3xh53"]
 [ext_resource type="Texture2D" uid="uid://3ugdclamlyxd" path="res://icon.svg" id="1_r8sdi"]
 [ext_resource type="Script" path="res://scripts/dataclasses/substance_data.gd" id="2_dqkcc"]
 [ext_resource type="Script" path="res://scripts/dataclasses/substance_reaction_data.gd" id="3_vx2pn"]
 
+[sub_resource type="Resource" id="Resource_ar7co"]
+script = ExtResource("1_3xh53")
+minimal_dose = 0
+effect_type = 1
+seconds_to_start = 15
+effect_strength = 2
+
 [resource]
 script = ExtResource("2_dqkcc")
 substance_type = "Jelenial"
 current_state_of_matter = 1
-effects = Array[ExtResource("1_3xh53")]([])
+effects = Array[ExtResource("1_3xh53")]([SubResource("Resource_ar7co")])
 possible_reactions = Array[ExtResource("3_vx2pn")]([])
 melting_temperature = 270
 ignition_temperature = 500

@@ -1,0 +1,51 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxlwvlsg8tida"]
+
+[ext_resource type="Script" path="res://scripts/ui/effect_repr.gd" id="1_gxqdc"]
+
+[node name="EffectRepresentation" type="HBoxContainer"]
+layout_direction = 2
+offset_right = 227.0
+offset_bottom = 71.0
+size_flags_horizontal = 3
+alignment = 1
+script = ExtResource("1_gxqdc")
+
+[node name="EffectName" type="RichTextLabel" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+bbcode_enabled = true
+text = "[center]JELENIAL"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="Strength" type="RichTextLabel" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+bbcode_enabled = true
+text = "[center]V"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="MinimalDose" type="RichTextLabel" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+bbcode_enabled = true
+text = "[center]35g"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+
+[node name="TimeToStart" type="RichTextLabel" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+bbcode_enabled = true
+text = "[center]35g"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
