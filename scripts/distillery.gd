@@ -61,7 +61,6 @@ func _ready() -> void:
 	target_temperature_right = SubstanceContainer.room_temperature
 	content_left.current_temperature = current_temperature_left
 	content_right.current_temperature = current_temperature_right
-	content_right.close()
 	_test()
 
 func self_destruct() -> void:
@@ -103,7 +102,7 @@ func set_target_temperature_right(new_temperature: int) -> void:
 	_update_temperature_display()
 
 ## Interval in seconds
-func _start_approaching_target_temperature_left(interval: int=3) -> void:
+func _start_approaching_target_temperature_left(interval: int = 3) -> void:
 	# Changes current temperature in static interval
 	temperature_change_timer_left.wait_time = interval
 	temperature_change_timer_left.start()
@@ -121,7 +120,7 @@ func _start_approaching_target_temperature_left(interval: int=3) -> void:
 	temperature_change_timer_left.stop()
 
 ## Interval in seconds
-func _start_approaching_target_temperature_right(interval: int=3) -> void:
+func _start_approaching_target_temperature_right(interval: int = 3) -> void:
 	# Changes current temperature in static interval
 	temperature_change_timer_right.wait_time = interval
 	temperature_change_timer_right.start()
@@ -138,7 +137,7 @@ func _start_approaching_target_temperature_right(interval: int=3) -> void:
 	current_temperature_right = target_temperature_right
 	temperature_change_timer_right.stop()
 
-func _start_moving_gases(interval: int=1) -> void:
+func _start_moving_gases(interval: int = 1) -> void:
 	gases_movement_timer.wait_time = interval
 	gases_movement_timer.start()
 	while true:
@@ -182,16 +181,16 @@ if target_temperature_right == current_temperature_right \
 else "[center][font_size=40]%dK[/font_size]
 [font_size=30](%dK)[/font_size][/center]" % [target_temperature_right, current_temperature_right]
 
-func increase_target_temperature_left(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
+func increase_target_temperature_left(value: int = DEFAULT_TEMPERATURE_CHANGE) -> void:
 	target_temperature_left += value
 
-func decrease_target_temperature_left(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
+func decrease_target_temperature_left(value: int = DEFAULT_TEMPERATURE_CHANGE) -> void:
 	target_temperature_left -= value
 
-func increase_target_temperature_right(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
+func increase_target_temperature_right(value: int = DEFAULT_TEMPERATURE_CHANGE) -> void:
 	target_temperature_right += value
 
-func decrease_target_temperature_right(value: int=DEFAULT_TEMPERATURE_CHANGE) -> void:
+func decrease_target_temperature_right(value: int = DEFAULT_TEMPERATURE_CHANGE) -> void:
 	target_temperature_right -= value
 
 func _on_decrease_temperature_left_button_pressed() -> void:
@@ -256,6 +255,14 @@ func add_substance_right(substance: SubstanceData, amount: int) -> void:
 	content_right.update_substance_display()
 	content_right.update_ongoing_reactions()
 
+func add_ingredient(ingredient: Ingredient, amount: int) -> void:
+	for substance_name in ingredient.composition:
+		var substance_amount: int = amount * ingredient.composition[substance_name] / 100
+		add_substance_left(data_table.data[substance_name], substance_amount)
+		
+	_update_substance_display()
+	_update_ongoing_reactions()
+
 func _update_substance_display() -> void:
 	content_left.update_substance_display()
 	content_right.update_substance_display()
@@ -263,14 +270,20 @@ func _update_substance_display() -> void:
 func _update_ongoing_reactions() -> void:
 	for substance_name: String in content_left.content:
 		var substance: SubstanceData = data_table.data[substance_name]
-		if substance.current_state_of_matter == SubstanceData.STATE_OF_MATTER.GAS and gases_queue.count(substance.name) == 0:
+		if substance.current_state_of_matter == SubstanceData.STATE_OF_MATTER.GAS and not gases_queue.has(substance.name):
 			gases_queue.push_back(substance.name)
 	
-	if gases_movement_timer.is_stopped():
+	if gases_movement_timer.is_stopped() and len(gases_queue) > 0:
 		_start_moving_gases(gas_movement_interval)
 	
 	content_left.update_ongoing_reactions()
 	content_right.update_ongoing_reactions()
+
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	if body is Ingredient:
+		add_ingredient(body, body.amount)
+		body.queue_free()
 
 func _test() -> void:
 	add_substance_left(data_table.data["Jelenial (liquid)"], 19)

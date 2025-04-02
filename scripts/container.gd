@@ -93,12 +93,6 @@ func update_ongoing_reactions() -> void:
 			continue
 		var substance := data_table.data[substance_name] as SubstanceData
 		for possible_reaction in substance.possible_reactions:
-			# Duplicates
-			if possible_reaction.name in real_reactions_names:
-				continue
-			# Reactant not present
-			if possible_reaction.reactant_name not in content:
-				continue
 			# Not enough substance or reactant
 			if content[possible_reaction.substance_name] < possible_reaction.substance_amount or content[possible_reaction.reactant_name] < possible_reaction.reactant_amount:
 				# still may scale down
@@ -109,6 +103,14 @@ func update_ongoing_reactions() -> void:
 				# check if there is enough substances if it can
 				if content[possible_reaction.substance_name] < possible_reaction.substance_amount or content[possible_reaction.reactant_name] < possible_reaction.reactant_amount:
 					continue
+
+			# Duplicates
+			if real_reactions_names.has(possible_reaction.name):
+				continue
+				
+			# Reactant not present
+			if possible_reaction.reactant_name not in content:
+				continue
 
 			var conditions = possible_reaction.reaction_conditions
 			# Temperature is too low or too high
@@ -170,8 +172,8 @@ func _reaction_coroutine(reaction: SubstanceReaction) -> void:
 		if reaction.name not in ongoing_reactions_timers:
 			break
 		
-		_add_substance(data_table.data[reaction.substance_name], - reaction.substance_amount)
-		_add_substance(data_table.data[reaction.reactant_name], - reaction.reactant_amount)
+		_add_substance(data_table.data[reaction.substance_name], -reaction.substance_amount)
+		_add_substance(data_table.data[reaction.reactant_name], -reaction.reactant_amount)
 
 		for substance_name: String in reaction.outcome_substances:
 			_add_substance(data_table.data[substance_name], reaction.outcome_substances[substance_name])
