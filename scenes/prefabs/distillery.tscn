@@ -1,10 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://b6txnvg0anq2e"]
+[gd_scene load_steps=7 format=3 uid="uid://b6txnvg0anq2e"]
 
 [ext_resource type="Script" path="res://scripts/distillery.gd" id="1_v10g5"]
 [ext_resource type="Texture2D" uid="uid://cilbjn5jhgj1w" path="res://content/images/distillery-t.png" id="2_g47ye"]
 [ext_resource type="PackedScene" uid="uid://chv6qeqta4eot" path="res://scenes/prefabs/container.tscn" id="2_l51i3"]
 [ext_resource type="Texture2D" uid="uid://dful5kmhtcxmm" path="res://content/images/plus-t.png" id="3_8wrvh"]
 [ext_resource type="Texture2D" uid="uid://h01ytmr31lmw" path="res://content/images/minus-t.png" id="4_kldqf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sd000"]
+size = Vector2(288, 151)
 
 [node name="Distillery" type="Node2D"]
 script = ExtResource("1_v10g5")
@@ -94,7 +97,15 @@ position = Vector2(741, 129)
 [node name="container_left" parent="." instance=ExtResource("2_l51i3")]
 position = Vector2(0, 27)
 
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(302, 340)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(134, 65.5)
+shape = SubResource("RectangleShape2D_sd000")
+
 [connection signal="pressed" from="distillery_sprite/increase_temperature_right" to="." method="_on_increase_temperature_right_button_pressed"]
 [connection signal="pressed" from="distillery_sprite/decrease_temperature_right" to="." method="_on_decrease_temperature_right_button_pressed"]
 [connection signal="pressed" from="distillery_sprite/increase_temperature_left" to="." method="_on_increase_temperature_left_button_pressed"]
 [connection signal="pressed" from="distillery_sprite/decrease_temperature_left" to="." method="_on_decrease_temperature_left_button_pressed"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

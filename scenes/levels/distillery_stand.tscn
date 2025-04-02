@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://bo1lrlpm54git"]
+
+[ext_resource type="PackedScene" uid="uid://b6txnvg0anq2e" path="res://scenes/prefabs/distillery.tscn" id="1_py17v"]
+[ext_resource type="PackedScene" uid="uid://xxt3l4dvx281" path="res://scenes/prefabs/inventory_box.tscn" id="2_obyq1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qg8d1"]
+size = Vector2(1150.5, 90)
+
+[node name="DistilleryStand" type="Node2D"]
+
+[node name="Distillery" parent="." instance=ExtResource("1_py17v")]
+position = Vector2(58, 0)
+
+[node name="floor" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="floor"]
+position = Vector2(575.75, 598)
+shape = SubResource("RectangleShape2D_qg8d1")
+
+[node name="IngredientSpawn" type="Node2D" parent="."]
+position = Vector2(177, 363)
+
+[node name="InventoryBox" parent="." instance=ExtResource("2_obyq1")]
+position = Vector2(1008, 553)
