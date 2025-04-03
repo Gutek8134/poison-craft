@@ -1,13 +1,13 @@
 [gd_scene load_steps=6 format=3 uid="uid://de5nuji5x8nqt"]
 
-[ext_resource type="Script" path="res://scenes/levels/main_scene.gd" id="1_0y1bn"]
+[ext_resource type="Script" path="res://scripts/main_scene.gd" id="1_047dc"]
 [ext_resource type="PackedScene" uid="uid://lnmnarbx60gl" path="res://scenes/prefabs/ui/inventory_ui.tscn" id="1_ljw8p"]
 [ext_resource type="PackedScene" uid="uid://dbuqro12ohuni" path="res://scenes/levels/cauldron_stand.tscn" id="2_7uyl8"]
 [ext_resource type="PackedScene" uid="uid://dtqoorsault2c" path="res://scenes/levels/counter.tscn" id="3_ouv6r"]
 [ext_resource type="PackedScene" uid="uid://bo1lrlpm54git" path="res://scenes/levels/distillery_stand.tscn" id="4_2uj02"]
 
 [node name="Main" type="Node2D"]
-script = ExtResource("1_0y1bn")
+script = ExtResource("1_047dc")
 
 [node name="Scenes" type="Node2D" parent="."]
 

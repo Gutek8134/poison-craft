@@ -11,7 +11,10 @@ extends Node2D
 @onready var counter_scene: Node2D = $Scenes/Counter
 @onready var distillery_scene: Node2D = $Scenes/DistilleryScene
 
+@onready var scenes = {Vector2i(0, 1): cauldron_scene, Vector2i(1, 1): counter_scene, Vector2i(2, 1): distillery_scene}
+
 @onready var currently_selected_scene: Node2D = cauldron_scene
+@onready var currently_selected_scene_index: Vector2i = Vector2i(0, 1)
 
 @onready var inventory_ui: inventory_ui_class = $InventoryUI
 
@@ -32,28 +35,27 @@ func _process(_delta: float) -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
     if scene_movement_timer and is_instance_valid(scene_movement_timer) and not is_zero_approx(scene_movement_timer.time_left):
         return
-
-    if event.is_action_released("Left") and currently_selected_scene == cauldron_scene:
+    var next_scene: Node2D
+    var next_scene_index: Vector2i
+    if event.is_action_released("Left"):
+        next_scene_index = currently_selected_scene_index + Vector2i(1, 0)
+        next_scene = scenes.get(next_scene_index)
+        if next_scene == null:
+            return
         starting_position = scene_holder.position
         ending_position = scene_holder.position + Vector2.LEFT * move_x
         scene_movement_timer = get_tree().create_timer(move_time)
-        currently_selected_scene = counter_scene
+        currently_selected_scene = next_scene
+        currently_selected_scene_index = next_scene_index
         inventory_ui.update_spawn_node()
-    elif event.is_action_released("Left") and currently_selected_scene == counter_scene:
-        starting_position = scene_holder.position
-        ending_position = scene_holder.position + Vector2.LEFT * move_x
-        scene_movement_timer = get_tree().create_timer(move_time)
-        currently_selected_scene = distillery_scene
-        inventory_ui.update_spawn_node()
-    elif event.is_action_released("Right") and currently_selected_scene == counter_scene:
-        starting_position = scene_holder.position
-        ending_position = scene_holder.position + Vector2.RIGHT * move_x
-        scene_movement_timer = get_tree().create_timer(move_time)
-        currently_selected_scene = cauldron_scene
-        inventory_ui.update_spawn_node()
-    elif event.is_action_released("Right") and currently_selected_scene == distillery_scene:
+    elif event.is_action_released("Right"):
+        next_scene_index = currently_selected_scene_index + Vector2i(-1, 0)
+        next_scene = scenes.get(next_scene_index)
+        if next_scene == null:
+            return
         starting_position = scene_holder.position
         ending_position = scene_holder.position + Vector2.RIGHT * move_x
         scene_movement_timer = get_tree().create_timer(move_time)
-        currently_selected_scene = counter_scene
+        currently_selected_scene = next_scene
+        currently_selected_scene_index = next_scene_index
         inventory_ui.update_spawn_node()
