@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3 uid="uid://dk7w0ggly5eso"]
+
+[ext_resource type="Texture2D" uid="uid://dt5xljmbyg3wc" path="res://content/images/cage.png" id="1_40bqh"]
+[ext_resource type="Script" path="res://scripts/rat_cage.gd" id="1_yax0j"]
+[ext_resource type="Texture2D" uid="uid://c8105hyn41miy" path="res://content/images/rat.png" id="2_vwaay"]
+[ext_resource type="PackedScene" uid="uid://xxt3l4dvx281" path="res://scenes/prefabs/inventory_box.tscn" id="3_y1dyp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_txoow"]
+size = Vector2(278, 102)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k4yh0"]
+size = Vector2(1150.5, 90)
+
+[node name="RatCage" type="Node2D"]
+script = ExtResource("1_yax0j")
+
+[node name="Cage" type="Sprite2D" parent="."]
+position = Vector2(658, 377)
+scale = Vector2(0.663889, 0.663889)
+texture = ExtResource("1_40bqh")
+
+[node name="Rat" type="Sprite2D" parent="."]
+position = Vector2(678.467, 498)
+scale = Vector2(0.294231, 0.294231)
+texture = ExtResource("2_vwaay")
+flip_h = true
+
+[node name="feeder" type="Area2D" parent="."]
+position = Vector2(384, 543)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="feeder"]
+shape = SubResource("RectangleShape2D_txoow")
+
+[node name="floor" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="floor"]
+position = Vector2(575.75, 598)
+shape = SubResource("RectangleShape2D_k4yh0")
+
+[node name="InventoryBox" parent="." instance=ExtResource("3_y1dyp")]
+position = Vector2(1008, 553)
