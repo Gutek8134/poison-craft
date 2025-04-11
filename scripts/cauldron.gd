@@ -103,7 +103,8 @@ func add_substance(substance: SubstanceData, amount: int) -> void:
 ## Amount in grams
 func add_ingredient(ingredient: Ingredient, amount: int) -> void:
 	for substance_name in ingredient.composition:
-		var substance_amount: int = amount * ingredient.composition[substance_name] / 100
+		@warning_ignore("integer_division")
+		var substance_amount: int = amount / ingredient.mass_unit * ingredient.composition[substance_name]
 		content.add_substance(data_table.data[substance_name], substance_amount)
 		
 	_update_substance_display()
@@ -169,7 +170,6 @@ func _on_take_out() -> void:
 	var new_potion := (potion_scene.instantiate() as Ingredient)
 	new_potion.is_potion = true
 	new_potion.composition = content.content.duplicate()
-	new_potion.normalize_composition()
 	var sum: int = 0
 	for amount in content.content.values():
 		sum += amount
@@ -197,7 +197,7 @@ func _start_moving_gases(interval: int = 1) -> void:
 		var width_left := cauldron_width
 		while content.content[gases_queue[0]] <= width_left:
 			width_left -= content.content[gases_queue[0]]
-			content.add_substance(data_table.data[gases_queue[0]], - content.content[gases_queue[0]])
+			content.add_substance(data_table.data[gases_queue[0]], -content.content[gases_queue[0]])
 			gases_queue.remove_at(0)
 			
 			# Maybe all of the gases have been transported
@@ -207,7 +207,7 @@ func _start_moving_gases(interval: int = 1) -> void:
 		if gases_queue.is_empty():
 			break
 
-		content.add_substance(data_table.data[gases_queue[0]], - width_left)
+		content.add_substance(data_table.data[gases_queue[0]], -width_left)
 		
 		_update_ongoing_reactions()
 		_update_substance_display()

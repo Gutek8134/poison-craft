@@ -6,6 +6,7 @@ extends RigidBody2D
 ## Normalized to sum up to 100
 @export var ingredient_name: String
 @export var composition: Dictionary = {}
+## Must be a multiple of mass unit, mass in grams
 @export var amount: int = 100
 @export var _gravity_scale: float = 1.3
 @export var _force_scale: float = 0.5
@@ -20,6 +21,8 @@ static var time_to_hide_container: float = 0.2
 @onready var container := $Container as SubstanceContainer
 @onready var data_table := SubstanceDataTable.factory()
 @onready var is_potion: bool = false
+## In grams
+var mass_unit: int
 var __mouse_hovering_over := false
 var __mouse_hovering_over_container := false
 var __dragging := false
@@ -32,14 +35,19 @@ var __maximum_force_vector: Vector2
 var split_slider_scene := preload("res://scenes/prefabs/ui/split_slider.tscn")
 
 func _ready():
+	for value in composition.values():
+		mass_unit += value
 	__container_position_offset = container.global_position - global_position
 	mass = amount / 1000.
 	gravity_scale = _gravity_scale
-	normalize_composition()
+	mass_unit = 0
+	for substance_mass in composition.values():
+		mass_unit += substance_mass
 	__minimum_force_vector = Vector2(_minimum_force, _minimum_force)
 	__maximum_force_vector = Vector2(_maximum_force, _maximum_force)
 	for substance_name: String in composition:
-		container.add_substance(data_table.data[substance_name], amount * composition[substance_name] / 100)
+		@warning_ignore("integer_division")
+		container.add_substance(data_table.data[substance_name], amount / mass_unit * composition[substance_name])
 
 func _physics_process(_delta):
 	if __dragging:
@@ -56,19 +64,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			# linear_velocity *= _throw_velocity_scale
 			if __mouse_hovering_over:
 				_on_mouse_entered()
-
-func normalize_composition() -> void:
-	var total: int = 0
-	for value in composition.values():
-		total += value
-	
-	if total == 100:
-		return
-	
-	# More or less correct
-	var factor: float = 100.0 / total
-	for key in composition:
-		composition[key] = int(composition[key] * factor)
 
 func _on_mouse_entered() -> void:
 	__mouse_hovering_over = true
@@ -145,7 +140,7 @@ func _on_input_event(_viewport: Node, event: InputEvent, _shape_idx: int):
 				self.amount -= split_value_slider.value as int
 				self.mass = self.amount / 1000.
 				for substance_name: String in composition:
-					container.add_substance(data_table.data[substance_name], - split_value_slider.value * composition[substance_name] / 100)
+					container.add_substance(data_table.data[substance_name], -split_value_slider.value * composition[substance_name] / 100)
 				get_tree().current_scene.add_child(duplicate_ingredient)
 				split_slider.queue_free()
 				return

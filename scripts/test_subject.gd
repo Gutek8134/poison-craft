@@ -10,7 +10,8 @@ func _ready() -> void:
 func consume(ingredient: Ingredient) -> void:
 	for substance_name in ingredient.composition.keys():
 		var substance: SubstanceData = data_table.data[substance_name]
-		var substance_amount: int = ingredient.composition[substance_name] * ingredient.amount
+		@warning_ignore("integer_division")
+		var substance_amount: int = ingredient.amount / ingredient.mass_unit * ingredient.composition[substance_name]
 		
 		for effect in substance.effects:
 			if effect.minimal_dose <= substance_amount:

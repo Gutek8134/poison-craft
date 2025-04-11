@@ -126,7 +126,12 @@ func try_buy_potion(potion: Ingredient) -> void:
     InventoryManager.add_gold(price)
 
 func get_final_price(potion: Ingredient) -> int:
-    var potion_effects: Array[SubstanceEffect] = potion.container.get_effects_list().filter(func(x: SubstanceEffect): return x.minimal_dose <= potion.amount)
+    var potion_effects: Array[SubstanceEffect] = []
+    for substance_name in potion.content.keys():
+        var substance_data: SubstanceData = potion.data_table.data[substance_name]
+        var amount: int = potion.content[substance_name]
+        potion_effects.append_array(substance_data.effects.filter(func(x: SubstanceEffect): return x.minimal_dose <= amount and x not in potion_effects))
+
     var potion_effects_names: Array[Array] = potion_effects.map(func(x: SubstanceEffect): return [x.effect_type, x.effect_strength])
 
     var missing_effects: int = len(expected_effects.filter(func(x): return x not in potion_effects_names))

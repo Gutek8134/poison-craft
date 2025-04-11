@@ -5,5 +5,5 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
         var ingredient = body as Ingredient
         if ingredient.name == "Unknown Potion":
             return
-        InventoryManager.add_to_inventory(ingredient.ingredient_name, ingredient.amount)
+        InventoryManager.add_to_inventory(ingredient.ingredient_name, ingredient.amount / ingredient.mass_unit)
         body.queue_free()

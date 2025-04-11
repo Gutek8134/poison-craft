@@ -20,7 +20,7 @@ var current_temperature: int = room_temperature:
 
 ## key: string (substance name) = SubstanceRepresentation
 @onready var substance_representations: Dictionary = {}
-## key: string (SubstanceEffect) = EffectRepresentation
+## key: SubstanceEffect = EffectRepresentation
 @onready var effect_representations: Dictionary = {}
 
 @onready var data_table = SubstanceDataTable.factory()
@@ -32,8 +32,6 @@ var current_temperature: int = room_temperature:
 @onready var timers_parent_node: Node = self
 @onready var content_display := $substance_scroll/substance_grid as GridContainer
 @onready var effect_display := $effect_scroll/effect_grid as GridContainer
-
-##TODO: show effects on right-click
 
 func _ready() -> void:
 	content_display.visible = true

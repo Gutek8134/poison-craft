@@ -3,7 +3,7 @@ extends Node
 const inventory_ui_class = preload("res://scripts/ui/inventory_ui.gd")
 
 @onready var gold: int = 100
-## key: string (ingredient name) = int (amount in inventory)
+## key: string (ingredient name) = int (amount of increments in inventory)
 @onready var inventory: Dictionary = {"Blue Leaf": 100}
 @onready var ingredient_table := IngredientDataTable.factory()
 var inventory_ui: inventory_ui_class

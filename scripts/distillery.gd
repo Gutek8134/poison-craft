@@ -257,7 +257,8 @@ func add_substance_right(substance: SubstanceData, amount: int) -> void:
 
 func add_ingredient(ingredient: Ingredient, amount: int) -> void:
 	for substance_name in ingredient.composition:
-		var substance_amount: int = amount * ingredient.composition[substance_name] / 100
+		@warning_ignore("integer_division")
+		var substance_amount: int = amount / ingredient.mass_unit * ingredient.composition[substance_name]
 		add_substance_left(data_table.data[substance_name], substance_amount)
 		
 	_update_substance_display()
