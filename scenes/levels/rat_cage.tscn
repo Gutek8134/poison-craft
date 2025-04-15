@@ -39,3 +39,8 @@ shape = SubResource("RectangleShape2D_k4yh0")
 
 [node name="InventoryBox" parent="." instance=ExtResource("3_y1dyp")]
 position = Vector2(1008, 553)
+
+[node name="IngredientSpawn" type="Node2D" parent="."]
+position = Vector2(177, 363)
+
+[connection signal="body_entered" from="feeder" to="." method="_on_feeder_body_entered"]

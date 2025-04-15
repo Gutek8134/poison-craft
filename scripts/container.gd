@@ -45,6 +45,7 @@ func _ready() -> void:
 func _input(event):
 	if not visible or not event.is_action_pressed("Switch Container Display"):
 		return
+	update_effect_display()
 	effect_display.visible = !effect_display.visible
 	content_display.visible = !content_display.visible
 
@@ -59,23 +60,34 @@ func update_effect_display() -> void:
 
 func update_effect_list() -> void:
 	var real_effects: Array[SubstanceEffect] = []
+	var sources: Array[String] = []
 	for substance_name in content.keys():
 		var substance_data: SubstanceData = data_table.data[substance_name]
 		var amount: int = content[substance_name]
-		real_effects.append_array(substance_data.effects.filter(func(x: SubstanceEffect): return x.minimal_dose <= amount and x not in real_effects))
+		var filtered_effects = substance_data.effects.filter(func(x: SubstanceEffect): return x.minimal_dose <= amount and x not in real_effects)
+		real_effects.append_array(filtered_effects)
+		for i in range(len(filtered_effects)):
+			sources.append(substance_name)
 
 	# Difference update
 	# 1 - delete not present in real_effects
 	for effect in effect_representations.keys().duplicate():
-		if effect not in real_effects:
-			effect_representations[effect].queue_free()
-			effect_representations.erase(effect)
+		if not effect.is_in_list(real_effects):
+			var effect_key: SubstanceEffect
+			for key in effect_representations:
+				if effect.is_equal(key):
+					effect_key = key
+					break
+			effect_representations[effect_key].queue_free()
+			effect_representations.erase(effect_key)
 
 	# 2 - add not present representations
-	for effect in real_effects:
-		if not effect_representations.has(effect):
+	for i in range(len(real_effects)):
+		var effect = real_effects[i]
+		if not effect.is_in_list(effect_representations.keys() as Array[SubstanceEffect]):
 			var representation := effect_representation_scene.instantiate() as EffectRepresentation
 			representation.effect = effect
+			representation.source_substance_name = sources[i]
 			effect_display.add_child(representation)
 			effect_representations[effect] = representation
 

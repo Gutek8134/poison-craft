@@ -20,3 +20,18 @@ func _init(p_minimal_dose: int = 1, p_effect_type: effect_enum = effect_enum.DEA
     effect_type = p_effect_type
     seconds_to_start = p_seconds_to_start
     effect_strength = p_effect_strength
+
+func is_equal(other: SubstanceEffect) -> bool:
+    return self.minimal_dose == other.minimal_dose \
+            and self.effect_type == other.effect_type \
+            and self.seconds_to_start == other.seconds_to_start \
+            and self.effect_strength == other.effect_strength
+
+func is_in_list(list: Array) -> bool:
+    for element in list:
+        if is_equal(element):
+            return true
+    return false
+
+func _to_string() -> String:
+    return "Effect %s; minimum %dg, %ds; strength %d" % [["Death", "Blindness", "Bleeding", "Memory Loss"][self.effect_type], minimal_dose, seconds_to_start, effect_strength]
