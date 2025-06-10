@@ -4,7 +4,7 @@ extends Node
 var known_effect_sources: Dictionary = {}
 
 func learn_effect_source(effect: SubstanceEffect, source: String) -> void:
-	print("Learnt effect %s from source %s" % [effect.to_string(), source])
+	# print("Learnt effect %s from source %s" % [effect.to_string(), source])
 	var known_effect = find_known_effect(effect)
 	if known_effect != null:
 		known_effect_sources[known_effect].append(source)

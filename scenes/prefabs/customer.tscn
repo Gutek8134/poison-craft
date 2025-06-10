@@ -1,19 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://4nue4xefeiqq"]
+[gd_scene load_steps=4 format=3 uid="uid://4nue4xefeiqq"]
 
 [ext_resource type="Script" path="res://scripts/customer.gd" id="1_l1nte"]
-[ext_resource type="Texture2D" uid="uid://c5e6dwpofpp6b" path="res://content/images/dialogue_box.png" id="2_3cmkg"]
+[ext_resource type="PackedScene" uid="uid://d3yf7ug2j1uwo" path="res://scenes/prefabs/ui/dialogue_box.tscn" id="2_8nfv8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pbuwa"]
 size = Vector2(150, 400)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ghwhy"]
 
 [node name="Customer" type="Node2D"]
 z_index = -2
 script = ExtResource("1_l1nte")
 
 [node name="Area2D" type="Area2D" parent="."]
-input_pickable = false
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
@@ -21,48 +18,13 @@ shape = SubResource("RectangleShape2D_pbuwa")
 
 [node name="Sprite2D" type="Sprite2D" parent="Area2D/CollisionShape2D"]
 
-[node name="DialogueBox" type="Sprite2D" parent="."]
+[node name="DialogueBox1" parent="." instance=ExtResource("2_8nfv8")]
 visible = false
-position = Vector2(-222, -158)
-scale = Vector2(0.688333, 0.6475)
-texture = ExtResource("2_3cmkg")
+position = Vector2(-152, -68)
 
-[node name="PanelContainer" type="PanelContainer" parent="DialogueBox"]
-offset_left = -190.315
-offset_top = -126.641
-offset_right = 137.685
-offset_bottom = 47.3591
-theme_override_styles/panel = SubResource("StyleBoxEmpty_ghwhy")
-
-[node name="RichTextLabel" type="RichTextLabel" parent="DialogueBox/PanelContainer"]
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_colors/default_color = Color(0, 0, 0, 1)
-bbcode_enabled = true
-text = "[font_size=45] aaaa [/font_size]"
-fit_content = true
-
-[node name="DialogueBox2" type="Sprite2D" parent="."]
+[node name="DialogueBox2" parent="." instance=ExtResource("2_8nfv8")]
 visible = false
-position = Vector2(-193, 71)
-scale = Vector2(0.6, 0.639)
-texture = ExtResource("2_3cmkg")
-flip_v = true
-
-[node name="PanelContainer" type="PanelContainer" parent="DialogueBox2"]
-offset_left = -183.333
-offset_top = -40.6886
-offset_right = 144.667
-offset_bottom = 133.311
-theme_override_styles/panel = SubResource("StyleBoxEmpty_ghwhy")
-
-[node name="RichTextLabel" type="RichTextLabel" parent="DialogueBox2/PanelContainer"]
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_colors/default_color = Color(0, 0, 0, 1)
-bbcode_enabled = true
-text = "aaaaaaaaaaaaaaaaa"
-fit_content = true
-scroll_active = false
+position = Vector2(254, -74)
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]

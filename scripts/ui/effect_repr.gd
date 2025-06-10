@@ -19,7 +19,7 @@ func update() -> void:
 	if not effect or not is_instance_valid(effect):
 		return
 
-	print(KnowledgeManager.is_effect_source_known(effect, source_substance_name), KnowledgeManager.known_effect_sources, effect._to_string(), source_substance_name)
+	# print(KnowledgeManager.is_effect_source_known(effect, source_substance_name), KnowledgeManager.known_effect_sources, effect._to_string(), source_substance_name)
 	if KnowledgeManager.is_effect_source_known(effect, source_substance_name):
 		($EffectName as RichTextLabel).text = "[center]%s[/center]" % [["Death", "Blindness", "Bleeding", "Memory Loss"][effect.effect_type]]
 		($Strength as RichTextLabel).text = "[center]%s[/center]" % [["I", "II", "III", "IV", "V"][effect.effect_strength]]

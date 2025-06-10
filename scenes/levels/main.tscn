@@ -40,3 +40,15 @@ offset_right = 1147.0
 offset_bottom = 44.0
 bbcode_enabled = true
 text = "[right]Current gold: 0[/right]"
+
+[node name="ResizeLabel" type="RichTextLabel" parent="."]
+visible = false
+offset_left = -389.0
+offset_top = -185.0
+offset_right = -119.0
+offset_bottom = -122.0
+size_flags_horizontal = 0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+bbcode_enabled = true
+text = "[font_size=45] aaaa [/font_size]"
+fit_content = true
