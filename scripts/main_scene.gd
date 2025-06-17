@@ -28,6 +28,7 @@ var ending_position: Vector2
 func _ready() -> void:
 	inventory_ui.update_spawn_node()
 	InventoryManager.gold_display = $CurrentGold
+	InventoryManager.gold_display.text = "[right]Current gold: %d[/right]" % [InventoryManager.gold]
 
 func _process(_delta: float) -> void:
 	if scene_movement_timer and is_instance_valid(scene_movement_timer) and not is_zero_approx(scene_movement_timer.time_left):
