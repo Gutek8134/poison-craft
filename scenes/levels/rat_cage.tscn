@@ -43,4 +43,13 @@ position = Vector2(1008, 553)
 [node name="IngredientSpawn" type="Node2D" parent="."]
 position = Vector2(177, 363)
 
+[node name="RatBuy" type="Button" parent="."]
+visible = false
+offset_left = 938.0
+offset_top = 32.0
+offset_right = 1111.0
+offset_bottom = 78.0
+text = "Buy a new rat (10g)"
+
 [connection signal="body_entered" from="feeder" to="." method="_on_feeder_body_entered"]
+[connection signal="pressed" from="RatBuy" to="." method="_on_rat_buy_pressed"]

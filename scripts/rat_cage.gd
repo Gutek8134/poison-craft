@@ -1,6 +1,8 @@
 extends Node2D
 
-@onready var data_table = SubstanceDataTable.factory()
+@onready var data_table := SubstanceDataTable.factory()
+@onready var rat_buy := $RatBuy as Button
+@onready var rat := $Rat as Sprite2D
 var feeder_free: bool = true
 
 func _apply_effect(effect: SubstanceEffect, source: String) -> void:
@@ -10,11 +12,12 @@ func _apply_effect(effect: SubstanceEffect, source: String) -> void:
 		SubstanceEffect.effect_enum.BLEEDING:
 			print("I AM BLEEDING")
 		SubstanceEffect.effect_enum.DEATH:
-			($Rat as Sprite2D).flip_h = true
+			rat.flip_h = false
 		SubstanceEffect.effect_enum.MEMORY_LOSS:
 			print("WHO AM I?!")
 		SubstanceEffect.effect_enum.BLINDNESS:
-			($Rat as Sprite2D).flip_v = true
+			rat.flip_v = true
+	rat_buy.visible = true
 
 func _on_feeder_body_entered(body: Node2D) -> void:
 	if feeder_free and body is Ingredient:
@@ -27,3 +30,11 @@ func _on_feeder_body_entered(body: Node2D) -> void:
 
 
 		body.queue_free()
+
+
+func _on_rat_buy_pressed() -> void:
+	if InventoryManager.gold >= 10:
+		InventoryManager.remove_gold(10)
+		feeder_free = true
+		rat.flip_h = true
+		rat.flip_v = false
