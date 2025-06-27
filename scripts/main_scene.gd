@@ -37,6 +37,7 @@ func _process(_delta: float) -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if scene_movement_timer and is_instance_valid(scene_movement_timer) and not is_zero_approx(scene_movement_timer.time_left):
 		return
+	var previous_scene: Node2D = currently_selected_scene
 	var next_scene: Node2D
 	var next_scene_index: Vector2i
 	if event.is_action_released("Left"):
@@ -83,3 +84,9 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		currently_selected_scene = next_scene
 		currently_selected_scene_index = next_scene_index
 		inventory_ui.update_spawn_node()
+
+	if next_scene is Scene:
+		next_scene._update_scene()
+	await get_tree().create_timer(move_time).timeout
+	if previous_scene is Scene:
+		previous_scene._update_scene()

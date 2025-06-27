@@ -61,6 +61,7 @@ func _ready() -> void:
 	target_temperature_right = SubstanceContainer.room_temperature
 	content_left.current_temperature = current_temperature_left
 	content_right.current_temperature = current_temperature_right
+	_update_content_visibility()
 	_test()
 
 func self_destruct() -> void:
@@ -279,6 +280,10 @@ func _update_ongoing_reactions() -> void:
 	
 	content_left.update_ongoing_reactions()
 	content_right.update_ongoing_reactions()
+
+func _update_content_visibility() -> void:
+	content_left.visible = (get_tree().current_scene as MainScene).currently_selected_scene == get_parent()
+	content_right.visible = (get_tree().current_scene as MainScene).currently_selected_scene == get_parent()
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
