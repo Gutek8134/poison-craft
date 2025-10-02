@@ -16,3 +16,11 @@ func _on_value_text_submitted(new_text: String) -> void:
 
 func _on_slider_value_changed(value: float) -> void:
     value_text.text = str(value as int)
+
+
+func _on_minus_button_pressed() -> void:
+    value_slider.value -= 1
+
+
+func _on_plus_button_pressed() -> void:
+    value_slider.value += 1
