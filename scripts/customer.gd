@@ -16,28 +16,31 @@ var customer_name: String
 @onready var dialogue_box_2: Node2D = $DialogueBox2
 var __original_position: Vector2
 
+
+static var customer_scene: PackedScene = preload("res://scenes/prefabs/customer.tscn")
+
+static var customer_names = ["Bob"]
+
+# TODO: add more
+static var customer_ranges = \
+{
+	"Aristocrat": CustomerRange.new(0.15, Pair.new(40, 800), Pair.new(0.05, 0.2), Pair.new(500, 2000),
+	{
+		[SubstanceEffect.effect_enum.BLINDNESS, 3]: 0.7,
+		[SubstanceEffect.effect_enum.DEATH, 2]: 0.3
+	},
+	Pair.new(1, 1))
+}
+
+static var customer_sprites = \
+{
+	"Aristocrat": preload("res://content/images/plus-t.png")
+}
+
 func _ready() -> void:
 	__original_position = dialogue_box_1.position
-
+	
 static func generate_random_customer() -> Customer:
-	const customer_scene: PackedScene = preload("res://scenes/prefabs/customer.tscn")
-	const customer_names = ["Bob"]
-
-	# TODO: add more
-	var customer_ranges = \
-	{
-		"Aristocrat": CustomerRange.new(0.15, Pair.new(40, 800), Pair.new(0.05, 0.2), Pair.new(500, 2000),
-		{
-			[SubstanceEffect.effect_enum.BLINDNESS, 3]: 0.7,
-			[SubstanceEffect.effect_enum.DEATH, 2]: 0.3
-		},
-		Pair.new(1, 1))
-	}
-	var customer_sprites = \
-	{
-		"Aristocrat": preload("res://content/images/plus-t.png")
-	}
-
 	var new_customer: Customer = customer_scene.instantiate() as Customer
 	new_customer.customer_type = customer_ranges.keys().pick_random()
 	var customer_range: CustomerRange = customer_ranges[new_customer.customer_type]
