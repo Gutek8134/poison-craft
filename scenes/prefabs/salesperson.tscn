@@ -1,0 +1,48 @@
+[gd_scene load_steps=6 format=3 uid="uid://b1ptbkw4803h3"]
+
+[ext_resource type="Script" path="res://scripts/salesperson.gd" id="1_cv0lr"]
+[ext_resource type="Texture2D" uid="uid://h01ytmr31lmw" path="res://content/images/minus-t.png" id="2_lm4uw"]
+[ext_resource type="PackedScene" uid="uid://d3yf7ug2j1uwo" path="res://scenes/prefabs/ui/dialogue_box.tscn" id="2_ul2yv"]
+[ext_resource type="PackedScene" uid="uid://4utasimisca2" path="res://scenes/levels/shop.tscn" id="3_5of2f"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pbuwa"]
+size = Vector2(150, 400)
+
+[node name="Salesperson" type="Node2D"]
+z_index = -2
+position = Vector2(71, 205)
+script = ExtResource("1_cv0lr")
+
+[node name="Area2D" type="Area2D" parent="."]
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_pbuwa")
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D/CollisionShape2D"]
+position = Vector2(0, -0.500004)
+scale = Vector2(0.608333, 1.65417)
+texture = ExtResource("2_lm4uw")
+
+[node name="DialogueBox1" parent="." instance=ExtResource("2_ul2yv")]
+visible = false
+position = Vector2(-152, -68)
+
+[node name="DialogueBox2" parent="." instance=ExtResource("2_ul2yv")]
+visible = false
+position = Vector2(254, -74)
+
+[node name="Shop" parent="." instance=ExtResource("3_5of2f")]
+visible = false
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -71.0
+offset_top = -205.0
+offset_right = 1081.0
+offset_bottom = 443.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]

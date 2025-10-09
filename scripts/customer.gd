@@ -17,9 +17,9 @@ var customer_name: String
 var __original_position: Vector2
 
 
-static var customer_scene: PackedScene = preload("res://scenes/prefabs/customer.tscn")
+const customer_scene: PackedScene = preload("res://scenes/prefabs/customer.tscn")
 
-static var customer_names = ["Bob"]
+const customer_names = ["Bob"]
 
 # TODO: add more
 static var customer_ranges = \
@@ -39,7 +39,7 @@ static var customer_sprites = \
 
 func _ready() -> void:
 	__original_position = dialogue_box_1.position
-	
+
 static func generate_random_customer() -> Customer:
 	var new_customer: Customer = customer_scene.instantiate() as Customer
 	new_customer.customer_type = customer_ranges.keys().pick_random()
