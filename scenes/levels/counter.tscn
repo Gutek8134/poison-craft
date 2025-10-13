@@ -21,3 +21,6 @@ position = Vector2(177, 363)
 
 [node name="CustomerSpawn" type="Node2D" parent="."]
 position = Vector2(845, 276)
+
+[node name="SalesSpawn" type="Node2D" parent="."]
+position = Vector2(214, 276)
