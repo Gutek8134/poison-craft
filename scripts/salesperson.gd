@@ -6,6 +6,7 @@ extends Node2D
 
 @onready var shop_ui = $Shop
 @onready var shop_items_container = $Shop/ScrollContainer/GridContainer
+@onready var dialogue_menu = $DialogueMenu
 
 const shop_item_scene = preload("res://scenes/prefabs/ui/shop_item.tscn")
 
@@ -19,6 +20,7 @@ static var salesperson_sprites: Dictionary = {
 
 
 var ingredient_data_table: IngredientDataTable = IngredientDataTable.factory()
+var scene_changer: MainScene
 
 const salesperson_scene: PackedScene = preload("res://scenes/prefabs/salesperson.tscn")
 
@@ -40,6 +42,12 @@ func _ready() -> void:
 		"Blue Leaf": shop_item_scene.instantiate()
 	}
 	assortment["Blue Leaf"].ingredient_name = "Blue Leaf"
+	
+	if get_tree().current_scene is MainScene:
+		scene_changer = get_tree().current_scene
+	else:
+		scene_changer = null
+
 	print(assortment)
 	setup_shop()
 	update_shop_display()
@@ -54,13 +62,65 @@ func setup_shop() -> void:
 func update_shop_display() -> void:
 	pass
 
+func go_away() -> void:
+	# Just in case
+	dialogue_menu_off()
+	CustomerManager.customer_went_away.emit()
+	CoroutinesLib.invoke(queue_free, get_tree(), 4)
+
+func dialogue_menu_on() -> void:
+	if dialogue_menu.visible:
+		return
+
+	dialogue_menu.visible = true
+	if scene_changer != null:
+		scene_changer.lock_movement()
+
+func dialogue_menu_off() -> void:
+	if not dialogue_menu.visible:
+		return
+
+	dialogue_menu.visible = false
+	if scene_changer != null:
+		scene_changer.unlock_movement()
+
+func shop_ui_on() -> void:
+	if shop_ui.visible:
+		return
+
+	shop_ui.visible = true
+	if scene_changer != null:
+		scene_changer.lock_movement()
+
+func shop_ui_off() -> void:
+	if not shop_ui.visible:
+		return
+
+	shop_ui.visible = false
+	if scene_changer != null:
+		scene_changer.unlock_movement()
+
+
 func _on_area_2d_body_entered(_body: Node2D) -> void:
 	pass
 
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-			shop_ui.visible = !shop_ui.visible
+			dialogue_menu_on()
+			
+		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+			dialogue_menu_off()
+
+func _on_shop_button_pressed() -> void:
+	dialogue_menu_off()
+	shop_ui_on()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		if event.pressed and event.keycode == KEY_ESCAPE:
+			dialogue_menu_off()
+			shop_ui_off()
 
 func _on_item_run_out(ingredient_name: String) -> void:
 	assortment.erase(ingredient_name)

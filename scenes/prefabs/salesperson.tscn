@@ -20,7 +20,6 @@ monitorable = false
 shape = SubResource("RectangleShape2D_pbuwa")
 
 [node name="Sprite2D" type="Sprite2D" parent="Area2D/CollisionShape2D"]
-position = Vector2(0, -0.500004)
 scale = Vector2(0.608333, 1.65417)
 texture = ExtResource("2_lm4uw")
 
@@ -44,5 +43,59 @@ offset_bottom = 443.0
 grow_horizontal = 1
 grow_vertical = 1
 
+[node name="DialogueMenu" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 60.0
+offset_top = -167.0
+offset_right = 60.0
+offset_bottom = -167.0
+
+[node name="Background" type="ColorRect" parent="DialogueMenu"]
+offset_right = 292.0
+offset_bottom = 245.0
+color = Color(0.384394, 0.719996, 0.676708, 1)
+
+[node name="ButtonContainer" type="VBoxContainer" parent="DialogueMenu"]
+offset_right = 292.0
+offset_bottom = 242.0
+
+[node name="Shop" type="CenterContainer" parent="DialogueMenu/ButtonContainer"]
+custom_minimum_size = Vector2(0, 78.62)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="Button" type="Button" parent="DialogueMenu/ButtonContainer/Shop"]
+custom_minimum_size = Vector2(100, 60)
+layout_mode = 2
+text = "SHOP"
+
+[node name="SendOut" type="CenterContainer" parent="DialogueMenu/ButtonContainer"]
+custom_minimum_size = Vector2(0, 78.62)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="Button" type="Button" parent="DialogueMenu/ButtonContainer/SendOut"]
+custom_minimum_size = Vector2(100, 60)
+layout_mode = 2
+text = "SEND OUT"
+
+[node name="Close" type="CenterContainer" parent="DialogueMenu/ButtonContainer"]
+custom_minimum_size = Vector2(0, 78.62)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="Button" type="Button" parent="DialogueMenu/ButtonContainer/Close"]
+custom_minimum_size = Vector2(100, 60)
+layout_mode = 2
+text = "CLOSE"
+
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
+[connection signal="pressed" from="DialogueMenu/ButtonContainer/Shop/Button" to="." method="_on_shop_button_pressed"]
+[connection signal="pressed" from="DialogueMenu/ButtonContainer/SendOut/Button" to="." method="go_away"]
+[connection signal="pressed" from="DialogueMenu/ButtonContainer/Close/Button" to="." method="dialogue_menu_off"]

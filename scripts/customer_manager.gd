@@ -1,8 +1,11 @@
 extends Node
 
+signal customer_went_away()
+
 func _ready() -> void:
     spawn_customer.call_deferred()
     spawn_salesperson.call_deferred()
+    customer_went_away.connect(func(): return )
 
 func spawn_customer():
     var customer: Customer = Customer.generate_random_customer()

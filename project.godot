@@ -18,7 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 InventoryManager="*res://scripts/inventory_manager.gd"
-CustomerManager="res://scripts/customer_manager.gd"
+CustomerManager="*res://scripts/customer_manager.gd"
 KnowledgeManager="*res://scripts/knowledge_manager.gd"
 
 [display]

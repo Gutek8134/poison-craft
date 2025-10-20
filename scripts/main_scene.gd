@@ -25,6 +25,16 @@ var scene_movement_timer: SceneTreeTimer
 var starting_position: Vector2
 var ending_position: Vector2
 
+## Basically a semaphore, but without locks
+## Implemented this way in case multiple ui elements want to lock the current screen
+var _movement_locks: int = 0
+
+func lock_movement() -> void:
+	_movement_locks += 1
+
+func unlock_movement() -> void:
+	_movement_locks -= 1
+
 func _ready() -> void:
 	inventory_ui.update_spawn_node()
 	InventoryManager.gold_display = $CurrentGold
@@ -37,6 +47,11 @@ func _process(_delta: float) -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if scene_movement_timer and is_instance_valid(scene_movement_timer) and not is_zero_approx(scene_movement_timer.time_left):
 		return
+
+	# Most UI prefers to stay on the same scene
+	if _movement_locks > 0:
+		return
+	
 	var previous_scene: Node2D = currently_selected_scene
 	var next_scene: Node2D
 	var next_scene_index: Vector2i

@@ -102,14 +102,15 @@ func say(_text: String, time: int = -1, force_box: int = 0) -> void:
 	dialogue_box_2.say(_text, time)
 	
 
-func try_buy_potion(potion: Ingredient) -> void:
+func try_buy_potion(potion: Ingredient) -> bool:
 	var price = get_final_price(potion)
 	if price == 0:
 		say("This is worthless!", 5, 2)
-		return
+		return false
 	
 	say("Thank you", 3, 2)
 	InventoryManager.add_gold(price)
+	return true
 
 func get_final_price(potion: Ingredient) -> int:
 	var potion_effects: Array[SubstanceEffect] = []
@@ -153,8 +154,12 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 			say("Why are you giving this to me?", 3)
 			return
 		
-		try_buy_potion(body)
-		return
+		if try_buy_potion(body):
+			go_away()
+
+func go_away() -> void:
+	CustomerManager.customer_went_away.emit()
+	CoroutinesLib.invoke(queue_free, get_tree(), 10)
 
 var _introduction_is_said: bool = false
 func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
