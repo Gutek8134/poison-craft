@@ -53,11 +53,13 @@ offset_right = 60.0
 offset_bottom = -167.0
 
 [node name="Background" type="ColorRect" parent="DialogueMenu"]
+layout_mode = 0
 offset_right = 292.0
 offset_bottom = 245.0
 color = Color(0.384394, 0.719996, 0.676708, 1)
 
 [node name="ButtonContainer" type="VBoxContainer" parent="DialogueMenu"]
+layout_mode = 0
 offset_right = 292.0
 offset_bottom = 242.0
 

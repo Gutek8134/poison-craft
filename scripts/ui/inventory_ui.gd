@@ -96,12 +96,18 @@ func update_spawn_node() -> void:
 
 func add_representation(ingredient_name: String) -> void:
 	print("adding repr")
-	var data: IngredientData = ingredient_data_table.data[ingredient_name]
+	
+	var data: IngredientData
+	if "Potion" in ingredient_name:
+		data = PotionTableManager.get_potion(ingredient_name)
+	else:
+		data = ingredient_data_table.data[ingredient_name]
+
 	var ingredient_representation: Control = inventory_item_scene.instantiate()
 	(ingredient_representation.get_node("IngredientRepresentation/IngredientSymbol") as TextureRect).texture = data.sprite
 	(ingredient_representation.get_node("IngredientRepresentation/VBoxContainer/IngredientName") as RichTextLabel).text = ingredient_name
 	(ingredient_representation.get_node("IngredientRepresentation/IngredientAmount") as RichTextLabel).text = "[center]%d[/center]" % [InventoryManager.inventory[ingredient_name]]
-	(ingredient_representation.get_node("Button") as Button).button_down.connect(_choose_value.bind(ingredient_name))
+	(ingredient_representation.get_node("Button") as Button).pressed.connect(_choose_value.bind(ingredient_name))
 	representations[ingredient_name] = ingredient_representation
 	$ScrollContainer/VBoxContainer.add_child(ingredient_representation)
 
@@ -117,11 +123,17 @@ func _choose_value(ingredient_name: String) -> void:
 	value_slider.max_value = InventoryManager.inventory[ingredient_name]
 	(slider.get_node("ValueSlider/MinimumValueText") as RichTextLabel).text = "[center]%d[/center]" % [value_slider.min_value]
 	(slider.get_node("ValueSlider/MaximumValueText") as RichTextLabel).text = "[center]%d[/center]" % [value_slider.max_value]
-	(slider.get_node("Button") as Button).button_down.connect(_take_out_slider.bind(ingredient_name, value_slider))
+	(slider.get_node("Button") as Button).pressed.connect(_take_out_slider.bind(ingredient_name, value_slider))
 	get_tree().current_scene.add_child(slider)
 
 func _take_out(ingredient_name: String, amount: int) -> void:
-	var ingredient_instance := (load("res://scenes/prefabs/ingredients/%s.tscn" % ingredient_name) as PackedScene).instantiate() as Ingredient
+	var ingredient_instance: Ingredient
+	
+	if "Potion" in ingredient_name:
+		ingredient_instance = (load("res://scenes/prefabs/ingredients/Potion.tscn") as PackedScene).instantiate() as Ingredient
+		ingredient_instance.composition = PotionTableManager.get_potion(ingredient_name).composition
+	else:
+		ingredient_instance = (load("res://scenes/prefabs/ingredients/%s.tscn" % ingredient_name) as PackedScene).instantiate() as Ingredient
 	if ingredient_instance.mass_unit == 0:
 		for substance_mass in ingredient_instance.composition.values():
 			ingredient_instance.mass_unit += substance_mass

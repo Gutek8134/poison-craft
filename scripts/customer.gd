@@ -154,6 +154,8 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 			say("Why are you giving this to me?", 3)
 			return
 		
+		ConfirmationDialog.new()
+
 		if try_buy_potion(body):
 			go_away()
 

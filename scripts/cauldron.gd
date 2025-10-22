@@ -163,6 +163,12 @@ func _on_lid_toggled(toggled_on: bool) -> void:
 	else:
 		content.open()
 
+var index: int = 1
+func _potion_name(_potion: Ingredient) -> String:
+	var new_name := "Potion_%d" % [index]
+	index += 1
+	return new_name
+
 func _on_take_out() -> void:
 	if content.content.is_empty():
 		return
@@ -177,6 +183,17 @@ func _on_take_out() -> void:
 	new_potion.mass = sum / 1000.
 	new_potion.position = $Button2.position
 	new_potion.z_index = -1
+
+	var potion_name = _potion_name(new_potion)
+	new_potion.ingredient_name = potion_name
+
+	if potion_name not in PotionTableManager.potion_table.data:
+		var new_ingredient = IngredientData.new()
+		new_ingredient.composition = new_potion.composition
+		new_ingredient.sprite = (new_potion.get_node("Sprite") as Sprite2D).texture
+		PotionTableManager.add_potion(potion_name, new_ingredient)
+
+
 	content.clear_content()
 	get_tree().current_scene.add_child(new_potion)
 
